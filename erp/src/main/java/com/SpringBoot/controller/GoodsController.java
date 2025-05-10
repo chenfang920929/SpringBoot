@@ -23,11 +23,10 @@ public class GoodsController {
 	LayuiJson layuiJson;
 	
     @RequestMapping("loadAllGoods")
-	public LayuiJson<Goods> loadAllGoods(Integer providerid,String goodsname ,String productcode,String promitcode,String description
-			,String size,Integer page,Integer limit){
+	public LayuiJson<Goods> loadAllGoods(Integer providerid,String goodsname ,String productcode,String size,Integer page,Integer limit){
 		
 		int index=(page-1)*limit;
-		List<Goods> data = goodsService.select(providerid, goodsname, productcode, promitcode, description, size, index, limit);
+		List<Goods> data = goodsService.select(providerid, goodsname, productcode,  size, index, limit);
 		layuiJson.setCode(0);
 		layuiJson.setCount(1000);
 		layuiJson.setData(data);
@@ -59,7 +58,7 @@ public class GoodsController {
 			String size, String produceplace, String goodspackage, Double price, Integer number, Integer dangernum,
 			Integer available){
         try {
-        	goodsService.insert(providerid, goodsname, productcode, promitcode, description, size, produceplace, goodspackage, price, number, dangernum, available);
+        	goodsService.insert(providerid, goodsname, productcode, size);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,11 +72,9 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("updateGoods")
-    public ResultObj updateGoods(Integer id, Integer providerid, String goodsname, String productcode, String promitcode,
-			String description, String size, String produceplace, String goodspackage, Double price, Integer number,
-			Integer dangernum, Integer available){
+    public ResultObj updateGoods(Integer id, Integer providerid, String goodsname, String productcode, String size){
         try {
-            goodsService.update(id, providerid, goodsname, productcode, promitcode, description, size, produceplace, goodspackage, price, number, dangernum, available);
+            goodsService.update(id, providerid, goodsname, productcode, size);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

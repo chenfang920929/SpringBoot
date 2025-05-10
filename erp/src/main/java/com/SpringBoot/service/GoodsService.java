@@ -16,10 +16,8 @@ public class GoodsService implements GoodsImp {
 	
 	
 	@Override
-	public void insert(Integer providerid, String goodsname, String productcode, String promitcode, String description,
-			String size, String produceplace, String goodspackage, Double price, Integer number, Integer dangernum,
-			Integer available) {
-		goodsImp.insert(providerid, goodsname, productcode, promitcode, description, size, produceplace, goodspackage, price, number, dangernum, available);
+	public void insert(Integer providerid, String goodsname, String productcode, String size) {
+		goodsImp.insert(providerid, goodsname, productcode,  size);
 	}
 
 	@Override
@@ -28,10 +26,8 @@ public class GoodsService implements GoodsImp {
 	}
 
 	@Override
-	public void update(Integer id, Integer providerid, String goodsname, String productcode, String promitcode,
-			String description, String size, String produceplace, String goodspackage, Double price, Integer number,
-			Integer dangernum, Integer available) {
-		goodsImp.update(id, providerid, goodsname, productcode, promitcode, description, size, produceplace, goodspackage, price, number, dangernum, available);		
+	public void update(Integer id, Integer providerid, String goodsname, String productcode,String size) {
+		goodsImp.update(id, providerid, goodsname, productcode, size);		
 	}
 
 
@@ -42,10 +38,9 @@ public class GoodsService implements GoodsImp {
 	}
 
 	@Override
-	public List<Goods> select(Integer providerid, String goodsname, String productcode, String promitcode,
-			String description, String size, Integer index, Integer limit) {
+	public List<Goods> select(Integer providerid, String goodsname, String productcode,String size, Integer index, Integer limit) {
 		// TODO 自动生成的方法存根
-		List<Goods> select = goodsImp.select(providerid, goodsname, productcode, promitcode, description, size, index, limit);
+		List<Goods> select = goodsImp.select(providerid, goodsname, productcode, size, index, limit);
 		return select;
 	}
 

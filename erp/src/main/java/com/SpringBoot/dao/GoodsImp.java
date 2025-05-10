@@ -10,18 +10,13 @@ import com.SpringBoot.bean.Goods;
 @Mapper
 public interface GoodsImp {
 
-	public List<Goods> select(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,
-			@Param("promitcode")String promitcode,@Param("description")String description,@Param("size")String size,@Param("index")Integer index,@Param("limit")Integer limit);
+	public List<Goods> select(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("size")String size,@Param("index")Integer index,@Param("limit")Integer limit);
 	
-	public void insert(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,
-			@Param("promitcode")String promitcode,@Param("description")String description,@Param("size")String size,@Param("produceplace")String produceplace,
-			@Param("goodspackage")String goodspackage,@Param("price")Double price,@Param("number")Integer number,@Param("dangernum")Integer dangernum,@Param("available")Integer available);
+	public void insert(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("size")String size);
 	
 	public void delete(Integer id);
 	
-	public void update(@Param("id")Integer id,@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,
-			@Param("promitcode")String promitcode,@Param("description")String description,@Param("size")String size,@Param("produceplace")String produceplace,
-			@Param("goodspackage")String goodspackage,@Param("price")Double price,@Param("number")Integer number,@Param("dangernum")Integer dangernum,@Param("available")Integer available);
+	public void update(@Param("id")Integer id,@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("size")String size);
 	
 	public List<Goods> selectGoodsName();
 	

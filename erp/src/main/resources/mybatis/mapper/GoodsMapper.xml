@@ -22,12 +22,6 @@
 		    <if test="productcode!=null">
 		    and g.productcode like '%${productcode}%'
 		    </if>
-		    <if test="promitcode!=null">
-		    and g.promitcode like '%${promitcode}%'
-		    </if>
-		    <if test="description!=null">
-		    and g.description like '%${description}%'
-		    </if>
 		    <if test="size!=null">
 		    and g.size like '%${size}%'
 		    </if>
@@ -36,9 +30,9 @@
 	</select>
 
 	<insert id="insert">
-		insert into bus_goods (providerid, goodsname, productcode,promitcode, description, size, produceplace,goodspackage, price, number, dangernum, available) 
+		insert into bus_goods (providerid, goodsname, productcode, size) 
 		values 
-		(#{providerid},#{goodsname},#{ productcode},#{promitcode},#{description},#{size},#{produceplace},#{goodspackage},#{price},#{number},#{dangernum},#{available});
+		(#{providerid},#{goodsname},#{ productcode},#{size});
 	</insert>
 
 	<delete id="delete">
@@ -46,9 +40,7 @@
 	</delete>
 	
 	<update id="update">	
-		update bus_goods set providerid=#{providerid},goodsname=#{goodsname} ,productcode=#{productcode},
-		promitcode=#{promitcode},description=#{description},size=#{size},produceplace=#{produceplace}
-		,goodspackage=#{goodspackage}, price=#{ price}, number=#{ number}, dangernum=#{ dangernum}, available=#{available}
+		update bus_goods set providerid=#{providerid},goodsname=#{goodsname} ,productcode=#{productcode},size=#{size}
 		 where id=#{id}
 	</update>
 	
