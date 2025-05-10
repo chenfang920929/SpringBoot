@@ -29,18 +29,16 @@ public class CustomerService implements CustomerImp{
 	}
 
 	@Override
-	public void insert(String customername, String zip, String address, String telephone, String connectionpersion,
-			String phone, String bank, String account, String email, String fax, Integer available) {
+	public void insert(String customername, String address, String connectionpersion,
+			String phone, String email) {
 		// TODO 自动生成的方法存根
-		customerImp.insert(customername, zip, address, telephone, connectionpersion, phone, bank, account, email, fax, available);
+		customerImp.insert(customername, address, connectionpersion, phone, email);
 	}
 
 	@Override
-	public void update(Integer id, String customername, String zip, String address, String telephone,
-			String connectionpersion, String phone, String bank, String account, String email, String fax,
-			Integer available) {
+	public void update(Integer id, String customername, String address, String connectionpersion, String phone,String email) {
 		// TODO 自动生成的方法存根
-		customerImp.update(id, customername, zip, address, telephone, connectionpersion, phone, bank, account, email, fax, available);
+		customerImp.update(id, customername, address, connectionpersion, phone, email);
 		
 	}
 

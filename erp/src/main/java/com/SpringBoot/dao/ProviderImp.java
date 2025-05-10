@@ -12,11 +12,9 @@ public interface ProviderImp {
 
 	public List<Provider> select(@Param("providername")String providername,@Param("connectionperson")String connectionperson,@Param("phone")String phone,@Param("index")Integer index,@Param("limit")Integer limit);
 	
-	public void insert(@Param("providername")String providername,@Param("zip")String zip,@Param("address")String address,@Param("telephone")String telephone,@Param("connectionperson")String connectionperson,
-			@Param("phone")String phone,@Param("bank")String bank,@Param("account")String account,@Param("email")String email,@Param("fax")String fax,@Param("available")Integer available);
+	public void insert(@Param("providername")String providername,@Param("address")String address,@Param("connectionperson")String connectionperson,@Param("phone")String phone);
 	
-	public void update(@Param("id")Integer id,@Param("providername")String providername,@Param("zip")String zip,@Param("address")String address,@Param("telephone")String telephone,@Param("connectionperson")String connectionperson,
-			@Param("phone")String phone,@Param("bank")String bank,@Param("account")String account,@Param("email")String email,@Param("fax")String fax,@Param("available")Integer available);
+	public void update(@Param("id")Integer id,@Param("providername")String providername,@Param("address")String address,@Param("connectionperson")String connectionperson,@Param("phone")String phone);
 	
 	public void delete(Integer id);
 	

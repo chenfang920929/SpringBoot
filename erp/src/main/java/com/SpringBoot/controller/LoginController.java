@@ -37,18 +37,18 @@ public class LoginController {
     @RequestMapping("login")
     public ResultObj login(UserVo userVo,String code,HttpSession session,HttpServletRequest request){
     	
-    	String rightCode = (String) request.getSession().getAttribute("rightCode");
+    	//String rightCode = (String) request.getSession().getAttribute("rightCode");
         //前端传入的tryCode参数
-        String tryCode = request.getParameter("tryCode");
+        //String tryCode = request.getParameter("tryCode");
     	
     		String remoteAddr = request.getRemoteAddr();
             Subject subject = SecurityUtils.getSubject();
             AuthenticationToken token = new UsernamePasswordToken(userVo.getLoginname(),userVo.getPwd());
             
-            if (!rightCode.equals(tryCode)) {
+            //if (!rightCode.equals(tryCode)) {
             	
-            	return ResultObj.LOGIN_ERROR_CODE;
-            }else {
+            	//return ResultObj.LOGIN_ERROR_CODE;
+            //}else {
             	 try {
                      //对用户进行认证登陆
                      subject.login(token);
@@ -59,7 +59,7 @@ public class LoginController {
                      e.printStackTrace();
                      return ResultObj.LOGIN_ERROR_PASS;
                  }
-            }
+            //}
         
     }
     

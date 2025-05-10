@@ -15,13 +15,11 @@ public interface CustomerImp {
 	
 	public List<Customer> selectName();
 	
-	public void insert(@Param("customername")String customername,@Param("zip")String zip,@Param("address")String address,@Param("telephone")String telephone,@Param("connectionpersion")String connectionpersion
-			,@Param("phone")String phone,@Param("bank")String bank,@Param("account")String account
-			,@Param("email")String email,@Param("fax")String fax,@Param("available")Integer available);
+	public void insert(@Param("customername")String customername,@Param("address")String address,@Param("connectionpersion")String connectionpersion
+			,@Param("phone")String phone,@Param("email")String email);
 	
-	public void update(@Param("id")Integer id,@Param("customername")String customername,@Param("zip")String zip,@Param("address")String address,@Param("telephone")String telephone,@Param("connectionpersion")String connectionpersion
-			,@Param("phone")String phone,@Param("bank")String bank,@Param("account")String account
-			,@Param("email")String email,@Param("fax")String fax,@Param("available")Integer available);
+	public void update(@Param("id")Integer id,@Param("customername")String customername,@Param("address")String address,@Param("connectionpersion")String connectionpersion
+			,@Param("phone")String phone,@Param("email")String email);
 	
 	public void delete(Integer id);
 }

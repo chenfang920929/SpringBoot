@@ -96,20 +96,6 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">供应商电话</label>
-                <div class="layui-input-block">
-                    <input type="text" name="telephone" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入供应商电话">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">邮编</label>
-                <div class="layui-input-block">
-                    <input type="text" name="zip" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入邮编">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
                 <label class="layui-form-label">联系人</label>
                 <div class="layui-input-block">
                     <input type="text" name="connectionperson" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入联系人姓名">
@@ -122,42 +108,6 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">开户银行</label>
-                <div class="layui-input-block">
-                    <input type="text" id="bank" name="bank" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入开户银行">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">银行账户</label>
-                <div class="layui-input-block">
-                    <input type="text" id="account" name="account" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入开户银行">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">email</label>
-                <div class="layui-input-block">
-                    <input type="text" id="email" name="email" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入email">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">传真</label>
-                <div class="layui-input-block">
-                    <input type="text" id="fax" name="fax" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入传真">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">是否可用</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="available" value="1" title="可用" checked="">
-                    <input type="radio" name="available" value="0" title="不可用">
-                </div>
-            </div>
-        </div>
-
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
@@ -194,21 +144,12 @@
             height: "full-180",
             cols: [ [
                 {type:'checkbox',fixed:'left'},
-                {field: 'id', title: 'ID', align: 'center',width:'50'},
-                {field: 'providername', title: '供应商名称', align: 'center',width:'100'},
-                {field: 'address', title: '供应商地址', align: 'center',width:'150'},
-                {field: 'telephone', title: '供应商电话', align: 'center',width:'140'},
-                {field: 'zip', title: '邮编', align: 'center',width:'90'},
-                {field: 'connectionperson', title: '联系人', align: 'center',width:'130'},
-                {field: 'phone', title: '联系人电话', align: 'center',width:'130'},
-                {field: 'bank', title: '开户银行', align: 'center',width:'100'},
-                {field: 'account', title: '银行账号', align: 'center',width:'160'},
-                {field: 'email', title: '邮箱', align: 'center',width:'200'},
-                {field: 'fax', title: '传真', align: 'center',width:'100'},
-                {field: 'available', title: '是否可用', align: 'center',width:'100',templet:function (d) {
-                    return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
-                }},
-                {fixed: 'right', title: '操作', toolbar: '#providerRowBar', align: 'center',width:'180'}
+                {field: 'id', title: 'ID', align: 'center',width:'200'},
+                {field: 'providername', title: '供应商名称', align: 'center',width:'200'},
+                {field: 'address', title: '供应商地址', align: 'center',width:'200'},
+                {field: 'connectionperson', title: '联系人', align: 'center',width:'200'},
+                {field: 'phone', title: '联系人电话', align: 'center',width:'200'},
+                {fixed: 'right', title: '操作', toolbar: '#providerRowBar', align: 'center',width:'200'}
             ] ],
             done: function (data, curr, count) {
                 //不是第一页时，如果当前返回的数据为0那么就返回上一页

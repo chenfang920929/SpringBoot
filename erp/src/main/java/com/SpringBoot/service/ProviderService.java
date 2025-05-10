@@ -15,16 +15,14 @@ public class ProviderService implements ProviderImp {
 	ProviderImp providerImp;
 	
 	@Override
-	public void insert(String providername, String zip, String address, String telephone, String connectionperson,
-			String phone, String bank, String account, String email, String fax, Integer available) {
-		providerImp.insert(providername, zip, address, telephone, connectionperson, phone, bank, account, email, fax, available);
+	public void insert(String providername, String address, String connectionperson,String phone) {
+		providerImp.insert(providername, address, connectionperson, phone);
 	}
 
 	@Override
-	public void update(Integer id, String providername, String zip, String address, String telephone,
-			String connectionperson, String phone, String bank, String account, String email, String fax,
-			Integer available) {
-		providerImp.update(id, providername, zip, address, telephone, connectionperson, phone, bank, account, email, fax, available);		
+	public void update(Integer id, String providername, String address,
+			String connectionperson, String phone) {
+		providerImp.update(id, providername, address,connectionperson, phone);		
 	}
 
 	@Override
@@ -41,9 +39,7 @@ public class ProviderService implements ProviderImp {
 
 	@Override
 	public List<Provider> selectAvailable() {
-		// TODO 自动生成的方法存根
-		List<Provider> selectAvailable = providerImp.selectAvailable();
-		return selectAvailable;
+		// TODO Auto-generated method stub
+		return providerImp.selectAvailable();		
 	}
-
 }

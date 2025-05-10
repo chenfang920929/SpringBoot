@@ -45,11 +45,9 @@ public class ProviderController {
 	     * @return
 	     */
 	    @RequestMapping("addProvider")
-	    public ResultObj addProvider(String providername, String zip, String address, String telephone, String connectionperson,
-				String phone, String bank, String account, String email, String fax, Integer available){
+	    public ResultObj addProvider(String providername, String address, String connectionperson,String phone){
 	        try {
-	            providerService.insert(providername, zip, address, telephone, connectionperson
-	            		, phone, bank, account, email, fax, available);
+	            providerService.insert(providername, address, connectionperson, phone);
 	            return ResultObj.ADD_SUCCESS;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -64,11 +62,9 @@ public class ProviderController {
 	     * @return
 	     */
 	    @RequestMapping("updateProvider")
-	    public ResultObj updateProvider(Integer id, String providername, String zip, String address, String telephone,
-				String connectionperson, String phone, String bank, String account, String email, String fax,
-				Integer available){
+	    public ResultObj updateProvider(Integer id, String providername, String address, String connectionperson, String phone){
 	        try {
-	            providerService.update(id, providername, zip, address, telephone, connectionperson, phone, bank, account, email, fax, available);
+	            providerService.update(id, providername, address, connectionperson, phone);
 	            return ResultObj.UPDATE_SUCCESS;
 	        } catch (Exception e) {
 	            e.printStackTrace();

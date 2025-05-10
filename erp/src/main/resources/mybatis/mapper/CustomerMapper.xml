@@ -27,15 +27,14 @@
  	</select>
  
  	<insert id="insert">
- 		insert into bus_customer (customername,zip,address,telephone,connectionpersion,phone,bank,account,email,fax,available)
+ 		insert into bus_customer (customername,address,connectionpersion,phone,email)
  		values
- 		(#{customername},#{zip},#{address},#{telephone},#{connectionpersion},#{phone},#{bank},#{account},#{email},#{fax},#{available})
+ 		(#{customername},#{address},#{connectionpersion},#{phone},#{email})
  	</insert>
  	
  	<update id="update">
- 		update bus_customer set customername=#{customername},zip=#{zip},address=#{address},telephone=#{telephone},
- 		connectionpersion=#{connectionpersion},phone=#{phone},bank=#{bank},account=#{account},email=#{email},
- 		fax=#{fax},available=#{available}
+ 		update bus_customer set customername=#{customername},address=#{address},
+ 		connectionpersion=#{connectionpersion},phone=#{phone},email=#{email}
  		where id=#{id}
  	</update>
  	

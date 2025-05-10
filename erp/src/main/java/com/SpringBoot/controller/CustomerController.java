@@ -42,13 +42,12 @@ public class CustomerController {
 	
 	
 	@RequestMapping("updateCustomer")
-    public ResultObj updateCustomer(Integer id, String customername, String zip, String address, String telephone,
-			String connectionpersion, String phone, String bank, String account, String email, String fax,
-			Integer available){
+    public ResultObj updateCustomer(Integer id, String customername, String address, 
+			String connectionpersion, String phone, String email){
         try {
         	
-            customerService.update(id, customername, zip, address, telephone, 
-            		connectionpersion, phone, bank, account, email, fax, available);
+            customerService.update(id, customername, address, 
+            		connectionpersion, phone, email);
             
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
@@ -58,11 +57,11 @@ public class CustomerController {
     }
 	
 	@RequestMapping("addCustomer")
-    public ResultObj addCustomer(String customername, String zip, String address, String telephone, String connectionpersion,
-			String phone, String bank, String account, String email, String fax, Integer available){
+    public ResultObj addCustomer(String customername, String address, String connectionpersion,
+			String phone, String email){
         try {
-            customerService.insert(customername, zip, address, telephone, connectionpersion, 
-            		phone, bank, account, email, fax, available);
+            customerService.insert(customername, address, 
+            		connectionpersion, phone, email);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
