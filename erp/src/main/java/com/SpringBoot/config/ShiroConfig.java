@@ -37,7 +37,6 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/loginfo/**", "authc");
 		filterChainDefinitionMap.put("/menu/**", "authc");
 		filterChainDefinitionMap.put("/notice/**", "authc");
-		filterChainDefinitionMap.put("/outport/**", "authc");
 		filterChainDefinitionMap.put("/permission/**", "authc");
 		filterChainDefinitionMap.put("/provider/**", "authc");
 		filterChainDefinitionMap.put("/role/**", "authc");
@@ -61,9 +60,6 @@ public class ShiroConfig {
 		
 		filterChainDefinitionMap.put("/notice/deleteNotice", "roles[root]");
 		filterChainDefinitionMap.put("/notice/batchDeleteNotice", "roles[root]");
-		
-		filterChainDefinitionMap.put("/outport/deleteOutport", "roles[root]");
-		filterChainDefinitionMap.put("/outport/addOutport", "roles[root]");
 		
 		filterChainDefinitionMap.put("/permission/deletePermission", "roles[root]");
 		

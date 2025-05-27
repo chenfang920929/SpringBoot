@@ -29,6 +29,25 @@
 		limit #{index},#{limit}
 	</select>
 
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(*) from bus_goods g join bus_provider p on g.providerid = p.id 
+		<where>
+			
+			<if test="providerid!=null">
+		    and g.providerid like '%${providerid}%'
+		    </if>
+		    <if test="goodsname!=null">
+		    and g.goodsname like '%${goodsname}%'
+		    </if>
+		    <if test="productcode!=null">
+		    and g.productcode like '%${productcode}%'
+		    </if>
+		    <if test="size!=null">
+		    and g.size like '%${size}%'
+		    </if>
+		</where>
+	</select>
+
 	<insert id="insert">
 		insert into bus_goods (providerid, goodsname, productcode, size) 
 		values 

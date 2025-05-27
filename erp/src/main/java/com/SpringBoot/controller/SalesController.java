@@ -32,7 +32,7 @@ public class SalesController {
 		int index=(page-1)*limit;
 		List<Sales> data = salesService.select(customerid, goodsid, index, limit);
 		layuiJson.setCode(0);
-		layuiJson.setCount(1000);
+		layuiJson.setCount(data.size());
 		layuiJson.setData(data);
 		return layuiJson;
 	}

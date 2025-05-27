@@ -27,8 +27,9 @@ public class GoodsController {
 		
 		int index=(page-1)*limit;
 		List<Goods> data = goodsService.select(providerid, goodsname, productcode,  size, index, limit);
+		Integer num=goodsService.selectCount(providerid, goodsname, productcode, size);
 		layuiJson.setCode(0);
-		layuiJson.setCount(1000);
+		layuiJson.setCount(num);
 		layuiJson.setData(data);
 		return layuiJson;
 	}

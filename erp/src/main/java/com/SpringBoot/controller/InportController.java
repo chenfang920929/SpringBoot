@@ -54,7 +54,7 @@ public class InportController {
         try {
         	Date inporttime = new Date();
         	String operateperson = (String) httpSession.getAttribute("username");
-        	inportService.insert(paytype, inporttime, operateperson, number, remark, inportprice, providerid, goodsid);
+        	inportService.insert(inporttime, operateperson, number, remark, inportprice, providerid, goodsid);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class InportController {
         try {
         	Date inporttime = new Date();
         	String operateperson = (String) httpSession.getAttribute("username");
-            inportService.update(id, paytype, inporttime, number, remark, inportprice, providerid, goodsid, operateperson);
+            inportService.update(id, inporttime, number, remark, inportprice, providerid, goodsid, operateperson);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +108,6 @@ public class InportController {
     		Inport i = inportService.selectById(id);
     		Date inporttime = new Date();
     		String remark = i.getRemark();
-    		String paytype = i.getPaytype();
         	Integer goodsid = i.getGoodsid();
         	Double inportprice = i.getInportprice();
         	Integer providerid = i.getProviderid();
@@ -125,7 +124,7 @@ public class InportController {
         		
         	}else if(i.getNumber()>number){
         		goodsService.updateNumber(goodsid, number+goodsNumber);
-        		inportService.update(id, paytype, inporttime, i.getNumber()-number,remark, 
+        		inportService.update(id, inporttime, i.getNumber()-number,remark, 
         				inportprice, providerid, goodsid, operateperson);
         		
         		return ResultObj.RUN_SUCCESS;

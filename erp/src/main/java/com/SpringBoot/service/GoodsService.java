@@ -43,6 +43,13 @@ public class GoodsService implements GoodsImp {
 		List<Goods> select = goodsImp.select(providerid, goodsname, productcode, size, index, limit);
 		return select;
 	}
+	
+	@Override
+	public Integer selectCount(Integer providerid, String goodsname, String productcode,String size) {
+		// TODO 自动生成的方法存根
+		Integer select = goodsImp.selectCount(providerid, goodsname, productcode, size);
+		return select;
+	}
 
 	@Override
 	public List<Goods> selectGoodsName() {

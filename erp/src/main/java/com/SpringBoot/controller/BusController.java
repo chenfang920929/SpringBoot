@@ -53,16 +53,6 @@ public class BusController {
 	}
 	
 	/**
-	 * Outport
-	 * @author admin
-	 *
-	 */
-	@RequestMapping("toOutportManager")
-	public String toOutportManager() {
-		return "business/outport/outportManager";
-	}
-	
-	/**
 	 * Sales
 	 * @author admin
 	 *

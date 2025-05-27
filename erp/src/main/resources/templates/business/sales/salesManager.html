@@ -94,7 +94,44 @@
         </div>
     </div>
 </form>
-
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
+    <legend>选择Excel File导入数据</legend>
+</fieldset>
+<div class="layui-card">
+    <div class="layui-card-body">
+		<form class="layui-form" lay-filter="import-form">
+		    <div class="layui-form-item">
+		        <label class="layui-form-label">选择文件</label>
+		        <div class="layui-input-inline">
+		            <button type="button" class="layui-btn" id="select-file">
+		                <i class="layui-icon">&#xe67c;</i>选择Excel文件 
+		            </button>
+		            <input type="file" id="file-input" style="display:none" accept=".xlsx,.xls">
+		        </div>
+				<div class="layui-input-inline">
+				     <span id="file-name" style="color:#666;"></span>
+				</div>
+				<div class="layui-input-inline">
+				      <button type="button" class="layui-btn layui-btn-normal" id="import-btn">
+				         <i class="layui-icon layui-icon-upload"></i>开始导入 
+				      </button>
+				 </div>
+		        <div class="layui-input-inline">
+		            <button type="button" class="layui-btn layui-btn-primary" id="download-template">
+		                <i class="layui-icon">&#xe601;</i>下载模板 
+		            </button>
+		        </div>
+		    </div>
+		</form>
+        
+        <div id="progress-container" style="display: none; margin-top: 20px;">
+            <div class="layui-progress" lay-showpercent="true" lay-filter="import-progress">
+                <div class="layui-progress-bar" lay-percent="0%"></div>
+            </div>
+            <div id="import-result" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+</div>
 <!--数据表格-->
 <div>
     <table class="layui-hide" id="salesTable" lay-filter="salesTable"></table>
@@ -132,12 +169,23 @@
             <div class="layui-inline">
                 <label class="layui-form-label">商品名称</label>
                 <div class="layui-input-inline">
-                    <select name="goodsid" id="goodsid">
-                        <option value="">请选择商品</option>
-                    </select>
+					<select name="goodsname" id="goodsname" placeholder="请选择商品名称">
+						<option value="">请选择商品名称</option>
+						<option value="硒鼓">硒鼓</option>
+						<option value="墨盒">墨盒</option>
+						<option value="墨水">墨水</option>
+						<option value="配件">配件</option>
+						<option value="纸盒">纸盒</option>
+					</select>
                 </div>
                 <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
             </div>
+			<div class="layui-inline">
+				<label class="layui-form-label">商品型号</label>
+				<div class="layui-input-inline">
+					 <input type="text" name="productcode" id="productcode" class="layui-input input-radius" placeholder="请输入商品型号">
+				</div>
+			</div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
@@ -148,7 +196,7 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">销售价格</label>
+                <label class="layui-form-label">销售价格(PHP)</label>
                 <div class="layui-input-block">
                     <input type="text" name="saleprice" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入销售价格">
                 </div>
@@ -158,9 +206,10 @@
             <div class="layui-inline">
                 <label class="layui-form-label">支付类型</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="paytype" value="微信" title="微信">
-                    <input type="radio" name="paytype" value="支付宝" title="支付宝" checked>
-                    <input type="radio" name="paytype" value="银联" title="银联">
+                    <input type="radio" name="paytype" value="Cash" title="Cash">
+                    <input type="radio" name="paytype" value="Check" title="Check">
+                    <input type="radio" name="paytype" value="Credit" title="Credit">
+					<input type="radio" name="paytype" value="Bank" title="Bank">
                 </div>
             </div>
         </div>
@@ -228,12 +277,138 @@
     //提升数据表格的作用域，因为底下还有一个reloadTable方法
     var tableIns;
 
-    layui.use(['jquery', 'form', 'layer', 'table', 'laydate'], function () {
+    layui.use(['jquery', 'form', 'layer', 'table', 'laydate', 'upload', 'element'], function () {
         var $ = layui.jquery;
         var form = layui.form;
         var layer = layui.layer;
         var table = layui.table;
         var laydate = layui.laydate;
+		var upload = layui.upload; 
+		var element = layui.element;
+
+		var selectedFile = null;
+		 
+		// 文件选择按钮点击事件 
+		$('#select-file').click(function(){
+		    $('#file-input').click();
+		});
+		 
+		// 文件选择变化事件 
+		$('#file-input').change(function(e){
+		    if(this.files  && this.files.length  > 0){
+		        selectedFile = this.files[0]; 
+		        
+		        // 验证文件类型 
+		        var fileExt = selectedFile.name.split('.').pop().toLowerCase(); 
+		        if(!['xlsx','xls'].includes(fileExt)){
+		            layer.msg(' 请选择Excel文件(xlsx或xls格式)', {icon: 2});
+		            return;
+		        }
+		        
+		        // 验证文件大小(100MB限制)
+		        if(selectedFile.size  > 100 * 1024 * 1024){
+		            layer.msg(' 文件大小不能超过100MB', {icon: 2});
+		            return;
+		        }
+		        
+		        $('#file-name').text(selectedFile.name).css('color','#333'); 
+		    }
+		});
+		 
+		// 导入按钮点击事件 
+		$('#import-btn').click(function(){
+		    if(!selectedFile){
+		        layer.msg(' 请先选择Excel文件', {icon: 2});
+		        return;
+		    }
+		    
+		    // 显示加载层 
+		    var loadIndex = layer.load(2); 
+		    
+		    // 显示进度条 
+		    $('#progress-container').show();
+		    element.progress('import-progress',  '0%');
+		    
+		    // 使用FormData上传文件 
+		    var formData = new FormData();
+		    formData.append('file',  selectedFile);
+		    
+		    // 使用原生AJAX上传 
+		    var xhr = new XMLHttpRequest();
+		    xhr.open('POST',  '/excel/importsales', true);
+		    
+		    xhr.upload.onprogress  = function(e) {
+		        if(e.lengthComputable){ 
+		            var percent = Math.round((e.loaded  / e.total)  * 100);
+		            element.progress('import-progress',  percent + '%');
+		        }
+		    };
+		    
+		    xhr.onload  = function() {
+		        layer.close(loadIndex); 
+		        if(xhr.status  === 200){
+		            try {
+		                var res = JSON.parse(xhr.responseText); 
+		                if(res.code  === 200){
+		                    showImportResult(res);
+		                    tableIns.reload(); 
+		                } else {
+		                    showErrorResult(res.msg  || '导入失败');
+		                }
+		            } catch(e) {
+		                showErrorResult('解析服务器响应失败');
+		            }
+		        } else {
+		            showErrorResult('服务器错误: ' + xhr.status); 
+		        }
+		    };
+		    
+		    xhr.onerror  = function() {
+		        layer.close(loadIndex); 
+		        showErrorResult('网络错误，请检查连接');
+		    };
+		    
+		    xhr.send(formData); 
+		});
+		 
+		// 显示导入结果 
+		function showImportResult(res) {
+		    var html = '<div style="color:green">导入成功！</div>' +
+		               '<div>总记录数: ' + res.data.total  + '</div>' +
+		               '<div>成功: ' + res.data.successCount  + '</div>' +
+		               '<div>失败: ' + res.data.failureCount  + '</div>';
+		    
+		    if(res.data.failureCount  > 0) {
+		        html += '<div style="margin-top:10px;">' +
+		                '<a href="javascript:void(0)" class="layui-btn layui-btn-xs" id="show-error">查看失败详情</a>' +
+		                '<div id="error-detail" style="display:none;margin-top:10px;padding:10px;background:#f2f2f2;">';
+		        
+		        res.data.errorMessages.forEach(function(error,  index) {
+		            html += '<p>' + (index + 1) + '. 行号: ' + error.row  + ', 错误: ' + error.message  + '</p>';
+		        });
+		        
+		        html += '</div></div>';
+		        
+		        $('#import-result').html(html);
+		        
+		        $('#show-error').click(function(){
+		            $('#error-detail').toggle();
+		        });
+		    } else {
+		        $('#import-result').html(html);
+		    }
+		}
+		 
+		// 显示错误结果 
+		function showErrorResult(message) {
+		    element.progress('import-progress',  '0%');
+		    $('#import-result').html('<div style="color:red">' + message + '</div>');
+		}
+		 
+		// 模板下载功能 
+		$('#download-template').click(function(){
+		    window.location.href  = '/excel/salestemplate';
+		});
 
         //初始化时间选择器
         laydate.render({
@@ -256,14 +431,15 @@
             cols: [ [
                 {field: 'id', title: 'ID', align: 'center',width:'50'},
                 {field: 'customername', title: '客户名称', align: 'center',width:'100'},
-                {field: 'goodsname', title: '商品名称', align: 'center',width:'150'},
+                {field: 'goodsname', title: '商品名称', align: 'center',width:'100'},
+				{field: 'productcode', title: '商品型号', align: 'center',width:'260'},
+				{field: 'size', title: '商品规格', align: 'center',width:'260'},
                 {field: 'paytype', title: '支付类型', align: 'center',width:'90'},
-                {field: 'salestime', title: '销售时间', align: 'center',width:'170'},
-                {field: 'operateperson', title: '操作员', align: 'center',width:'130'},
+                {field: 'salestime', title: '销售时间', align: 'center',width:'160'},
+                {field: 'operateperson', title: '销售员', align: 'center',width:'80'},
                 {field: 'number', title: '销售数量', align: 'center',width:'100'},
-                {field: 'size', title: '商品规格', align: 'center',width:'100'},
-                {field: 'saleprice', title: '销售价格', align: 'center',width:'120'},
-                {field: 'remark', title: '备注', align: 'center',width:'120'},
+                {field: 'saleprice', title: '销售价格(PHP)', align: 'center',width:'140'},
+                {field: 'remark', title: '备注', align: 'center',width:'100'},
                 {fixed: 'right', title: '操作', toolbar: '#salesRowBar', align: 'center',width:'260'}
             ] ],
             done: function (data, curr, count) {

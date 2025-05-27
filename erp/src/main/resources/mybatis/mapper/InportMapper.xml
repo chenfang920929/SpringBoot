@@ -19,14 +19,14 @@
 	</select>
 	
 	<insert id="insert">
-		insert into bus_inport (paytype,inporttime, operateperson, number, remark, inportprice, providerid, goodsid) 
+		insert into bus_inport (inporttime, operateperson, number, remark, inportprice, providerid, goodsid) 
 		values 
-		(#{paytype},#{inporttime},#{operateperson},#{number},#{remark},#{inportprice},#{providerid},#{goodsid});
+		(#{inporttime},#{operateperson},#{number},#{remark},#{inportprice},#{providerid},#{goodsid});
 	</insert>
 	
 	<update id="update">
 
-		update bus_inport set paytype=#{paytype},inporttime=#{inporttime},number=#{number},remark=#{remark},inportprice=#{inportprice}, providerid=#{providerid},
+		update bus_inport set inporttime=#{inporttime},number=#{number},remark=#{remark},inportprice=#{inportprice}, providerid=#{providerid},
 		goodsid=#{goodsid},operateperson=#{operateperson}
 		  where id=#{id}
 	</update>

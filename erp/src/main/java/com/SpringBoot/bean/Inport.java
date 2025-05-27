@@ -1,8 +1,6 @@
 package com.SpringBoot.bean;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -17,8 +15,6 @@ import lombok.NoArgsConstructor;
 public class Inport {
 
 	private Integer id;
-
-    private String paytype;
 
     private Date inporttime;
 

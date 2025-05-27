@@ -26,16 +26,16 @@ public class InportService implements InportImp {
 
 
 	@Override
-	public void insert(String paytype, Date inporttime, String operateperson, Integer number, String remark,
+	public void insert(Date inporttime, String operateperson, Integer number, String remark,
 			Double inportprice, Integer providerid, Integer goodsid) {
-		inportImp.insert(paytype, inporttime, operateperson, number, remark, inportprice, providerid, goodsid);
+		inportImp.insert(inporttime, operateperson, number, remark, inportprice, providerid, goodsid);
 	}
 
 	@Override
-	public void update(Integer id, String paytype, Date inporttime, Integer number, String remark, Double inportprice,
+	public void update(Integer id, Date inporttime, Integer number, String remark, Double inportprice,
 			Integer providerid, Integer goodsid, String operateperson) {
 		
-		inportImp.update(id, paytype, inporttime, number, remark, inportprice, providerid, goodsid,operateperson);
+		inportImp.update(id , inporttime, number, remark, inportprice, providerid, goodsid,operateperson);
 		
 	}
 
