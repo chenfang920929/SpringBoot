@@ -38,6 +38,18 @@ public class ProviderService implements ProviderImp {
 	}
 
 	@Override
+	public Integer selectCount(String providername, String connectionperson, String phone) {
+		Integer count = providerImp.selectCount(providername, connectionperson,phone);
+		return count;	
+	}
+	
+	@Override
+	public Integer selectProviderId(String providername) {
+		Integer providerId = providerImp.selectProviderId(providername);
+		return providerId;	
+	}
+	
+	@Override
 	public List<Provider> selectAvailable() {
 		// TODO Auto-generated method stub
 		return providerImp.selectAvailable();		

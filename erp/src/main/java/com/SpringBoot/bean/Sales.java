@@ -31,6 +31,8 @@ public class Sales {
 	    private Double saleprice;
 
 	    private Integer goodsid;
+	    
+	    private String productcode;
 
 	    /**
 	     * 客户名称

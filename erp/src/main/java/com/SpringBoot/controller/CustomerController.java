@@ -27,8 +27,9 @@ public class CustomerController {
 			String phone,Integer page,Integer limit){
 		int index=(page-1)*limit;
 		List<Customer> data = customerService.select(customername, connectionpersion, phone, index, limit);
+		Integer num=customerService.selectCount(customername, connectionpersion, phone);
 		layuiJson.setCode(0);
-		layuiJson.setCount(1000);
+		layuiJson.setCount(num);
 		layuiJson.setData(data);
 		return layuiJson;
 	}

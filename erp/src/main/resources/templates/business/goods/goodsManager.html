@@ -42,44 +42,42 @@
 <body>
 <!--查询条件-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>搜索条件</legend>
+    <legend>search criteria/搜索条件</legend>
 </fieldset>
 <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
     <div class="layui-form-item">
 		<div class="layui-inline">
-		    <label class="layui-form-label">商品型号</label>
+		    <label class="layui-form-label">Model<br/>产品型号</label>
 		    <div class="layui-input-inline">
-		        <input type="text" name="productcode" id="productcode" class="layui-input input-radius" placeholder="请输入商品型号">
+		        <input type="text" name="productcode" id="productcode" class="layui-input input-radius" placeholder="Please enter the model number">
 		    </div>
 		</div>
-	</div>
-	<div class="layui-form-item">
+
 		<div class="layui-inline">
-		    <label class="layui-form-label">商品规格</label>
+		    <label class="layui-form-label">Remark<br/>产品规格</label>
 		    <div class="layui-input-inline">
-		        <input type="text" name="size" id="size" class="layui-input input-radius" placeholder="请输入商品规格">
+		        <input type="text" name="size" id="size" class="layui-input input-radius" placeholder="Please enter the remark">
 		    </div>
 		</div>
-	</div>
-	<div class="layui-form-item">
+
 		<div class="layui-inline">
-				             <label class="layui-form-label">商品名称</label>
+				             <label class="layui-form-label">Product Name<br/>产品名称</label>
 						     <div class="layui-input-block">
-						  	  	<select name="goodsname" id="goodsname" placeholder="请选择商品名称">
-						      		<option value="">请选择商品名称</option>
-						  	  		<option value="硒鼓">硒鼓</option>
-						  	 		<option value="墨盒">墨盒</option>
-						  	  		<option value="墨水">墨水</option>
-						  	 		<option value="配件">配件</option>
-						  	  		<option value="纸盒">纸盒</option>
+						  	  	<select name="goodsname" id="goodsname" placeholder="Please select the product name">
+						      		<option value="">Please select the product name</option>
+						  	  		<option value="Toner Cartridge/硒鼓">Toner Cartridge/硒鼓</option>
+						  	 		<option value="Ink Cartridge/墨盒">Ink Cartridge/墨盒</option>
+						  	  		<option value="Ink/墨水">Ink/墨水</option>
+						  	 		<option value="Parts/配件">Parts/配件</option>
+						  	  		<option value="Box/纸盒">Box/纸盒</option>
 						  	 	</select>
 						      </div>
 		</div>
 		<div class="layui-inline">
-						    <label class="layui-form-label">商品供应商</label>
+						    <label class="layui-form-label">Provider<br/>商品供应商</label>
 						    <div class="layui-input-inline">
 						        <select name="providerid" id="select_providerid">
-						            <option value="0">请选择商品供应商</option>
+						            <option value="0">Please select the provider</option>
 						        </select>
 						    </div>
 		</div>
@@ -87,25 +85,25 @@
 	<div class="layui-form-item">
 	    <div class="layui-input-block" style="text-align: center;padding-right: 15%;">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
-                    class="layui-icon layui-icon-search layui-icon-normal"></i>查询
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query/查询
             </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
-                    class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                    class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
             </button>
         </div>
 	</div>
 </form>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>选择Excel File导入数据</legend>
+    <legend>Import Data/导入数据</legend>
 </fieldset>
 <div class="layui-card">
     <div class="layui-card-body">
         <form class="layui-form" lay-filter="import-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">选择文件</label>
+                <label class="layui-form-label">Choose File</label>
                 <div class="layui-input-inline">
                     <button type="button" class="layui-btn" id="select-file">
-                        <i class="layui-icon">&#xe67c;</i>选择Excel文件 
+                        <i class="layui-icon">&#xe67c;</i>Choose Excel File
                     </button>
                     <input type="file" id="file-input" style="display:none" accept=".xlsx,.xls">
                 </div>
@@ -114,12 +112,12 @@
 				</div>
 				<div class="layui-input-inline">
 				      <button type="button" class="layui-btn layui-btn-normal" id="import-btn">
-				         <i class="layui-icon layui-icon-upload"></i>开始导入 
+				         <i class="layui-icon layui-icon-upload"></i>Start Import
 				      </button>
 				 </div>
                 <div class="layui-input-inline">
                     <button type="button" class="layui-btn layui-btn-primary" id="download-template">
-                        <i class="layui-icon">&#xe601;</i>下载模板 
+                        <i class="layui-icon">&#xe601;</i>Download Template
                     </button>
                 </div>
             </div>
@@ -138,15 +136,15 @@
     <table class="layui-hide" id="goodsTable" lay-filter="goodsTable"></table>
     <div id="goodsToolBar" style="display: none">
         <button type="button" lay-event="add" shiro:hasPermission="goods:create" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
-            <i class="layui-icon layui-icon-add-1"></i>添加商品
+            <i class="layui-icon layui-icon-add-1"></i>Add Product/添加商品
         </button>
     </div>
     <div id="goodsRowBar" style="display: none;">
         <button type="button" lay-event="update" shiro:hasPermission="goods:update" class="layui-btn layui-btn-sm layui-btn-radius"><i
-                class="layui-icon layui-icon-edit"></i>编辑
+                class="layui-icon layui-icon-edit"></i>Edit/编辑
         </button>
         <button type="button" lay-event="delete" shiro:hasPermission="goods:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>删除
+                class="layui-icon layui-icon-delete"></i>Delete/删除
         </button>
     </div>
 </div>
@@ -157,39 +155,51 @@
         <div class="layui-col-md12 layui-col-xs12">
             <div class="layui-row layui-col-space10">
                 <div class="layui-col-md9 layui-col-xs7">
-					<div class="layui-inline">
-					    <label class="layui-form-label">商品型号</label>
-					    <div class="layui-input-inline">
-							<input type="hidden" name="id">
-					        <input type="text" class="layui-input input-radius" name="productcode" lay-verify="required" placeholder="请输入商品型号">
-					    </div>
-					</div>
-					<div class="layui-inline">
-					     <label class="layui-form-label">商品规格</label>
-					     <div class="layui-input-inline">
-					         <input type="text" class="layui-input input-radius" name="size" lay-verify="required" placeholder="请输入商品规格">
-					     </div>
-					</div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">商品名称</label>
-                        <div class="layui-input-block">
-							<select name="goodsname" id="goodsname" placeholder="请选择商品名称">
-								<option value="">请选择商品名称</option>
-								<option value="硒鼓">硒鼓</option>
-								<option value="墨盒">墨盒</option>
-								<option value="墨水">墨水</option>
-								<option value="配件">配件</option>
-								<option value="纸盒">纸盒</option>
-							</select>
-                        </div>
-                    </div>
 					<div class="layui-form-item">
-					    <label class="layui-form-label">商品供应商</label>
+					    <label class="layui-form-label">Provider<br/>商品供应商</label>
 					    <div class="layui-input-block">
 					        <select name="providerid" id="providerid">
-					            <option value="0">请选择商品供应商</option>
+					            <option value="0">Please select the provider</option>
 					        </select>
 					    </div>
+					</div>
+					<div class="layui-form-item">
+					                        <label class="layui-form-label">Product Name<br/>产品名称</label>
+					                        <div class="layui-input-block">
+												<select name="goodsname" id="goodsname" placeholder="Please select the product name">
+													<option value="">Please select the product name</option>
+													<option value="Toner Cartridge/硒鼓">Toner Cartridge/硒鼓</option>
+													<option value="Ink Cartridge/墨盒">Ink Cartridge/墨盒</option>
+													<option value="Ink/墨水">Ink/墨水</option>
+													<option value="Parts/配件">Parts/配件</option>
+													<option value="Box/纸盒">Box/纸盒</option>
+												</select>
+					                        </div>
+					</div>
+					<div class="layui-inline">
+					    <label class="layui-form-label">Model<br/>型号</label>
+					    <div class="layui-input-inline">
+							<input type="hidden" name="id">
+					        <input type="text" class="layui-input input-radius" name="productcode" lay-verify="required" placeholder="Please enter the model number">
+					    </div>
+					</div>
+					<div class="layui-inline">
+					     <label class="layui-form-label">Compatible for<br/>机型</label>
+					     <div class="layui-input-inline">
+					         <input type="text" class="layui-input input-radius" name="description" lay-verify="required" placeholder="Please enter the Compatible for">
+					     </div>
+					</div>
+					<div class="layui-inline">
+					     <label class="layui-form-label">Remark<br/>规格</label>
+					     <div class="layui-input-inline">
+					         <input type="text" class="layui-input input-radius" name="size" lay-verify="required" placeholder="Please enter the remark">
+					     </div>
+					</div>
+					<div class="layui-inline">
+					     <label class="layui-form-label">Qty<br/>数量-库存数据</label>
+					     <div class="layui-input-inline">
+					         <input type="text" class="layui-input input-radius" name="number" lay-verify="required" placeholder="Please enter the number">
+					     </div>
 					</div>
                 </div>
             </div>
@@ -198,10 +208,10 @@
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
                 </button>
             </div>
         </div>
@@ -358,12 +368,12 @@
 			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
             cols: [ [
-                {field: 'id', title: 'ID', align: 'center',width:'100'},
-				{field: 'productcode', title: '商品型号', align: 'center',width:'500'},
-				{field: 'goodsname', title: '商品名称', align: 'center',width:'200'},
-				{field: 'size', title: '商品规格', align: 'center',width:'500'},
-                {field: 'providername', title: '商品供应商', align: 'center',width:'200'},
-                {fixed: 'right', title: '操作', toolbar: '#goodsRowBar', align: 'center',width:'200'}
+				{field: 'goodsname', title: 'Product Name<br/>产品名称', align: 'center',width:'200'},
+				{field: 'description', title: 'Compatible for<br/>产品机型', align: 'center', width:'500'},
+				{field: 'productcode', title: 'Model<br/>产品型号', align: 'center',width:'500'},
+				{field: 'size', title: 'Remark<br/>产品规格', align: 'center',width:'500'},
+				{field: 'number', title: 'Qty<br/>数量-库存数据', align: 'center',width:'200'},
+                {fixed: 'right', title: 'execute<br/>操作', toolbar: '#goodsRowBar', align: 'center',width:'250'}
             ] ],
             done: function (data, curr, count) {
                 //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -381,7 +391,7 @@
         $.get("/provider/loadAllProviderForSelect",function (res) {
             var data = res.data;
             var dom = $("#select_providerid");
-            var html = '<option value="">请选择供应商</option>';
+            var html = '<option value="">Please select the provider</option>';
             $.each(data,function (index, item) {
                 html += '<option value="'+item.id+'">'+item.providername+'</option>';
             })
@@ -444,7 +454,7 @@
                     $.get("/provider/loadAllProviderForSelect",function(res){
                         var data=res.data;
                         var dom=$("#providerid");
-                        var html='<option value="">请选择供应商</option>'
+                        var html='<option value="">Please select the provider</option>'
                         $.each(data,function(index,item){
                             html+='<option value="'+item.id+'">'+item.providername+'</option>'
                         });
@@ -461,7 +471,7 @@
                 type:1,
                 content:$("#addOrUpdateDiv"),
                 area:['700px','500px'],
-                title:'修改商品',
+                title:'Edit Product/修改商品',
                 success:function () {
                     //清空原有的数据
                     $("#dataFrm")[0].reset();
@@ -472,7 +482,7 @@
                     $.get("/provider/loadAllProviderForSelect",function(res){
                         var redata=res.data;
                         var dom=$("#providerid");
-                        var html='<option value="">请选择商品供应商</option>'
+                        var html='<option value="">Please select the provider</option>'
                         $.each(redata,function(index,item){
                             if (data.providerid===item.id){
                                 html+='<option value="'+item.id+'" selected>'+item.providername+'</option>'

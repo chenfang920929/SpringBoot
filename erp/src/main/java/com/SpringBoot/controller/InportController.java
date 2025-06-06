@@ -37,8 +37,9 @@ public class InportController {
 	public LayuiJson<Inport> loadAllInport(Integer providerid,Integer goodsid,Integer page,Integer limit){
 		int index=(page-1)*limit;
 		List<Inport> data = inportService.select(providerid, goodsid, index, limit);
+		Integer num=inportService.selectCount(providerid, goodsid);
 		layuiJson.setCode(0);
-		layuiJson.setCount(1000);
+		layuiJson.setCount(num);
 		layuiJson.setData(data);
 		return layuiJson;
 		

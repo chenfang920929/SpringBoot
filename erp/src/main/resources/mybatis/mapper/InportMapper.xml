@@ -18,6 +18,19 @@
 			limit #{index},#{limit}
 	</select>
 	
+	<select id="selectCount" resultType="java.lang.Integer">
+ 		select count(*) from bus_inport i join bus_goods g on i.goodsid=g.id 
+			join bus_provider p on i.providerid=p.id
+			<where>
+				<if test="providerid!=null">
+			    and i.providerid =#{providerid}
+			    </if>
+			    <if test="goodsid!=null">
+			    and i.goodsid =#{goodsid}
+			    </if>
+			</where>
+ 	</select>
+	
 	<insert id="insert">
 		insert into bus_inport (inporttime, operateperson, number, remark, inportprice, providerid, goodsid) 
 		values 

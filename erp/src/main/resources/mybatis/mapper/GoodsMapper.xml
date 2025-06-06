@@ -49,9 +49,9 @@
 	</select>
 
 	<insert id="insert">
-		insert into bus_goods (providerid, goodsname, productcode, size) 
+		insert into bus_goods (providerid, goodsname, productcode, description,size, number) 
 		values 
-		(#{providerid},#{goodsname},#{ productcode},#{size});
+		(#{providerid},#{goodsname},#{ productcode},#{description},#{size},#{number});
 	</insert>
 
 	<delete id="delete">
@@ -59,7 +59,7 @@
 	</delete>
 	
 	<update id="update">	
-		update bus_goods set providerid=#{providerid},goodsname=#{goodsname} ,productcode=#{productcode},size=#{size}
+		update bus_goods set providerid=#{providerid},goodsname=#{goodsname} ,productcode=#{productcode},description=#{description},size=#{size},number=#{number}
 		 where id=#{id}
 	</update>
 	

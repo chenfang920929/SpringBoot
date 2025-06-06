@@ -16,9 +16,9 @@ public class SalesbackService implements SalesbackImp{
 	SalesbackImp salesbackImp;
 
 	@Override
-	public List<Salesback> select(Integer customerid, Integer goodsid, Integer index, Integer limit) {
+	public List<Salesback> select(Integer customerid, Integer goodsid,Integer orderno,Integer index, Integer limit) {
 		// TODO 自动生成的方法存根
-		List<Salesback> select = salesbackImp.select(customerid, goodsid, index, limit);
+		List<Salesback> select = salesbackImp.select(customerid, goodsid, orderno,index, limit);
 		return select;
 	}
 
@@ -30,9 +30,15 @@ public class SalesbackService implements SalesbackImp{
 
 	@Override
 	public void insert(Integer customerid, String paytype, Date salesbacktime, Double salebackprice,
-			String operateperson, Integer number, String remark, Integer goodsid) {
+			String operateperson, Integer number, String remark, Integer goodsid, Integer orderno) {
 		// TODO 自动生成的方法存根
-		salesbackImp.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid);
+		salesbackImp.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,orderno);
+	}
+
+	@Override
+	public Integer selectCount(Integer customerid, Integer goodsid,Integer orderno) {
+		Integer count = salesbackImp.selectCount(customerid, goodsid,orderno);
+		return count;	
 	}
 
 }

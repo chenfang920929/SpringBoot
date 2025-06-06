@@ -27,6 +27,8 @@ public class Inport {
     private Double inportprice;
 
     private Integer providerid;
+    
+    private String productcode;
 
     private Integer goodsid;
 

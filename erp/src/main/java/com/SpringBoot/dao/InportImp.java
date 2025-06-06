@@ -22,5 +22,7 @@ public interface InportImp {
 	public void delete(Integer id);
 	
 	public Inport selectById(Integer id);
+
+	public Integer selectCount(@Param("providerid")Integer providerid,@Param("goodsid")Integer goodsid);
 	
 }

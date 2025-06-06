@@ -20,70 +20,70 @@
 <body>
 <!--查询条件-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>搜索条件</legend>
+    <legend>search criteria/搜索条件</legend>
 </fieldset>
 <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">供应商名称</label>
+            <label class="layui-form-label">Provider name<br/>供应商名称</label>
             <div class="layui-input-inline">
                 <input type="text" name="providername" id="providername" class="layui-input input-radius"
-                       placeholder="请输入供应商名称">
+                       placeholder="Please input the provider name">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">联系人名称</label>
+            <label class="layui-form-label">Connection Person's Name<br/>联系人名称</label>
             <div class="layui-input-inline">
-                <input type="text" name="connectionperson" id="connectionperson" class="layui-input input-radius" placeholder="请输入联系人名称">
+                <input type="text" name="connectionperson" id="connectionperson" class="layui-input input-radius" placeholder="Please input the Connection Person's Name">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">联系人号码</label>
+            <label class="layui-form-label">Phone Number<br/>电话</label>
             <div class="layui-input-inline">
-                <input type="text" name="phone" id="phone" class="layui-input input-radius" placeholder="请输入联系人号码">
+                <input type="text" name="phone" id="phone" class="layui-input input-radius" placeholder="Please input the phone number">
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block" style="text-align: center;padding-right: 15%;">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
-                    class="layui-icon layui-icon-search layui-icon-normal"></i>查询
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query/查询
             </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
-                    class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                    class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
             </button>
         </div>
     </div>
 </form>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>选择Excel File导入数据</legend>
+    <legend>Import Data/导入数据</legend>
 </fieldset>
 <div class="layui-card">
     <div class="layui-card-body">
-		<form class="layui-form" lay-filter="import-form">
-		    <div class="layui-form-item">
-		        <label class="layui-form-label">选择文件</label>
-		        <div class="layui-input-inline">
-		            <button type="button" class="layui-btn" id="select-file">
-		                <i class="layui-icon">&#xe67c;</i>选择Excel文件 
-		            </button>
-		            <input type="file" id="file-input" style="display:none" accept=".xlsx,.xls">
-		        </div>
+        <form class="layui-form" lay-filter="import-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Choose File</label>
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="select-file">
+                        <i class="layui-icon">&#xe67c;</i>Choose Excel File
+                    </button>
+                    <input type="file" id="file-input" style="display:none" accept=".xlsx,.xls">
+                </div>
 				<div class="layui-input-inline">
 				     <span id="file-name" style="color:#666;"></span>
 				</div>
 				<div class="layui-input-inline">
 				      <button type="button" class="layui-btn layui-btn-normal" id="import-btn">
-				         <i class="layui-icon layui-icon-upload"></i>开始导入 
+				         <i class="layui-icon layui-icon-upload"></i>Start Import
 				      </button>
 				 </div>
-		        <div class="layui-input-inline">
-		            <button type="button" class="layui-btn layui-btn-primary" id="download-template">
-		                <i class="layui-icon">&#xe601;</i>下载模板 
-		            </button>
-		        </div>
-		    </div>
-		</form>
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn layui-btn-primary" id="download-template">
+                        <i class="layui-icon">&#xe601;</i>Download Template
+                    </button>
+                </div>
+            </div>
+        </form>
         
         <div id="progress-container" style="display: none; margin-top: 20px;">
             <div class="layui-progress" lay-showpercent="true" lay-filter="import-progress">
@@ -98,15 +98,15 @@
     <table class="layui-hide" id="providerTable" lay-filter="providerTable"></table>
     <div id="providerToolBar" style="display: none">
         <button type="button" lay-event="add" shiro:hasPermission="provider:create" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
-            <i class="layui-icon layui-icon-add-1"></i>添加供应商
+            <i class="layui-icon layui-icon-add-1"></i>Add Provider/添加供应商
         </button>
     </div>
     <div id="providerRowBar" style="display: none;">
         <button type="button" lay-event="update" shiro:hasPermission="provider:update" class="layui-btn layui-btn-sm layui-btn-radius"><i
-                class="layui-icon layui-icon-edit"></i>编辑
+                class="layui-icon layui-icon-edit"></i>Edit/编辑
         </button>
         <button type="button" lay-event="delete" shiro:hasPermission="provider:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>删除
+                class="layui-icon layui-icon-delete"></i>Delete/删除
         </button>
     </div>
 </div>
@@ -116,42 +116,42 @@
     <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">供应商名称</label>
+                <label class="layui-form-label">Provider name<br/>供应商名称</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">
                     <input type="text" name="providername" lay-verify="required" autocomplete="off"
-                           class="layui-input input-radius" placeholder="请输入供应商名称">
+                           class="layui-input input-radius" placeholder="Please input the provider name">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">供应商地址</label>
+                <label class="layui-form-label">Provider Address<br/>供应商地址</label>
                 <div class="layui-input-block">
-                    <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入供应商地址">
+                    <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please input the provider address">
                 </div>
             </div>
 
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">联系人</label>
+                <label class="layui-form-label">Connection Person's Name<br/>联系人名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="connectionperson" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入联系人姓名">
+                    <input type="text" name="connectionperson" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please input the Connection Person's Name">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">联系电话</label>
+                <label class="layui-form-label">Phone Number<br/>电话</label>
                 <div class="layui-input-block">
-                    <input type="text" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入联系人电话">
+                    <input type="text" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please input the phone number">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
                 </button>
             </div>
         </div>
@@ -304,15 +304,15 @@
             url: "/provider/loadAllProvider",
             toolbar: "#providerToolBar",
             page: true,
+			limit: '9999999',  // 默认单页模式 
+			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
             cols: [ [
-                {type:'checkbox',fixed:'left'},
-                {field: 'id', title: 'ID', align: 'center',width:'200'},
-                {field: 'providername', title: '供应商名称', align: 'center',width:'200'},
-                {field: 'address', title: '供应商地址', align: 'center',width:'200'},
-                {field: 'connectionperson', title: '联系人', align: 'center',width:'200'},
-                {field: 'phone', title: '联系人电话', align: 'center',width:'200'},
-                {fixed: 'right', title: '操作', toolbar: '#providerRowBar', align: 'center',width:'200'}
+                {field: 'providername', title: 'Provider Name<br/>供应商名称', align: 'center',width:'200'},
+                {field: 'address', title: 'Provider Address<br/>供应商地址', align: 'center',width:'200'},
+                {field: 'connectionperson', title: 'Connection Person\'s Name<br/>联系人名称', align: 'center',width:'200'},
+                {field: 'phone', title: 'Phone Number<br/>电话', align: 'center',width:'200'},
+                {fixed: 'right', title: 'execute<br/>操作', toolbar: '#providerRowBar', align: 'center',width:'250'}
             ] ],
             done: function (data, curr, count) {
                 //不是第一页时，如果当前返回的数据为0那么就返回上一页

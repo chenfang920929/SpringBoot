@@ -21,6 +21,25 @@
 				limit #{index},#{limit}		
 	</select>
 	
+	<select id="selectCount" resultType="java.lang.Integer">
+ 		select count(*) from bus_provider
+				<where>
+					<if test="providername!=null">
+				    and providername like '%${providername}%'
+				    </if>
+				    <if test="connectionperson!=null">
+				    and connectionperson like '%${connectionperson}%'
+				    </if>
+				    <if test="phone!=null">
+				    and phone like '%${phone}%'
+				    </if>
+				</where>
+ 	</select>
+ 	
+ 	<select id="selectProviderId" resultType="java.lang.Integer">
+ 		select id from bus_provider where  providername like '%${providername}%'
+ 	</select>
+ 		
 	<select id="selectAvailable" resultType="com.SpringBoot.bean.Provider">
 		select * from bus_provider
 	</select>

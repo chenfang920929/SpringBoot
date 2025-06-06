@@ -34,11 +34,12 @@ public class SalesbackController {
 	HttpSession httpSession;
 	
 	@RequestMapping("loadAllSalesback")
-	public LayuiJson<Salesback> loadAllSalesback(Integer customerid,Integer goodsid,Integer page,Integer limit){
+	public LayuiJson<Salesback> loadAllSalesback(Integer customerid,Integer goodsid,Integer orderno,Integer page,Integer limit){
 		int index=(page-1)*limit;
-		List<Salesback> data = salesbackService.select(customerid, goodsid, index, limit);
+		List<Salesback> data = salesbackService.select(customerid, goodsid,orderno,index, limit);
+		Integer num=salesbackService.selectCount(customerid, goodsid,orderno);
 		layuiJson.setCode(0);
-		layuiJson.setCount(1000);
+		layuiJson.setCount(num);
 		layuiJson.setData(data);
 		return layuiJson;
 	}
@@ -74,14 +75,14 @@ public class SalesbackController {
     		
     		if(s.getNumber()==number) {
     			
-    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid);
+    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,id);
     			salesService.delete(id);
     			
     	    	return ResultObj.BACKINPORT_SUCCESS;
     			
     		}else if(s.getNumber()>number) {
     			
-    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid);
+    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,id);
     			salesService.updateNumber(id, s.getNumber()-number);
     	    	return ResultObj.BACKINPORT_SUCCESS;
     		}else {

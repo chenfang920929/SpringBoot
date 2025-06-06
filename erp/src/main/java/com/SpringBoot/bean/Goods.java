@@ -20,7 +20,11 @@ public class Goods {
 
     private String productcode;
     
+    private String description;
+    
     private String providername;
+    
+    private Integer providerid;
     
     private Integer number;
 }

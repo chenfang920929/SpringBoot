@@ -16,17 +16,17 @@ public class SalesService implements SalesImp {
 	SalesImp salesImp;
 	
 	@Override
-	public List<Sales> select(Integer customerid, Integer goodsid, Integer index, Integer limit) {
+	public List<Sales> select(Integer customerid, Integer goodsid, Integer id,Integer index, Integer limit) {
 		// TODO 自动生成的方法存根
-		List<Sales> select = salesImp.select(customerid, goodsid, index, limit);
+		List<Sales> select = salesImp.select(customerid, goodsid,id, index, limit);
 		return select;
 	}
 
 	@Override
-	public void insert(Integer customerid, String paytype, Date salestime, String operateperson, Integer number,
+	public void insert(Integer id,Integer customerid, String paytype, Date salestime, String operateperson, Integer number,
 			String remark, Double saleprice, Integer goodsid) {
 		// TODO 自动生成的方法存根
-		salesImp.insert(customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
+		salesImp.insert(id,customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
 	}
 
 	@Override
@@ -54,5 +54,9 @@ public class SalesService implements SalesImp {
 		salesImp.updateNumber(id, number);
 	}
 
-
+	@Override
+	public Integer selectCount(Integer customerid, Integer goodsid, Integer id) {
+		Integer count = salesImp.selectCount(customerid, goodsid, id);
+		return count;	
+	}
 }

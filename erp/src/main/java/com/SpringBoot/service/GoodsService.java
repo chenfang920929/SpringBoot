@@ -16,8 +16,8 @@ public class GoodsService implements GoodsImp {
 	
 	
 	@Override
-	public void insert(Integer providerid, String goodsname, String productcode, String size) {
-		goodsImp.insert(providerid, goodsname, productcode,  size);
+	public void insert(Integer providerid, String goodsname, String productcode, String description,String size, Integer number){
+		goodsImp.insert(providerid, goodsname, productcode,description, size,  number);
 	}
 
 	@Override
@@ -26,8 +26,8 @@ public class GoodsService implements GoodsImp {
 	}
 
 	@Override
-	public void update(Integer id, Integer providerid, String goodsname, String productcode,String size) {
-		goodsImp.update(id, providerid, goodsname, productcode, size);		
+	public void update(Integer id, Integer providerid, String goodsname, String productcode, String description,String size, Integer number) {
+		goodsImp.update(id, providerid, goodsname, productcode,description, size,  number);		
 	}
 
 
@@ -47,8 +47,8 @@ public class GoodsService implements GoodsImp {
 	@Override
 	public Integer selectCount(Integer providerid, String goodsname, String productcode,String size) {
 		// TODO 自动生成的方法存根
-		Integer select = goodsImp.selectCount(providerid, goodsname, productcode, size);
-		return select;
+		Integer count = goodsImp.selectCount(providerid, goodsname, productcode, size);
+		return count;
 	}
 
 	@Override

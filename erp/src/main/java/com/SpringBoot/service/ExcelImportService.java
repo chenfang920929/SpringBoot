@@ -1,13 +1,17 @@
 package com.SpringBoot.service;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -33,6 +37,22 @@ public class ExcelImportService {
 	
 	@Autowired
 	GoodsService goodsService;
+	
+	@Autowired
+	CustomerService customerService;
+	
+	@Autowired
+	InportService inportService;
+	
+	@Autowired
+	ProviderService providerService;
+	
+	@Autowired
+	SalesService salesService;
+	
+	@Autowired
+	HttpSession httpSession;
+	
  
     public ImportResult importGoodsExcel(MultipartFile file) throws Exception {
         List<Goods> successList = new ArrayList<>();
@@ -49,9 +69,9 @@ public class ExcelImportService {
                     
                     Goods goods = parseGoodsRow(row);
                     validateGoods(goods);
-                    
+                    Integer providerId=providerService.selectProviderId("MEYINK");
                     // 保存到数据库 
-                    goodsService.insert(14, "硒鼓", goods.getProductcode(), goods.getSize()); 
+                    goodsService.insert(providerId, "Toner Cartridge/硒鼓", goods.getProductcode(),goods.getDescription(),goods.getSize(),0); 
                     successList.add(goods); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -67,6 +87,7 @@ public class ExcelImportService {
         Goods goods = new Goods();
         goods.setProductcode(getCellValue(row,  0)); // 商品型号 
         goods.setSize(getCellValue(row,  1));        // 商品规格 
+        goods.setDescription(getCellValue(row,  2));        // 适用机型 
         return goods;
     }
     
@@ -80,14 +101,14 @@ public class ExcelImportService {
             Sheet sheet = workbook.getSheetAt(0); 
             for (int i = 1; i <= sheet.getLastRowNum();  i++) { // 从第2行开始读取 
                 Row row = sheet.getRow(i); 
-                if (row == null) continue;
+                if (row == null || StringUtil.isBlank(getCellValue(row,  0))) continue;
                 
                 try {
                 	Customer customer = parseCustomerRow(row);
                     validateCustomer(customer);
                     
                     // 保存到数据库 
-                    //goodsRepository.save(goods); 
+                    customerService.insert(customer.getCustomername(), customer.getAddress(), customer.getConnectionpersion(), customer.getPhone(), customer.getEmail());
                     successList.add(customer); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -101,10 +122,11 @@ public class ExcelImportService {
  
     private Customer parseCustomerRow(Row row) {
     	Customer customer = new Customer();
-       // goods.setProductCode(getCellValue(row,  0)); // 商品型号 
-        //goods.setGoodsName(getCellValue(row,  1));   // 商品名称 
-        //goods.setSize(getCellValue(row,  2));        // 商品规格 
-        //goods.setProviderId(getCellValue(row,  3)); // 供应商ID 
+    	customer.setCustomername(getCellValue(row,  0));
+    	customer.setAddress(getCellValue(row,  1));
+    	customer.setConnectionpersion(getCellValue(row,  2));
+    	customer.setPhone(getCellValue(row,  3));
+    	customer.setEmail(getCellValue(row,  4));
         return customer;
     }
     
@@ -112,20 +134,21 @@ public class ExcelImportService {
         List<Inport> successList = new ArrayList<>();
         List<ImportError> errorList = new ArrayList<>();
         
+        String operateperson = (String) httpSession.getAttribute("username");
         try (InputStream is = file.getInputStream(); 
              Workbook workbook = WorkbookFactory.create(is))  {
             
             Sheet sheet = workbook.getSheetAt(0); 
             for (int i = 1; i <= sheet.getLastRowNum();  i++) { // 从第2行开始读取 
                 Row row = sheet.getRow(i); 
-                if (row == null) continue;
+                if (row == null || StringUtil.isBlank(getCellValue(row,  0))) continue;
                 
                 try {
                 	Inport inport = parseInportRow(row);
                     validateInport(inport);
                     
                     // 保存到数据库 
-                    //goodsRepository.save(goods); 
+                    inportService.insert(new Date(), operateperson, inport.getNumber(), inport.getRemark(), inport.getInportprice(), inport.getProviderid(), inport.getGoodsid());
                     successList.add(inport); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -156,14 +179,14 @@ public class ExcelImportService {
             Sheet sheet = workbook.getSheetAt(0); 
             for (int i = 1; i <= sheet.getLastRowNum();  i++) { // 从第2行开始读取 
                 Row row = sheet.getRow(i); 
-                if (row == null) continue;
+                if (row == null || StringUtil.isBlank(getCellValue(row,  0))) continue;
                 
                 try {
                 	Provider provider = parseProviderRow(row);
                     validateProvider(provider);
                     
                     // 保存到数据库 
-                    //goodsRepository.save(goods); 
+                    providerService.insert(provider.getProvidername(), provider.getAddress(), provider.getConnectionperson(),provider.getPhone());
                     successList.add(provider); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -177,31 +200,32 @@ public class ExcelImportService {
  
     private Provider parseProviderRow(Row row) {
     	Provider provider = new Provider();
-       // goods.setProductCode(getCellValue(row,  0)); // 商品型号 
-        //goods.setGoodsName(getCellValue(row,  1));   // 商品名称 
-        //goods.setSize(getCellValue(row,  2));        // 商品规格 
-        //goods.setProviderId(getCellValue(row,  3)); // 供应商ID 
+         provider.setProvidername(getCellValue(row,  0)); 
+         provider.setAddress(getCellValue(row,  1));   
+         provider.setConnectionperson(getCellValue(row,  2));         
+         provider.setPhone(getCellValue(row,  3)); 
         return provider;
     }
     
     public ImportResult importSalesExcel(MultipartFile file) throws Exception {
         List<Sales> successList = new ArrayList<>();
         List<ImportError> errorList = new ArrayList<>();
-        
+        String operateperson = (String) httpSession.getAttribute("username");
         try (InputStream is = file.getInputStream(); 
              Workbook workbook = WorkbookFactory.create(is))  {
             
             Sheet sheet = workbook.getSheetAt(0); 
             for (int i = 1; i <= sheet.getLastRowNum();  i++) { // 从第2行开始读取 
                 Row row = sheet.getRow(i); 
-                if (row == null) continue;
+                if (row == null || StringUtil.isBlank(getCellValue(row,  0))) continue;
                 
                 try {
                 	Sales sales = parseSalesRow(row);
                 	validateSales(sales);
                     
                     // 保存到数据库 
-                    //goodsRepository.save(goods); 
+                	salesService.insert(sales.getId(),sales.getId(), sales.getPaytype(), new Date(), operateperson, sales.getNumber(), sales.getRemark(), 
+                			sales.getSaleprice(), sales.getGoodsid());
                     successList.add(sales); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -214,11 +238,13 @@ public class ExcelImportService {
     }
  
     private Sales parseSalesRow(Row row) {
-    	Sales sales = new Sales();
-       // sales.setProductCode(getCellValue(row,  0)); // 商品型号 
-        //sales.setGoodsName(getCellValue(row,  1));   // 商品名称 
-        //sales.setSize(getCellValue(row,  2));        // 商品规格 
-        //sales.setProviderId(getCellValue(row,  3)); // 供应商ID 
+    	 Sales sales = new Sales();
+    	 sales.setId(Integer.valueOf(getCellValue(row,  0)));
+    	 
+         //sales.setProductCode(); // 商品型号 
+         //sales.setGoodsName(getCellValue(row,  1));   // 商品名称 
+         //sales.setSize(getCellValue(row,  2));        // 商品规格 
+         //sales.setProviderId(getCellValue(row,  3)); // 供应商ID 
         return sales;
     }
 
@@ -231,17 +257,36 @@ public class ExcelImportService {
             
             // 创建SXSSFWorkbook（默认保留100行在内存中）
             workbook = new SXSSFWorkbook();
-            Sheet sheet = workbook.createSheet(" 商品数据");
+            Sheet sheet = workbook.createSheet(" Product Record产品数据");
             
-            // 创建表头 
+            // Create cell style with text wrapping
+            CellStyle wrapStyle = workbook.createCellStyle(); 
+            wrapStyle.setWrapText(true); 
+            
+            // 创建表头  
             Row headerRow = sheet.createRow(0); 
-            headerRow.createCell(0).setCellValue(" 商品型号");
-            headerRow.createCell(1).setCellValue(" 商品名称");
-            headerRow.createCell(2).setCellValue(" 商品规格");  
-  
-            // 写入响应流 
-            workbook.write(response.getOutputStream()); 
+            headerRow.setHeightInPoints(30);  // Increased height for wrapped text
             
+            headerRow.createCell(0).setCellValue("Model\n产品型号");
+            headerRow.getCell(0).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(1).setCellValue("Remark\n产品规格");
+            headerRow.getCell(1).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(2).setCellValue("Compatible for\n产品机型");
+            headerRow.getCell(2).setCellStyle(wrapStyle); 
+
+            
+            // Set column widths (in units of 1/256th of a character width)
+            sheet.setColumnWidth(0,  30 * 256);  // Provider Name 
+            sheet.setColumnWidth(1,  30 * 256);  // Provider Address 
+            sheet.setColumnWidth(2,  30 * 256);  // Contact Person
+
+            // 写入响应流 
+            try (ServletOutputStream out = response.getOutputStream())  {
+                workbook.write(out); 
+                workbook.dispose();  // Clean up temporary files
+            }
         } catch (Exception e) {
             throw new RuntimeException("生成模板失败", e);
         } finally {
@@ -268,19 +313,43 @@ public class ExcelImportService {
             
             // 创建SXSSFWorkbook（默认保留100行在内存中）
             workbook = new SXSSFWorkbook();
-            Sheet sheet = workbook.createSheet(" 客户数据");
+            Sheet sheet = workbook.createSheet("Customer Record客户数据");
+            
+            // Create cell style with text wrapping
+            CellStyle wrapStyle = workbook.createCellStyle(); 
+            wrapStyle.setWrapText(true); 
             
             // 创建表头 
             Row headerRow = sheet.createRow(0); 
-            headerRow.createCell(0).setCellValue(" 客户名称");
-            headerRow.createCell(1).setCellValue(" 客户地址");
-            headerRow.createCell(2).setCellValue(" 联系人");
-            headerRow.createCell(3).setCellValue(" 联系人电话");
-            headerRow.createCell(4).setCellValue(" 邮箱");
+            headerRow.setHeightInPoints(30);  // Increased height for wrapped text
             
+            headerRow.createCell(0).setCellValue("Client's Name\n客户名称");
+            headerRow.getCell(0).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(1).setCellValue("Client's Address\n客户地址");
+            headerRow.getCell(1).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(2).setCellValue("Connection Person's Name\n联系人");
+            headerRow.getCell(2).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(3).setCellValue("Phone Number\n联系人电话");
+            headerRow.getCell(3).setCellStyle(wrapStyle);
+            
+            headerRow.createCell(4).setCellValue("Email Address\n邮箱");
+            headerRow.getCell(4).setCellStyle(wrapStyle); 
+            
+            // Set column widths (in units of 1/256th of a character width)
+            sheet.setColumnWidth(0,  30 * 256); 
+            sheet.setColumnWidth(1,  30 * 256);
+            sheet.setColumnWidth(2,  30 * 256);
+            sheet.setColumnWidth(3,  30 * 256);  
+            sheet.setColumnWidth(4,  30 * 256); 
+
             // 写入响应流 
-            workbook.write(response.getOutputStream()); 
-            
+            try (ServletOutputStream out = response.getOutputStream())  {
+                workbook.write(out); 
+                workbook.dispose();  // Clean up temporary files
+            }
         } catch (Exception e) {
             throw new RuntimeException("生成模板失败", e);
         } finally {
@@ -350,18 +419,39 @@ public class ExcelImportService {
             
             // 创建SXSSFWorkbook（默认保留100行在内存中）
             workbook = new SXSSFWorkbook();
-            Sheet sheet = workbook.createSheet(" 供应商数据");
+            Sheet sheet = workbook.createSheet("Provider Record供应商数据");
+            
+            // Create cell style with text wrapping
+            CellStyle wrapStyle = workbook.createCellStyle(); 
+            wrapStyle.setWrapText(true); 
             
             // 创建表头 
             Row headerRow = sheet.createRow(0); 
-            headerRow.createCell(0).setCellValue(" 供应商名称");
-            headerRow.createCell(1).setCellValue(" 供应商地址");
-            headerRow.createCell(2).setCellValue(" 联系人");
-            headerRow.createCell(3).setCellValue(" 联系人电话");
+            headerRow.setHeightInPoints(30);  // Increased height for wrapped text
+            
+            headerRow.createCell(0).setCellValue("Provider Name\n供应商名称");
+            headerRow.getCell(0).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(1).setCellValue("Provider Address\n供应商地址");
+            headerRow.getCell(1).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(2).setCellValue("Connection Person's Name\n联系人名称");
+            headerRow.getCell(2).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(3).setCellValue("Phone Number\n电话");
+            headerRow.getCell(3).setCellStyle(wrapStyle); 
+            
+            // Set column widths (in units of 1/256th of a character width)
+            sheet.setColumnWidth(0,  30 * 256);  // Provider Name 
+            sheet.setColumnWidth(1,  30 * 256);  // Provider Address 
+            sheet.setColumnWidth(2,  30 * 256);  // Contact Person
+            sheet.setColumnWidth(3,  30 * 256);  // Phone Number
 
             // 写入响应流 
-            workbook.write(response.getOutputStream()); 
-            
+            try (ServletOutputStream out = response.getOutputStream())  {
+                workbook.write(out); 
+                workbook.dispose();  // Clean up temporary files
+            }
         } catch (Exception e) {
             throw new RuntimeException("生成模板失败", e);
         } finally {

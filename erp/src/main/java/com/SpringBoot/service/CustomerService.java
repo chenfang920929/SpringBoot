@@ -20,6 +20,12 @@ public class CustomerService implements CustomerImp{
 		List<Customer> select = customerImp.select(customername, connectionpersion, phone, index, limit);
 		return select;
 	}
+	
+	@Override
+	public Integer selectCount(String customername,String connectionpersion,String phone) {
+		Integer count = customerImp.selectCount(customername, connectionpersion, phone);
+		return count;
+	}
 
 	@Override
 	public List<Customer> selectName() {

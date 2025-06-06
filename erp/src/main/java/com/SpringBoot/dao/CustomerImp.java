@@ -22,4 +22,6 @@ public interface CustomerImp {
 			,@Param("phone")String phone,@Param("email")String email);
 	
 	public void delete(Integer id);
+
+	public Integer selectCount(@Param("customername")String customername,@Param("connectionpersion")String connectionpersion,@Param("phone")String phone);
 }

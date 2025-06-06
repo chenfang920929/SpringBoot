@@ -14,11 +14,11 @@ public interface GoodsImp {
 	
 	public Integer selectCount(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("size")String size);
 	
-	public void insert(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("size")String size);
+	public void insert(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("description")String description,@Param("size")String size,@Param("number")Integer number);
 	
 	public void delete(Integer id);
 	
-	public void update(@Param("id")Integer id,@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("size")String size);
+	public void update(@Param("id")Integer id,@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("description")String description,@Param("size")String size,@Param("number")Integer number);
 	
 	public List<Goods> selectGoodsName();
 	

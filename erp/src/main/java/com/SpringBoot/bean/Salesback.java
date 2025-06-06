@@ -31,6 +31,10 @@ public class Salesback {
 	    private String remark;
 
 	    private Integer goodsid;
+	    
+	    private String productcode;
+	    
+	    private Integer orderno;
 
 	    /**
 	     * 客户姓名

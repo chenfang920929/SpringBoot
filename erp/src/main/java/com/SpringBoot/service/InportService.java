@@ -50,14 +50,17 @@ public class InportService implements InportImp {
 		List<Inport> select = inportImp.select(providerid, goodsid, index, limit);
 		return select;
 	}
+	
+	@Override
+	public Integer selectCount(Integer providerid, Integer goodsid) {
+		Integer count = inportImp.selectCount(providerid, goodsid);
+		return count;	
+	}
+
 
 	@Override
 	public Inport selectById(Integer id) {
 		// TODO 自动生成的方法存根
 		return inportImp.selectById(id);
 	}
-
-	
-
-
 }

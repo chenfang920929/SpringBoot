@@ -62,67 +62,84 @@
 <body>
 <!--查询条件-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>搜索条件</legend>
+    <legend>search criteria/搜索条件</legend>
 </fieldset>
 <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">客户名称</label>
+            <label class="layui-form-label">Client's Name<br/>客户名称</label>
             <div class="layui-input-inline">
                 <select name="customerid" id="select_customerid">
-                    <option value="">请选择客户</option>
+                    <option value="">Please select the client's Name</option>
                 </select>
             </div>
         </div>
+		
+		<div class="layui-inline">
+		    <label class="layui-form-label">Order No.<br/>订单号</label>
+			<div class="layui-input-inline">
+			    <input type="text" name="id" id="id" lay-verify="number"  class="layui-input input-radius" placeholder="Please select the Order No">
+			</div>
+		</div>
+		
         <div class="layui-inline">
-            <label class="layui-form-label">商品名称</label>
+            <label class="layui-form-label">Product Name<br/>产品名称</label>
             <div class="layui-input-inline">
                 <select name="goodsid" id="select_goodsid">
-                    <option value="">请选择商品</option>
+                    <option value="">Please select the product name</option>
                 </select>
             </div>
         </div>
+		
+		<div class="layui-inline">
+		    <label class="layui-form-label">Sales Date<br/>销售日期</label>
+		    <div class="layui-input-inline" style="width: 300px;">
+		        <input type="text" class="layui-input" id="salesDateRange" placeholder="请选择日期范围">
+		        <input type="hidden" name="startTime" id="startTime">
+		        <input type="hidden" name="endTime" id="endTime">
+		    </div>
+		</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block" style="text-align: center;padding-right: 15%;">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
-                    class="layui-icon layui-icon-search layui-icon-normal"></i>查询
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query/查询
             </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
-                    class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                    class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
             </button>
         </div>
     </div>
 </form>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>选择Excel File导入数据</legend>
+    <legend>Import Data/导入数据</legend>
 </fieldset>
 <div class="layui-card">
     <div class="layui-card-body">
-		<form class="layui-form" lay-filter="import-form">
-		    <div class="layui-form-item">
-		        <label class="layui-form-label">选择文件</label>
-		        <div class="layui-input-inline">
-		            <button type="button" class="layui-btn" id="select-file">
-		                <i class="layui-icon">&#xe67c;</i>选择Excel文件 
-		            </button>
-		            <input type="file" id="file-input" style="display:none" accept=".xlsx,.xls">
-		        </div>
+        <form class="layui-form" lay-filter="import-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Choose File</label>
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="select-file">
+                        <i class="layui-icon">&#xe67c;</i>Choose Excel File
+                    </button>
+                    <input type="file" id="file-input" style="display:none" accept=".xlsx,.xls">
+                </div>
 				<div class="layui-input-inline">
 				     <span id="file-name" style="color:#666;"></span>
 				</div>
 				<div class="layui-input-inline">
 				      <button type="button" class="layui-btn layui-btn-normal" id="import-btn">
-				         <i class="layui-icon layui-icon-upload"></i>开始导入 
+				         <i class="layui-icon layui-icon-upload"></i>Start Import
 				      </button>
 				 </div>
-		        <div class="layui-input-inline">
-		            <button type="button" class="layui-btn layui-btn-primary" id="download-template">
-		                <i class="layui-icon">&#xe601;</i>下载模板 
-		            </button>
-		        </div>
-		    </div>
-		</form>
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn layui-btn-primary" id="download-template">
+                        <i class="layui-icon">&#xe601;</i>Download Template
+                    </button>
+                </div>
+            </div>
+        </form>
         
         <div id="progress-container" style="display: none; margin-top: 20px;">
             <div class="layui-progress" lay-showpercent="true" lay-filter="import-progress">
@@ -137,18 +154,18 @@
     <table class="layui-hide" id="salesTable" lay-filter="salesTable"></table>
     <div id="salesToolBar" style="display: none">
         <button type="button" lay-event="add" shiro:hasPermission="sales:create" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
-            <i class="layui-icon layui-icon-add-1"></i>添加销售
+            <i class="layui-icon layui-icon-add-1"></i>Add Sales/添加销售
         </button>
     </div>
     <div id="salesRowBar" style="display: none;">
         <button type="button" lay-event="update" shiro:hasPermission="sales:update" class="layui-btn layui-btn-sm layui-btn-radius"><i
-                class="layui-icon layui-icon-edit"></i>编辑
+                class="layui-icon layui-icon-edit"></i>Edit/编辑
         </button>
         <button type="button" lay-event="delete" shiro:hasPermission="sales:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>删除
+                class="layui-icon layui-icon-delete"></i>Delte/删除
         </button>
         <button type="button" lay-event="back" shiro:hasPermission="sales:back" class="layui-btn layui-btn-sm layui-btn-warm layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>退货
+                class="layui-icon layui-icon-delete"></i>Return/退货
         </button>
     </div>
 </div>
@@ -158,53 +175,54 @@
     <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">客户名称</label>
+                <label class="layui-form-label">Client's Name<br/>客户名称</label>
                 <div class="layui-input-inline">
                     <select name="customerid" id="customerid" lay-filter="customerid">
-                        <option value="">请选择客户</option>
+                        <option value="">Please select the client's Name</option>
                     </select>
                     <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">商品名称</label>
-                <div class="layui-input-inline">
-					<select name="goodsname" id="goodsname" placeholder="请选择商品名称">
-						<option value="">请选择商品名称</option>
-						<option value="硒鼓">硒鼓</option>
-						<option value="墨盒">墨盒</option>
-						<option value="墨水">墨水</option>
-						<option value="配件">配件</option>
-						<option value="纸盒">纸盒</option>
-					</select>
-                </div>
-                <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
-            </div>
+            
 			<div class="layui-inline">
-				<label class="layui-form-label">商品型号</label>
+				 <label class="layui-form-label">Product Name<br/>产品名称</label>
 				<div class="layui-input-inline">
-					 <input type="text" name="productcode" id="productcode" class="layui-input input-radius" placeholder="请输入商品型号">
-				</div>
+				      <select name="goodsid" id="goodsid" lay-filter="goodsid">
+				          <option value="">Please select the product name</option>
+				     </select>
+					<div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
+				 </div>
 			</div>
         </div>
+		
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">Order No.<br/>订单号</label>
+				<div class="layui-input-block">
+				    <input type="text" name="id" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Order No.">
+				</div>
+		    </div>
+		</div>
+		
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">销售数量</label>
+                <label class="layui-form-label">Sales Qty<br/>销售数量</label>
                 <div class="layui-input-block">
-                    <input type="hidden" name="id">
-                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入销售数量">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">销售价格(PHP)</label>
-                <div class="layui-input-block">
-                    <input type="text" name="saleprice" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入销售价格">
+                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the sales Qty">
                 </div>
             </div>
         </div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">Sales Price(PHP)<br/>销售价格(比索)</label>
+		        <div class="layui-input-block">
+		            <input type="text" name="saleprice" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the sales price">
+		        </div>
+		    </div>
+		</div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">支付类型</label>
+                <label class="layui-form-label">Paytype<br/>支付类型</label>
                 <div class="layui-input-block">
                     <input type="radio" name="paytype" value="Cash" title="Cash">
                     <input type="radio" name="paytype" value="Check" title="Check">
@@ -215,19 +233,19 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">销售备注</label>
+                <label class="layui-form-label">Note<br/>备注</label>
                 <div class="layui-input-block">
-                    <textarea name="remark" placeholder="请输入销售备注" class="layui-textarea" cols="200" rows="8"></textarea>
+                    <textarea name="remark" placeholder="Please select the Note" class="layui-textarea" cols="200" rows="8"></textarea>
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
                 </button>
             </div>
         </div>
@@ -240,29 +258,29 @@
 
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">退货数量</label>
+                <label class="layui-form-label">Return Qty<br/>退货数量</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">  <!-- 销售单ID  -->
                     <input type="hidden" name="currentNumber" id="currentNumber">  <!-- 销售单中销售数量  -->
-                    <input type="text" name="number" lay-verify="required|checkNumber" autocomplete="off" class="layui-input input-radius" placeholder="请输入退货数量">
+                    <input type="text" name="number" lay-verify="required|checkNumber" autocomplete="off" class="layui-input input-radius" placeholder="Please select the return Qty">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">退货备注</label>
+                <label class="layui-form-label">Return Note<br/>退货备注</label>
                 <div class="layui-input-block">
-                    <textarea name="remark" placeholder="请输入退货备注" class="layui-textarea" cols="200" rows="8"></textarea>
+                    <textarea name="remark" placeholder="Please select the return note" class="layui-textarea" cols="200" rows="8"></textarea>
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doBackSubmit" id="doBackSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
                 </button>
             </div>
         </div>
@@ -410,15 +428,41 @@
 		    window.location.href  = '/excel/salestemplate';
 		});
 
-        //初始化时间选择器
-        laydate.render({
-            elem: '#startTime',
-            type: 'datetime'
-        });
-        laydate.render({
-            elem: '#endTime',
-            type: 'datetime'
-        })
+		//初始化时间选择器 - 日期范围控件 
+		        laydate.render({ 
+		            elem: '#salesDateRange',
+		            type: 'date',
+		            range: true,
+		            trigger: 'click',
+		            format: 'yyyy-MM-dd',
+		            value: getCurrentDateRange(),
+		            done: function(value, date, endDate) {
+		                if(value) {
+		                    var dates = value.split('  - ');
+		                    $('#startTime').val(dates[0]);
+		                    $('#endTime').val(dates[1]);
+		                } else {
+		                    $('#startTime').val('');
+		                    $('#endTime').val('');
+		                }
+		            }
+		        });
+		 
+		        // 获取当天日期范围的方法
+		        function getCurrentDateRange() {
+		            var now = new Date();
+		            var year = now.getFullYear(); 
+		            var month = now.getMonth()  + 1;
+		            var day = now.getDate(); 
+		            
+		            month = month < 10 ? '0' + month : month;
+		            day = day < 10 ? '0' + day : day;
+		            
+		            var today = year + '-' + month + '-' + day;
+		            return today + ' - ' + today;
+		        }
+		 
+ 
 
         //初始化表格 加载数据
         tableIns = table.render({
@@ -427,20 +471,21 @@
             url: "/sales/loadAllSales",
             toolbar: "#salesToolBar",
             page: true,
+			limit: '9999999',  // 默认单页模式 
+			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
             cols: [ [
-                {field: 'id', title: 'ID', align: 'center',width:'50'},
-                {field: 'customername', title: '客户名称', align: 'center',width:'100'},
-                {field: 'goodsname', title: '商品名称', align: 'center',width:'100'},
-				{field: 'productcode', title: '商品型号', align: 'center',width:'260'},
-				{field: 'size', title: '商品规格', align: 'center',width:'260'},
-                {field: 'paytype', title: '支付类型', align: 'center',width:'90'},
-                {field: 'salestime', title: '销售时间', align: 'center',width:'160'},
-                {field: 'operateperson', title: '销售员', align: 'center',width:'80'},
-                {field: 'number', title: '销售数量', align: 'center',width:'100'},
-                {field: 'saleprice', title: '销售价格(PHP)', align: 'center',width:'140'},
-                {field: 'remark', title: '备注', align: 'center',width:'100'},
-                {fixed: 'right', title: '操作', toolbar: '#salesRowBar', align: 'center',width:'260'}
+				{field: 'id', title: 'Order No.<br/>订单号', align: 'center',width:'150'},
+                {field: 'customername', title: 'Client\'s Name<br/>客户名称', align: 'center',width:'140'},
+				{field: 'productcode', title: 'Model<br/>产品型号', align: 'center',width:'260'},
+				{field: 'size', title: 'Remark<br/>产品规格', align: 'center',width:'260'},
+                {field: 'paytype', title: 'Paytype<br/>支付类型', align: 'center',width:'90'},
+                {field: 'salestime', title: 'Sales Time<br/>销售时间', align: 'center',width:'160'},
+                {field: 'operateperson', title: 'Sales Name<br/>销售员', align: 'center',width:'80'},
+                {field: 'number', title: 'Sales Qty<br/>销售数量', align: 'center',width:'100'},
+                {field: 'saleprice', title: 'Sales Price(PHP)<br/>销售价格(比索)', align: 'center',width:'140'},
+                {field: 'remark', title: 'Note<br/>备注', align: 'center',width:'100'},
+                {fixed: 'right', title: 'execute<br/>操作', toolbar: '#salesRowBar', align: 'center',width:'350'}
             ] ],
             done: function (data, curr, count) {
                 //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -509,7 +554,7 @@
             var dom = $("#select_goodsid");
             var html = '<option value="">请选择商品</option>';
             $.each(data,function (index, item) {
-                html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.size+']-'+'['+item.providername+']'+'</option>';
+                html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.productcode+']-'+'['+item.providername+']'+'</option>';
             });
             dom.html(html);
             //重新渲染下拉列表
@@ -559,9 +604,9 @@
                         var html='<option value="">请选择供应商</option>'
                         $.each(redata,function(index,item){
                             if (data.goodsid===item.id){
-                                html+='<option value="'+item.id+'" selected>'+item.goodsname+'</option>'
+                                html+='<option value="'+item.id+'" selected>'+item.goodsname+'-['+item.productcode+']-'+'['+item.providername+']'+'</option>'
                             }else {
-                                html+='<option value="'+item.id+'">'+item.goodsname+'</option>'
+                                html+='<option value="'+item.id+'">'+item.goodsname+'-['+item.productcode+']-'+'['+item.providername+']'+'</option>'
                             }
                         });
                         dom.html(html);
@@ -610,7 +655,7 @@
                 var dom = $("#goodsid");
                 var html = '<option value="">请选择商品</option>';
                 $.each(data,function (index, item) {
-                    html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.size+']-'+'['+item.providername+']'+'</option>';
+                    html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.productcode+']-'+'['+item.providername+']'+'</option>';
                 });
                 dom.html(html);
                 //如果goodsid有值就进行反选

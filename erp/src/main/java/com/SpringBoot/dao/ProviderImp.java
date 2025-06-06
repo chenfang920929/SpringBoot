@@ -19,4 +19,8 @@ public interface ProviderImp {
 	public void delete(Integer id);
 	
 	public List<Provider> selectAvailable();
+
+	public Integer selectCount(@Param("providername")String providername,@Param("connectionperson")String connectionperson,@Param("phone")String phone);
+
+	public Integer selectProviderId(@Param("providername")String providername);
 }

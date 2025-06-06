@@ -28,11 +28,12 @@ public class SalesController {
 	HttpSession httpSession;
 	
 	@RequestMapping("loadAllSales")
-	public LayuiJson<Sales> loadAllSales(Integer customerid,Integer goodsid,Integer page,Integer limit){
+	public LayuiJson<Sales> loadAllSales(Integer customerid,Integer goodsid,Integer id,Integer page,Integer limit){
 		int index=(page-1)*limit;
-		List<Sales> data = salesService.select(customerid, goodsid, index, limit);
+		List<Sales> data = salesService.select(customerid, goodsid, id,index, limit);
+		Integer num=salesService.selectCount(customerid, goodsid, id);
 		layuiJson.setCode(0);
-		layuiJson.setCount(data.size());
+		layuiJson.setCount(num);
 		layuiJson.setData(data);
 		return layuiJson;
 	}
@@ -43,12 +44,12 @@ public class SalesController {
      * @return
      */
     @RequestMapping("addSales")
-    public ResultObj addSales(Integer customerid, String paytype, Integer number,
+    public ResultObj addSales(Integer id,Integer customerid, String paytype, Integer number,
 			String remark, Double saleprice, Integer goodsid){
         try {
         	String operateperson = (String) httpSession.getAttribute("username");
         	Date salestime=new Date();
-			salesService.insert(customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
+			salesService.insert(id,customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

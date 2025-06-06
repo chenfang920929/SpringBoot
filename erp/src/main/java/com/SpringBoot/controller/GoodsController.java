@@ -55,11 +55,9 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("addGoods")
-    public ResultObj addGoods(Integer providerid, String goodsname, String productcode, String promitcode, String description,
-			String size, String produceplace, String goodspackage, Double price, Integer number, Integer dangernum,
-			Integer available){
+    public ResultObj addGoods(Integer providerid, String goodsname, String productcode, String description, String size,  Integer number){
         try {
-        	goodsService.insert(providerid, goodsname, productcode, size);
+        	goodsService.insert(providerid, goodsname, productcode, description, size ,number);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,9 +71,9 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("updateGoods")
-    public ResultObj updateGoods(Integer id, Integer providerid, String goodsname, String productcode, String size){
+    public ResultObj updateGoods(Integer id, Integer providerid, String goodsname, String productcode, String description,String size,Integer number){
         try {
-            goodsService.update(id, providerid, goodsname, productcode, size);
+            goodsService.update(id, providerid, goodsname, productcode, description,size,number);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

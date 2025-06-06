@@ -21,9 +21,24 @@
  		limit #{index},#{limit}
  	
  	</select>
+ 	
+ 	<select id="selectCount" resultType="java.lang.Integer">
+ 		select count(*) from bus_customer 
+ 		<where>
+ 			<if test="customername!=null">
+ 				and customername like '%${customername}%'
+ 			</if>
+ 			<if test="connectionpersion!=null">
+ 				and connectionpersion like '%${connectionpersion}%'
+ 			</if>
+ 			<if test="phone!=null">
+ 				and phone like '%${phone}%'
+ 			</if>
+ 		</where>
+ 	</select>
  		
  	<select id="selectName" resultType="com.SpringBoot.bean.Customer">
- 		select * from bus_customer where available=1
+ 		select * from bus_customer
  	</select>
  
  	<insert id="insert">

@@ -26,8 +26,9 @@ public class ProviderController {
 	public LayuiJson<Provider> loadAllProvider(String providername,String connectionperson,String phone,Integer page,Integer limit) {
 		int index=(page-1)*limit;
 		List<Provider> data = providerService.select(providername, connectionperson, phone, index, limit);
+		Integer num=providerService.selectCount(providername, connectionperson, phone);
 		layuiJson.setCode(0);
-		layuiJson.setCount(1000);
+		layuiJson.setCount(num);
 		layuiJson.setData(data);
 		return layuiJson;
 	}

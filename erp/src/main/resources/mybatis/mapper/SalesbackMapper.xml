@@ -14,18 +14,36 @@
 			<if test="goodsid!=null">
 			 and s.goodsid =#{goodsid}
 			</if>
+			<if test="orderno!=null">
+			 and s.orderno =#{orderno}
+			</if>
 		</where>
 		limit #{index},#{limit}
 	</select>
+	
+	<select id="selectCount" resultType="java.lang.Integer">
+ 		select count(*) from bus_salesback s join bus_customer c on s.customerid=c.id join bus_goods g on s.goodsid=g.id
+		<where>
+			<if test="customerid!=null">
+			 and s.customerid =#{customerid}
+			</if>
+			<if test="goodsid!=null">
+			 and s.goodsid =#{goodsid}
+			</if>
+			<if test="orderno!=null">
+			 and s.orderno =#{orderno}
+			</if>
+		</where>
+ 	</select>
 	
 	<delete id="delete">
 		delete from bus_salesback where id=#{id}
 	</delete>
 	
 	<insert id="insert">
-		insert into bus_salesback(customerid,paytype,salesbacktime,salebackprice,operateperson,number,remark,goodsid)
+		insert into bus_salesback(customerid,paytype,salesbacktime,salebackprice,operateperson,number,remark,goodsid,orderno)
 		values
-		(#{customerid},#{paytype},#{salesbacktime},#{salebackprice},#{operateperson},#{number},#{remark},#{goodsid})
+		(#{customerid},#{paytype},#{salesbacktime},#{salebackprice},#{operateperson},#{number},#{remark},#{goodsid},#{orderno})
 	</insert>
   
   </mapper>
