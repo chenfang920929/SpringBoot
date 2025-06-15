@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.Loginfo;
 import com.SpringBoot.common.ActiverUser;
 import com.SpringBoot.common.ResultObj;
@@ -34,6 +35,7 @@ public class LoginController {
     @Autowired
     private LoginfoService loginfoService;
     
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("login")
     public ResultObj login(UserVo userVo,String code,HttpSession session,HttpServletRequest request){
     	

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.Provider;
 import com.SpringBoot.common.DataGridView;
 import com.SpringBoot.common.LayuiJson;
@@ -22,6 +23,7 @@ public class ProviderController {
 	@Autowired
 	LayuiJson layuiJson;
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("loadAllProvider")
 	public LayuiJson<Provider> loadAllProvider(String providername,String connectionperson,String phone,Integer page,Integer limit) {
 		int index=(page-1)*limit;
@@ -33,11 +35,11 @@ public class ProviderController {
 		return layuiJson;
 	}
 	
-	
+	 @LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	 @RequestMapping("loadAllProviderForSelect")
 	 public DataGridView loadAllProviderForSelect() {
 	        List<Provider> list = this.providerService.selectAvailable();
-	        return new DataGridView(list);
+	        return new DataGridView(list!=null?list.size():0L,list);
 		}
 	 
 	 /**
@@ -45,6 +47,7 @@ public class ProviderController {
 	     * @param providerVo
 	     * @return
 	     */
+		@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	    @RequestMapping("addProvider")
 	    public ResultObj addProvider(String providername, String address, String connectionperson,String phone){
 	        try {
@@ -62,6 +65,7 @@ public class ProviderController {
 	     * @param providerVo
 	     * @return
 	     */
+		@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	    @RequestMapping("updateProvider")
 	    public ResultObj updateProvider(Integer id, String providername, String address, String connectionperson, String phone){
 	        try {
@@ -79,6 +83,7 @@ public class ProviderController {
 	     * @param id
 	     * @return
 	     */
+		@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	    @RequestMapping("deleteProvider")
 	    public ResultObj deleteProvider(Integer id){
 	        try {

@@ -1,5 +1,6 @@
 package com.SpringBoot.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
@@ -14,9 +15,11 @@ import lombok.NoArgsConstructor;
 @Component
 public class Sales {
 
-	 private Integer id;
+	 	private Integer id;
+	 	
+	 	private String orderid;
 
-	    private Integer customerid;
+	    private String customerid;
 
 	    private String paytype;
 
@@ -28,24 +31,15 @@ public class Sales {
 
 	    private String remark;
 
-	    private Double saleprice;
-
+	    private BigDecimal saleprice;
+	    
 	    private Integer goodsid;
 	    
 	    private String productcode;
 
-	    /**
-	     * 客户名称
-	     */
 	    private String customername;
 
-	    /**
-	     * 商品名称
-	     */
 	    private String goodsname;
 
-	    /**
-	     * 商品规格
-	     */
 	    private String size;
 }

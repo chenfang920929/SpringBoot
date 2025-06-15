@@ -14,6 +14,12 @@
 			    <if test="goodsid!=null">
 			    and i.goodsid =#{goodsid}
 			    </if>
+			    <if test="startTime!=null">
+				and i.inporttime >= #{startTime}
+				</if>
+			    <if test="endTime!=null">
+			    and i.inporttime <![CDATA[<=]]> DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+			    </if>
 			</where>
 			limit #{index},#{limit}
 	</select>
@@ -28,19 +34,24 @@
 			    <if test="goodsid!=null">
 			    and i.goodsid =#{goodsid}
 			    </if>
+			    <if test="startTime!=null">
+				and i.inporttime >= #{startTime}
+				</if>
+			    <if test="endTime!=null">
+			    and i.inporttime <![CDATA[<=]]>DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+			    </if>
 			</where>
  	</select>
 	
 	<insert id="insert">
-		insert into bus_inport (inporttime, operateperson, number, remark, inportprice, providerid, goodsid) 
+		insert into bus_inport (inporttime, operateperson, number, remark, inportprice, providerid, goodsid, carton) 
 		values 
-		(#{inporttime},#{operateperson},#{number},#{remark},#{inportprice},#{providerid},#{goodsid});
+		(#{inporttime},#{operateperson},#{number},#{remark},#{inportprice},#{providerid},#{goodsid},#{carton});
 	</insert>
 	
 	<update id="update">
 
-		update bus_inport set inporttime=#{inporttime},number=#{number},remark=#{remark},inportprice=#{inportprice}, providerid=#{providerid},
-		goodsid=#{goodsid},operateperson=#{operateperson}
+		update bus_inport set inporttime=#{inporttime},number=#{number},remark=#{remark},inportprice=#{inportprice},operateperson=#{operateperson},carton=#{carton}
 		  where id=#{id}
 	</update>
 

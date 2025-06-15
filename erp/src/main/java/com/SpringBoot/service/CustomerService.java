@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.SpringBoot.bean.Customer;
 import com.SpringBoot.dao.CustomerImp;
@@ -33,25 +34,43 @@ public class CustomerService implements CustomerImp{
 		List<Customer> selectName = customerImp.selectName();
 		return selectName;
 	}
-
+	
 	@Override
-	public void insert(String customername, String address, String connectionpersion,
-			String phone, String email) {
+	public List<Customer> selectAvailableName() {
 		// TODO 自动生成的方法存根
-		customerImp.insert(customername, address, connectionpersion, phone, email);
+		List<Customer> selectName = customerImp.selectAvailableName();
+		return selectName;
 	}
 
 	@Override
-	public void update(Integer id, String customername, String address, String connectionpersion, String phone,String email) {
+	public void insert(String id,String customername, String address, String connectionpersion,
+			String phone, String email,Integer available) {
 		// TODO 自动生成的方法存根
-		customerImp.update(id, customername, address, connectionpersion, phone, email);
+		customerImp.insert(id, customername, address, connectionpersion, phone, email,available);
+	}
+
+	@Override
+	public void update(String id, String customername, String address, String connectionpersion, String phone,String email,Integer available) {
+		// TODO 自动生成的方法存根
+		customerImp.update(id, customername, address, connectionpersion, phone, email,available);
 		
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(String id) {
 		// TODO 自动生成的方法存根
 		customerImp.delete(id);
 	}
-	
+
+	@Override
+	public Long getCurrentSeq() {
+		// TODO Auto-generated method stub
+		return customerImp.getCurrentSeq();
+	}
+
+	@Override
+	public void incrementSeq() {
+		customerImp.incrementSeq();
+	}
+
 }

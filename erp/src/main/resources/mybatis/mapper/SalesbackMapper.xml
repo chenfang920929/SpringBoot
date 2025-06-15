@@ -17,6 +17,12 @@
 			<if test="orderno!=null">
 			 and s.orderno =#{orderno}
 			</if>
+			<if test="startTime!=null">
+			 and s.salesbacktime >= #{startTime}
+			</if>
+			<if test="endTime!=null">
+			 and s.salesbacktime <![CDATA[<=]]> DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+			</if>
 		</where>
 		limit #{index},#{limit}
 	</select>
@@ -33,6 +39,12 @@
 			<if test="orderno!=null">
 			 and s.orderno =#{orderno}
 			</if>
+			<if test="startTime!=null">
+			 and s.salesbacktime >= #{startTime}
+			</if>
+			<if test="endTime!=null">
+			 and s.salesbacktime <![CDATA[<=]]> DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+			</if>
 		</where>
  	</select>
 	
@@ -46,4 +58,12 @@
 		(#{customerid},#{paytype},#{salesbacktime},#{salebackprice},#{operateperson},#{number},#{remark},#{goodsid},#{orderno})
 	</insert>
   
+  		
+	<select id="selectOrders" resultType="String">
+		select DISTINCT orderno from bus_salesback ORDER BY orderno 
+	</select>
+	
+	<select id="selectByCustomer" resultType="String">
+		select DISTINCT orderno from bus_salesback where customerid=#{customerid} ORDER BY orderno 
+	</select>
   </mapper>

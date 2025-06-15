@@ -40,16 +40,20 @@
  	<select id="selectName" resultType="com.SpringBoot.bean.Customer">
  		select * from bus_customer
  	</select>
+ 	
+ 	<select id="selectAvailableName" resultType="com.SpringBoot.bean.Customer">
+ 		select * from bus_customer where available=1
+ 	</select>
  
  	<insert id="insert">
- 		insert into bus_customer (customername,address,connectionpersion,phone,email)
+ 		insert into bus_customer (id,customername,address,connectionpersion,phone,email,available)
  		values
- 		(#{customername},#{address},#{connectionpersion},#{phone},#{email})
+ 		(#{id},#{customername},#{address},#{connectionpersion},#{phone},#{email},#{available})
  	</insert>
  	
  	<update id="update">
  		update bus_customer set customername=#{customername},address=#{address},
- 		connectionpersion=#{connectionpersion},phone=#{phone},email=#{email}
+ 		connectionpersion=#{connectionpersion},phone=#{phone},email=#{email},available=#{available}
  		where id=#{id}
  	</update>
  	
@@ -57,4 +61,11 @@
  		delete from bus_customer where id=#{id}
  	</delete>
  	
+ 	<select id="getCurrentSeq" resultType="java.lang.Long">
+ 		SELECT next_val FROM bus_customer_seq FOR UPDATE
+ 	</select>
+ 	
+ 	 <update id="incrementSeq">
+ 		UPDATE bus_customer_seq SET next_val = next_val + 1
+ 	</update>
  </mapper>

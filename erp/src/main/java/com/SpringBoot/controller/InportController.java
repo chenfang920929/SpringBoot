@@ -1,15 +1,18 @@
 package com.SpringBoot.controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.Goods;
 import com.SpringBoot.bean.Inport;
 import com.SpringBoot.common.LayuiJson;
@@ -33,11 +36,14 @@ public class InportController {
 	@Autowired
 	GoodsService goodsService;
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("loadAllInport")
-	public LayuiJson<Inport> loadAllInport(Integer providerid,Integer goodsid,Integer page,Integer limit){
+	public LayuiJson<Inport> loadAllInport(Integer providerid,Integer goodsid,Integer page,Integer limit
+			,@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime
+			,@DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
 		int index=(page-1)*limit;
-		List<Inport> data = inportService.select(providerid, goodsid, index, limit);
-		Integer num=inportService.selectCount(providerid, goodsid);
+		List<Inport> data = inportService.select(providerid, goodsid,startTime,endTime,index, limit);
+		Integer num=inportService.selectCount(providerid, goodsid,startTime,endTime);
 		layuiJson.setCode(0);
 		layuiJson.setCount(num);
 		layuiJson.setData(data);
@@ -50,12 +56,13 @@ public class InportController {
      * @param inportVo
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("addInport")
-    public ResultObj addInport(Integer providerid,Integer goodsid,Integer number,Double inportprice,String remark,String paytype){
+    public ResultObj addInport(Integer providerid,Integer goodsid,Integer number,BigDecimal inportprice,String remark,Double carton){
         try {
         	Date inporttime = new Date();
-        	String operateperson = (String) httpSession.getAttribute("username");
-        	inportService.insert(inporttime, operateperson, number, remark, inportprice, providerid, goodsid);
+        	String operateperson = (String) httpSession.getAttribute("username");                                     
+        	inportService.insert(inporttime, operateperson, number, remark, inportprice, providerid, goodsid,carton);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,12 +76,13 @@ public class InportController {
      * @param inportVo
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("updateInport")
-    public ResultObj updateInport(Integer id,Integer providerid,Integer goodsid,Integer number,Double inportprice,String remark,String paytype){
+    public ResultObj updateInport(Integer id,Integer number,BigDecimal inportprice,String remark,Double carton){
         try {
         	Date inporttime = new Date();
         	String operateperson = (String) httpSession.getAttribute("username");
-            inportService.update(id, inporttime, number, remark, inportprice, providerid, goodsid, operateperson);
+            inportService.update(id, inporttime, number, remark, inportprice, operateperson,carton);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,6 +96,7 @@ public class InportController {
      * @param id
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("deleteInport")
     public ResultObj deleteInport(Integer id){
         try {
@@ -99,7 +108,7 @@ public class InportController {
         }
     }
     
-    
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("run")
     public ResultObj runInport(Integer id,Integer number) {
@@ -110,9 +119,9 @@ public class InportController {
     		Date inporttime = new Date();
     		String remark = i.getRemark();
         	Integer goodsid = i.getGoodsid();
-        	Double inportprice = i.getInportprice();
-        	Integer providerid = i.getProviderid();
+        	BigDecimal inportprice = i.getInportprice();
         	String operateperson = (String) httpSession.getAttribute("username");
+        	Double carton = i.getCarton();
         	
         	Goods g = goodsService.selectById(goodsid);
         	Integer goodsNumber = g.getNumber();
@@ -126,7 +135,7 @@ public class InportController {
         	}else if(i.getNumber()>number){
         		goodsService.updateNumber(goodsid, number+goodsNumber);
         		inportService.update(id, inporttime, i.getNumber()-number,remark, 
-        				inportprice, providerid, goodsid, operateperson);
+        				inportprice,  operateperson,carton);
         		
         		return ResultObj.RUN_SUCCESS;
         	}else {

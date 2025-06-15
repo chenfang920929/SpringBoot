@@ -3,9 +3,11 @@ package com.SpringBoot.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.Customer;
 import com.SpringBoot.common.DataGridView;
 import com.SpringBoot.common.LayuiJson;
@@ -22,6 +24,7 @@ public class CustomerController {
 	@Autowired
 	LayuiJson layuiJson;
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("loadAllCustomer")
 	public LayuiJson<Customer> loadAllCustomer(String customername,String connectionpersion,
 			String phone,Integer page,Integer limit){
@@ -34,21 +37,31 @@ public class CustomerController {
 		return layuiJson;
 	}
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("loadAllCustomerForSelect")
 	public DataGridView loadAllCustomerForSelect(){
 		
 		List<Customer> list = customerService.selectName();
-		return new DataGridView(list);
+		return new DataGridView(list!=null?list.size():0L,list);
+	}
+	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
+	@RequestMapping("loadAvailableCustomerForSelect")
+	public DataGridView loadAvailableCustomerForSelect(){
+		
+		List<Customer> list = customerService.selectAvailableName();
+		return new DataGridView(list!=null?list.size():0L,list);
 	}
 	
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("updateCustomer")
-    public ResultObj updateCustomer(Integer id, String customername, String address, 
-			String connectionpersion, String phone, String email){
+    public ResultObj updateCustomer(String id, String customername, String address, 
+			String connectionpersion, String phone, String email,Integer available){
         try {
         	
             customerService.update(id, customername, address, 
-            		connectionpersion, phone, email);
+            		connectionpersion, phone, email,available);
             
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
@@ -57,12 +70,14 @@ public class CustomerController {
         }
     }
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("addCustomer")
     public ResultObj addCustomer(String customername, String address, String connectionpersion,
-			String phone, String email){
+			String phone, String email,Integer available){
         try {
-            customerService.insert(customername, address, 
-            		connectionpersion, phone, email);
+    		String customerId = generateCustomerId();
+            customerService.insert(customerId,customername, address, 
+            		connectionpersion, phone, email,available);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,8 +85,9 @@ public class CustomerController {
         }
     }
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("deleteCustomer")
-    public ResultObj deleteCustomer(Integer id){
+    public ResultObj deleteCustomer(String id){
         try {
             customerService.delete(id);
             return ResultObj.DELETE_SUCCESS;
@@ -79,6 +95,23 @@ public class CustomerController {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
+    }
+	
+    /**
+     * 生成 ZHT_0000001 格式的ID 
+     */
+    @Transactional 
+    public String generateCustomerId() {
+        // 1. 查询当前序列值（加锁）
+        Long nextVal = customerService.getCurrentSeq(); 
+ 
+        // 2. 格式化ID（ZHT_0000001）
+        String newId = String.format("ZHT-%06d",  nextVal);
+ 
+        // 3. 更新序列值 
+        customerService.incrementSeq(); 
+ 
+        return newId;
     }
 
 }

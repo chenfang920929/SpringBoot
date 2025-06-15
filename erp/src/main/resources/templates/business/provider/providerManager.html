@@ -16,47 +16,54 @@
     <link rel="stylesheet" href="../resources/css/public.css" media="all"/>
     <link rel="stylesheet" href="../resources/layui_ext/dtree/dtree.css" media="all"/>
     <link rel="stylesheet" href="../resources/layui_ext/dtree/font/dtreefont.css" media="all"/>
+	<style>
+		label.layui-form-label {
+		    width: 250px !important;  /* 默认宽度为120px，调整为180px或更大 */
+		    white-space: nowrap;      /* 禁止换行 */
+		    overflow: visible;        /* 允许内容溢出（避免被隐藏） */
+		}
+	</style>
 </head>
 <body>
 <!--查询条件-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>search criteria/搜索条件</legend>
+    <legend>search criteria(搜索条件)</legend>
 </fieldset>
 <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">Provider name<br/>供应商名称</label>
+            <label class="layui-form-label">Provider name(供应商名称)</label>
             <div class="layui-input-inline">
-                <input type="text" name="providername" id="providername" class="layui-input input-radius"
+                <input type="text" name="providername" id="providername" autocomplete="off"  class="layui-input input-radius"
                        placeholder="Please input the provider name">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">Connection Person's Name<br/>联系人名称</label>
+            <label class="layui-form-label">Connection Person's Name(联系人名称)</label>
             <div class="layui-input-inline">
-                <input type="text" name="connectionperson" id="connectionperson" class="layui-input input-radius" placeholder="Please input the Connection Person's Name">
+                <input type="text" name="connectionperson" id="connectionperson"  autocomplete="off" class="layui-input input-radius" placeholder="Please input the Connection Person's Name">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">Phone Number<br/>电话</label>
+            <label class="layui-form-label">Phone Number(电话)</label>
             <div class="layui-input-inline">
-                <input type="text" name="phone" id="phone" class="layui-input input-radius" placeholder="Please input the phone number">
+                <input type="text" name="phone" id="phone"  autocomplete="off" class="layui-input input-radius" placeholder="Please input the phone number">
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block" style="text-align: center;padding-right: 15%;">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
-                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query/查询
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query(查询)
             </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
-                    class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                    class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
             </button>
         </div>
     </div>
 </form>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>Import Data/导入数据</legend>
+    <legend>Import Data(导入数据)</legend>
 </fieldset>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -98,15 +105,15 @@
     <table class="layui-hide" id="providerTable" lay-filter="providerTable"></table>
     <div id="providerToolBar" style="display: none">
         <button type="button" lay-event="add" shiro:hasPermission="provider:create" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
-            <i class="layui-icon layui-icon-add-1"></i>Add Provider/添加供应商
+            <i class="layui-icon layui-icon-add-1"></i>Add Provider(添加供应商)
         </button>
     </div>
     <div id="providerRowBar" style="display: none;">
         <button type="button" lay-event="update" shiro:hasPermission="provider:update" class="layui-btn layui-btn-sm layui-btn-radius"><i
-                class="layui-icon layui-icon-edit"></i>Edit/编辑
+                class="layui-icon layui-icon-edit"></i>Edit(编辑)
         </button>
         <button type="button" lay-event="delete" shiro:hasPermission="provider:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>Delete/删除
+                class="layui-icon layui-icon-delete"></i>Delete(删除)
         </button>
     </div>
 </div>
@@ -116,16 +123,16 @@
     <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Provider name<br/>供应商名称</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Provider name(供应商名称)</label>
+                <div class="layui-input-inline">
                     <input type="hidden" name="id">
                     <input type="text" name="providername" lay-verify="required" autocomplete="off"
                            class="layui-input input-radius" placeholder="Please input the provider name">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">Provider Address<br/>供应商地址</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Provider Address(供应商地址)</label>
+                <div class="layui-input-inline">
                     <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please input the provider address">
                 </div>
             </div>
@@ -133,14 +140,14 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Connection Person's Name<br/>联系人名称</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Connection Person's Name(联系人名称）</label>
+                <div class="layui-input-inline">
                     <input type="text" name="connectionperson" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please input the Connection Person's Name">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">Phone Number<br/>电话</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Phone Number(电话)</label>
+                <div class="layui-input-inline">
                     <input type="text" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please input the phone number">
                 </div>
             </div>
@@ -148,10 +155,10 @@
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit(提交)
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
                 </button>
             </div>
         </div>
@@ -371,8 +378,8 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['700px','500px'],
-                title:'添加供应商',
+                area:['1500px','700px'],
+                title:'Add Provider(添加供应商)',
                 success:function () {
                     $("#dataFrm")[0].reset();
                     url="/provider/addProvider";
@@ -385,8 +392,8 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['700px','500px'],
-                title:'修改供应商',
+                area:['1500px','700px'],
+                title:'Edit Provider(修改供应商)',
                 success:function () {
                     //清空原有的数据
                     $("#dataFrm")[0].reset();

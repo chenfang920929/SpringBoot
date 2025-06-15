@@ -1,17 +1,21 @@
 package com.SpringBoot.controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.Sales;
 import com.SpringBoot.bean.Salesback;
+import com.SpringBoot.common.DataGridView;
 import com.SpringBoot.common.LayuiJson;
 import com.SpringBoot.common.ResultObj;
 import com.SpringBoot.service.SalesService;
@@ -33,11 +37,16 @@ public class SalesbackController {
 	@Autowired
 	HttpSession httpSession;
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("loadAllSalesback")
-	public LayuiJson<Salesback> loadAllSalesback(Integer customerid,Integer goodsid,Integer orderno,Integer page,Integer limit){
+	public LayuiJson<Salesback> loadAllSalesback(String customerid,Integer goodsid,String orderno,Integer page,Integer limit
+			,@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime
+			,@DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
 		int index=(page-1)*limit;
-		List<Salesback> data = salesbackService.select(customerid, goodsid,orderno,index, limit);
-		Integer num=salesbackService.selectCount(customerid, goodsid,orderno);
+		customerid="".equals(customerid)?null:customerid;
+		orderno="".equals(orderno)?null:orderno;
+		List<Salesback> data = salesbackService.select(customerid, goodsid,orderno,startTime,endTime,index, limit);
+		Integer num=salesbackService.selectCount(customerid, goodsid,orderno,startTime,endTime);
 		layuiJson.setCode(0);
 		layuiJson.setCount(num);
 		layuiJson.setData(data);
@@ -49,6 +58,7 @@ public class SalesbackController {
      * @param id
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("deleteSalesback")
     public ResultObj deleteSalesback(Integer id){
         try {
@@ -60,6 +70,7 @@ public class SalesbackController {
         }
     }
     
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @Transactional
     @RequestMapping("addSalesback")
     public ResultObj addSalesback(Integer id ,Integer number,String remark) {
@@ -68,21 +79,22 @@ public class SalesbackController {
     		Sales s = salesService.selectById(id);
     		Date salesbacktime=new Date();
     		String operateperson = (String) httpSession.getAttribute("username");
-    		Integer customerid = s.getCustomerid();
+    		String customerid = s.getCustomerid();
     		String paytype = s.getPaytype();
-    		Double salebackprice = s.getSaleprice();
+    		BigDecimal salebackprice = s.getSaleprice();
     		Integer goodsid = s.getGoodsid();
+    		String orderid =s.getOrderid();
     		
     		if(s.getNumber()==number) {
     			
-    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,id);
+    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,orderid);
     			salesService.delete(id);
     			
     	    	return ResultObj.BACKINPORT_SUCCESS;
     			
     		}else if(s.getNumber()>number) {
     			
-    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,id);
+    			salesbackService.insert(customerid, paytype, salesbacktime, salebackprice, operateperson, number, remark, goodsid,orderid);
     			salesService.updateNumber(id, s.getNumber()-number);
     	    	return ResultObj.BACKINPORT_SUCCESS;
     		}else {
@@ -97,4 +109,18 @@ public class SalesbackController {
     	
     }
 	
+	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
+    @RequestMapping("loadAllOrders")
+    public DataGridView loadAllOrders() {
+    	List<String> list = salesbackService.selectOrders();
+    	return new DataGridView(list!=null?list.size():0L,list);
+    }
+    
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
+    @RequestMapping("loadOrdersByCustomer")
+    public DataGridView loadOrdersByCustomer(String customerid) {
+    	List<String> list = salesbackService.selectByCustomer(customerid);
+    	return new DataGridView(list!=null?list.size():0L,list);
+    }
 }

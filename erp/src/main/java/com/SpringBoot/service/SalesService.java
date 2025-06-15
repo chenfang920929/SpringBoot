@@ -1,5 +1,6 @@
 package com.SpringBoot.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -16,24 +17,24 @@ public class SalesService implements SalesImp {
 	SalesImp salesImp;
 	
 	@Override
-	public List<Sales> select(Integer customerid, Integer goodsid, Integer id,Integer index, Integer limit) {
+	public List<Sales> select(String customerid, Integer goodsid,String orderid, Date startTime, Date endTime,Integer index, Integer limit) {
 		// TODO 自动生成的方法存根
-		List<Sales> select = salesImp.select(customerid, goodsid,id, index, limit);
+		List<Sales> select = salesImp.select(customerid, goodsid,orderid, startTime,endTime,index, limit);
 		return select;
 	}
 
 	@Override
-	public void insert(Integer id,Integer customerid, String paytype, Date salestime, String operateperson, Integer number,
-			String remark, Double saleprice, Integer goodsid) {
+	public void insert(String orderid,String customerid, String paytype, Date salestime, String operateperson, Integer number,
+			String remark, BigDecimal saleprice, Integer goodsid) {
 		// TODO 自动生成的方法存根
-		salesImp.insert(id,customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
+		salesImp.insert(orderid,customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
 	}
 
 	@Override
-	public void update(Integer id, Integer customerid, String paytype, Date salestime, String operateperson,
-			Integer number, String remark, Double saleprice, Integer goodsid) {
+	public void update(Integer id, String paytype, Date salestime, String operateperson,
+			Integer number, String remark, BigDecimal saleprice) {
 		// TODO 自动生成的方法存根
-		salesImp.update(id, customerid, paytype, salestime, operateperson, number, remark, saleprice, goodsid);
+		salesImp.update(id, paytype, salestime, operateperson, number, remark, saleprice);
 	}
 
 	@Override
@@ -55,8 +56,23 @@ public class SalesService implements SalesImp {
 	}
 
 	@Override
-	public Integer selectCount(Integer customerid, Integer goodsid, Integer id) {
-		Integer count = salesImp.selectCount(customerid, goodsid, id);
+	public Integer selectCount(String customerid, Integer goodsid, String orderid,Date startTime, 
+            Date endTime) {
+		Integer count = salesImp.selectCount(customerid, goodsid, orderid,startTime,endTime);
 		return count;	
 	}
+	
+	@Override
+	public List<String> selectOrders() {
+		// TODO 自动生成的方法存根
+		List<String> selectOrders = salesImp.selectOrders();
+		return selectOrders;
+	}
+
+	@Override
+	public List<String> selectByCustomer(String customerid) {
+		// TODO 自动生成的方法存根
+		return salesImp.selectByCustomer(customerid);
+	}
 }
+

@@ -70,6 +70,9 @@ public class GoodsService implements GoodsImp {
 		return goodsImp.selectById(id);
 	}
 
-	
-
+	@Override
+	public Goods selectByProductcode(String productcode,String size) {
+		// TODO 自动生成的方法存根
+		return goodsImp.selectByProductcode(productcode,size);
+	}
 }

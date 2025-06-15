@@ -16,7 +16,7 @@ public interface GoodsImp {
 	
 	public void insert(@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("description")String description,@Param("size")String size,@Param("number")Integer number);
 	
-	public void delete(Integer id);
+	public void delete(@Param("id")Integer id);
 	
 	public void update(@Param("id")Integer id,@Param("providerid")Integer providerid,@Param("goodsname")String goodsname,@Param("productcode")String productcode,@Param("description")String description,@Param("size")String size,@Param("number")Integer number);
 	
@@ -24,8 +24,10 @@ public interface GoodsImp {
 	
 	public void updateNumber(@Param("id")Integer id,@Param("number")Integer number);
 	
-	public List<Goods> selectByProviderid(Integer providerid);
+	public List<Goods> selectByProviderid(@Param("providerid")Integer providerid);
 	
-	public Goods selectById(Integer id);
+	public Goods selectById(@Param("id")Integer id);
+
+	public Goods selectByProductcode(@Param("productcode")String productcode,@Param("size")String size);
 	
 }

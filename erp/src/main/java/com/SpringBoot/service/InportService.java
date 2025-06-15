@@ -1,5 +1,6 @@
 package com.SpringBoot.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -27,15 +28,14 @@ public class InportService implements InportImp {
 
 	@Override
 	public void insert(Date inporttime, String operateperson, Integer number, String remark,
-			Double inportprice, Integer providerid, Integer goodsid) {
-		inportImp.insert(inporttime, operateperson, number, remark, inportprice, providerid, goodsid);
+			BigDecimal inportprice, Integer providerid, Integer goodsid,Double carton) {
+		inportImp.insert(inporttime, operateperson, number, remark, inportprice, providerid, goodsid, carton);
 	}
 
 	@Override
-	public void update(Integer id, Date inporttime, Integer number, String remark, Double inportprice,
-			Integer providerid, Integer goodsid, String operateperson) {
+	public void update(Integer id, Date inporttime, Integer number, String remark, BigDecimal inportprice, String operateperson,Double carton) {
 		
-		inportImp.update(id , inporttime, number, remark, inportprice, providerid, goodsid,operateperson);
+		inportImp.update(id , inporttime, number, remark, inportprice,operateperson,carton);
 		
 	}
 
@@ -45,15 +45,15 @@ public class InportService implements InportImp {
 	}
 
 	@Override
-	public List<Inport> select(Integer providerid, Integer goodsid, Integer index, Integer limit) {
+	public List<Inport> select(Integer providerid, Integer goodsid, Date startTime, Date endTime, Integer index, Integer limit) {
 		// TODO 自动生成的方法存根
-		List<Inport> select = inportImp.select(providerid, goodsid, index, limit);
+		List<Inport> select = inportImp.select(providerid, goodsid, startTime,endTime,index, limit);
 		return select;
 	}
 	
 	@Override
-	public Integer selectCount(Integer providerid, Integer goodsid) {
-		Integer count = inportImp.selectCount(providerid, goodsid);
+	public Integer selectCount(Integer providerid, Integer goodsid, Date startTime, Date endTime) {
+		Integer count = inportImp.selectCount(providerid, goodsid, startTime,endTime);
 		return count;	
 	}
 

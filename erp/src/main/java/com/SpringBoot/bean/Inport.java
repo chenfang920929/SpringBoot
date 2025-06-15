@@ -1,5 +1,6 @@
 package com.SpringBoot.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class Inport {
 
     private String remark;
 
-    private Double inportprice;
+    private BigDecimal inportprice;
 
     private Integer providerid;
     
@@ -47,5 +48,5 @@ public class Inport {
      */
     private String size;
 
-	
+    private Double carton;
 }

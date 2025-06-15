@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.Goods;
 import com.SpringBoot.common.DataGridView;
 import com.SpringBoot.common.LayuiJson;
@@ -22,6 +23,7 @@ public class GoodsController {
 	@Autowired
 	LayuiJson layuiJson;
 	
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("loadAllGoods")
 	public LayuiJson<Goods> loadAllGoods(Integer providerid,String goodsname ,String productcode,String size,Integer page,Integer limit){
 		
@@ -34,18 +36,18 @@ public class GoodsController {
 		return layuiJson;
 	}
     
-    
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("loadAllGoodsForSelect")
     public DataGridView loadAllGoodsForSelect() {
     	List<Goods> list = goodsService.selectGoodsName();
-    	return new DataGridView(list);
+    	return new DataGridView(list!=null?list.size():0L,list);
     }
     
-    
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("loadGoodsByProviderId")
     public DataGridView loadGoodsByProviderId(Integer providerid) {
     	List<Goods> list = goodsService.selectByProviderid(providerid);
-    	return new DataGridView(list);
+    	return new DataGridView(list!=null?list.size():0L,list);
     }
     
     
@@ -54,6 +56,7 @@ public class GoodsController {
      * @param goodsVo
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("addGoods")
     public ResultObj addGoods(Integer providerid, String goodsname, String productcode, String description, String size,  Integer number){
         try {
@@ -70,6 +73,7 @@ public class GoodsController {
      * @param goodsVo
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("updateGoods")
     public ResultObj updateGoods(Integer id, Integer providerid, String goodsname, String productcode, String description,String size,Integer number){
         try {
@@ -86,6 +90,7 @@ public class GoodsController {
      * @param id 商品id
      * @return
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("deleteGoods")
     public ResultObj deleteGoods(Integer id){
         try {

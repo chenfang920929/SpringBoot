@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class Customer {
 	
-    private Integer id;
+    private String id;
 
     private String customername;
 
@@ -23,4 +23,6 @@ public class Customer {
     private String phone;
 
     private String email;
+    
+    private Integer available;
 }

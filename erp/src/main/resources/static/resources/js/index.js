@@ -104,7 +104,7 @@ layui.use(['bodyTab','form','element','layer','jquery'],function(){
                 });
                 //定位到刷新前的窗口
                 if (curmenu != "undefined") {
-                    if (curmenu == '' || curmenu == "null") {  //定位到后台首页
+                    if (curmenu == '' || curmenu == "null") {  //定位到Backend Homepage
                         element.tabChange("bodyTab", '');
                     } else if (JSON.parse(curmenu).title == menu[i].title) {  //定位到刷新前的页面
                         element.tabChange("bodyTab", menu[i].layId);

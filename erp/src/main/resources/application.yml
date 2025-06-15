@@ -72,7 +72,6 @@ spring:
       enabled: true
       
 mybatis:
-  config-location: classpath:/mybatis/MybatisConfig.xml
-  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location: classpath:/mybatis/MybatisConfig.xml  
+  mapper-locations: classpath:/mybatis/mapper/*.xml 
   type-aliases-package: com.SpringBoot.bean
-      

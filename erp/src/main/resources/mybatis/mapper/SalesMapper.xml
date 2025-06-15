@@ -14,9 +14,15 @@
 				   <if test="goodsid!=null">
 				   and s.goodsid =#{goodsid}
 				  </if>
-				  <if test="id!=null">
-				   and s.id =#{id}
+				  <if test="orderid!=null">
+				   and s.orderid =#{orderid}
 				  </if>
+				  <if test="startTime!=null">
+				   and s.salestime >= #{startTime}
+				  </if>
+			      <if test="endTime!=null">
+			       and s.salestime <![CDATA[<=]]> DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+			      </if>
 			</where>
 			limit #{index},#{limit}
 	</select>
@@ -30,21 +36,27 @@
 				   <if test="goodsid!=null">
 				   and s.goodsid =#{goodsid}
 				  </if>
-				   <if test="id!=null">
-				   and s.id =#{id}
+				   <if test="orderid!=null">
+				   and s.orderid =#{orderid}
 				  </if>
+				  <if test="startTime!=null">
+				   and s.salestime >= #{startTime}
+				  </if>
+			      <if test="endTime!=null">
+			       and s.salestime <![CDATA[<=]]> DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+			      </if>
 			</where>
  	</select>
 	
 	<insert id="insert">
-		insert into bus_sales(id,customerid,paytype,salestime,operateperson,number,remark,saleprice,goodsid)
+		insert into bus_sales(orderid,customerid,paytype,salestime,operateperson,number,remark,saleprice,goodsid)
 		values
-		(#{id},#{customerid},#{paytype},#{salestime},#{operateperson},#{number},#{remark},#{saleprice},#{goodsid})
+		(#{orderid},#{customerid},#{paytype},#{salestime},#{operateperson},#{number},#{remark},#{saleprice},#{goodsid})
 	</insert>
 	
 	<update id="update">
-		update bus_sales set customerid=#{customerid},paytype=#{paytype},salestime=#{salestime},operateperson=#{operateperson}
-		,number=#{number},remark=#{remark},saleprice=#{saleprice},goodsid=#{goodsid}
+		update bus_sales set paytype=#{paytype},salestime=#{salestime},operateperson=#{operateperson}
+		,number=#{number},remark=#{remark},saleprice=#{saleprice}
 		where id=#{id}
 	</update>
 	
@@ -59,4 +71,12 @@
 	<update id="updateNumber">
 		update bus_sales set number=#{number} where id=#{id}
 	</update>
+	
+	<select id="selectOrders" resultType="String">
+		select DISTINCT orderid from bus_sales ORDER BY orderid 
+	</select>
+	
+	<select id="selectByCustomer" resultType="String">
+		select DISTINCT orderid from bus_sales where customerid=#{customerid} ORDER BY orderid 
+	</select>
 </mapper>

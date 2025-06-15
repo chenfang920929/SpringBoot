@@ -27,4 +27,10 @@ public class Goods {
     private Integer providerid;
     
     private Integer number;
+    
+    private Integer in_count;
+    
+    private Integer out_count;
+    
+    private Integer actual_count;
 }

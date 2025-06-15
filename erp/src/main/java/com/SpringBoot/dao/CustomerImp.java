@@ -15,13 +15,21 @@ public interface CustomerImp {
 	
 	public List<Customer> selectName();
 	
-	public void insert(@Param("customername")String customername,@Param("address")String address,@Param("connectionpersion")String connectionpersion
-			,@Param("phone")String phone,@Param("email")String email);
+	public List<Customer> selectAvailableName();
 	
-	public void update(@Param("id")Integer id,@Param("customername")String customername,@Param("address")String address,@Param("connectionpersion")String connectionpersion
-			,@Param("phone")String phone,@Param("email")String email);
+	public void insert(@Param("id")String id,@Param("customername")String customername,@Param("address")String address,@Param("connectionpersion")String connectionpersion
+			,@Param("phone")String phone,@Param("email")String email,@Param("available")Integer available);
 	
-	public void delete(Integer id);
+	public void update(@Param("id")String id,@Param("customername")String customername,@Param("address")String address,@Param("connectionpersion")String connectionpersion
+			,@Param("phone")String phone,@Param("email")String email,@Param("available")Integer available);
+	
+	public void delete(@Param("id")String id);
 
 	public Integer selectCount(@Param("customername")String customername,@Param("connectionpersion")String connectionpersion,@Param("phone")String phone);
+	
+	// 查询当前序列值（加锁）
+	public Long getCurrentSeq();
+ 
+    // 更新序列值 
+	public void incrementSeq();
 }

@@ -16,47 +16,54 @@
     <link rel="stylesheet" href="../resources/css/public.css" media="all"/>
     <link rel="stylesheet" href="../resources/layui_ext/dtree/dtree.css" media="all"/>
     <link rel="stylesheet" href="../resources/layui_ext/dtree/font/dtreefont.css" media="all"/>
+	<style>
+		label.layui-form-label {
+		    width: 250px !important;  /* 默认宽度为120px，调整为180px或更大 */
+		    white-space: nowrap;      /* 禁止换行 */
+		    overflow: visible;        /* 允许内容溢出（避免被隐藏） */
+		}
+	</style>
 </head>
 <body>
 <!--查询条件-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>search criteria/搜索条件</legend>
+    <legend>search criteria(搜索条件)</legend>
 </fieldset>
 <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">Client's Name<br/>客户名称</label>
+            <label class="layui-form-label">Client's Name(客户名称)</label>
             <div class="layui-input-inline">
-                <input type="text" name="customername" id="customername" class="layui-input input-radius"
+                <input type="text" name="customername" id="customername"  autocomplete="off" class="layui-input input-radius"
                        placeholder="Please select the client's Name">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">Connection Person's Name<br/>联系人名称</label>
+            <label class="layui-form-label">Connection Person's Name(联系人名称)</label>
             <div class="layui-input-inline">
-                <input type="text" name="connectionpersion" id="connectionpersion" class="layui-input input-radius" placeholder="Please select the connection person's Name">
+                <input type="text" name="connectionpersion" id="connectionpersion"  autocomplete="off" class="layui-input input-radius" placeholder="Please select the connection person's Name">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">Phone Number<br/>电话</label>
+            <label class="layui-form-label">Phone Number(电话)</label>
             <div class="layui-input-inline">
-                <input type="text" name="phone" id="phone" class="layui-input input-radius" placeholder="Please select the phone number">
+                <input type="text" name="phone" id="phone"  autocomplete="off" class="layui-input input-radius" placeholder="Please select the phone number">
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block" style="text-align: center;padding-right: 15%;">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
-                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query/查询
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query(查询)
             </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
-                    class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                    class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
             </button>
         </div>
     </div>
 </form>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>Import Data/导入数据</legend>
+    <legend>Import Data(导入数据)</legend>
 </fieldset>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -98,15 +105,15 @@
     <table class="layui-hide" id="customerTable" lay-filter="customerTable"></table>
     <div id="customerToolBar" style="display: none">
         <button type="button" lay-event="add" shiro:hasPermission="customer:create" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
-            <i class="layui-icon layui-icon-add-1"></i>Add Customer/添加客户
+            <i class="layui-icon layui-icon-add-1"></i>Add Customer(添加客户)
         </button>
     </div>
     <div id="customerRowBar" style="display: none;">
         <button type="button" lay-event="update" shiro:hasPermission="customer:update" class="layui-btn layui-btn-sm layui-btn-radius"><i
-                class="layui-icon layui-icon-edit"></i>Edit<br/>编辑
+                class="layui-icon layui-icon-edit"></i>Edit(编辑)
         </button>
         <button type="button" lay-event="delete" shiro:hasPermission="customer:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>Delete<br/>删除
+                class="layui-icon layui-icon-delete"></i>Delete(删除)
         </button>
     </div>
 </div>
@@ -116,16 +123,16 @@
     <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Client's Name<br/>客户名称</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Client's Name(客户名称)</label>
+                <div class="layui-input-inline">
                     <input type="hidden" name="id">
                     <input type="text" name="customername" lay-verify="required" autocomplete="off"
                            class="layui-input input-radius" placeholder="Please select the client's Name">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">Client's Address<br/>客户地址</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Client's Address(客户地址)</label>
+                <div class="layui-input-inline">
                     <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Client's Address">
                 </div>
             </div>
@@ -133,34 +140,42 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Connection Person's Name<br/>联系人名称</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Connection Person's Name(联系人名称)</label>
+                <div class="layui-input-inline">
                     <input type="text" name="connectionpersion" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please select the connection person's Name">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">Phone Number<br/>电话</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Phone Number(电话)</label>
+                <div class="layui-input-inline">
                     <input type="text" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the phone number">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Email Address<br/>邮箱</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Email Address(邮箱)</label>
+                <div class="layui-input-inline">
                     <input type="text" id="email" name="email" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="Please select the email address">
                 </div>
             </div>
         </div>
-
+		<div class="layui-form-item">
+			<div class="layui-inline">
+		    <label class="layui-form-label">If Available(是否可用)</label>
+		    <div class="layui-input-inline">
+		        <input type="radio" name="available" value="1" title="Available" checked="">
+		        <input type="radio" name="available" value="0" title="No Available">
+		    </div>
+			</div>
+		</div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit(提交)
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
                 </button>
             </div>
         </div>
@@ -317,11 +332,15 @@
 			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
             cols: [ [
-                {field: 'customername', title: 'Client\'s Name<br/>客户名称', align: 'center',width:'100'},
+				{field: 'id', title: 'Client\'s Id<br/>客户代码', align: 'center',width:'150'},
+                {field: 'customername', title: 'Client\'s Name<br/>客户名称', align: 'center',width:'150'},
                 {field: 'address', title: 'Client\'s Address<br/>客户地址', align: 'center',width:'150'},
                 {field: 'connectionpersion', title: 'Connection Person\'s Name<br/>联系人名称', align: 'center',width:'130'},
                 {field: 'phone', title: 'Phone Number<br/>电话', align: 'center',width:'130'},
                 {field: 'email', title: 'Email Address<br/>邮箱', align: 'center',width:'200'},
+				{field: 'available', title: 'If Available<br/>是否可用', align: 'center',width:'150',templet:function (d) {
+				    return d.available==1?'<font color="blue">Available</font>':'<font color="red">No Available</font>';
+				}},
                 {fixed: 'right', title: 'execute<br/>操作', toolbar: '#customerRowBar', align: 'center',width:'250'}
             ] ],
             done: function (data, curr, count) {
@@ -381,8 +400,8 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['700px','500px'],
-                title:'Add Customer/添加客户',
+                area:['1500px','700px'],
+                title:'Add Customer(添加客户)',
                 success:function () {
                     $("#dataFrm")[0].reset();
                     url="/customer/addCustomer";
@@ -395,8 +414,8 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['700px','500px'],
-                title:'Edit Customer/修改客户',
+                area:['1500px','700px'],
+                title:'Edit Customer(修改客户)',
                 success:function () {
                     //清空原有的数据
                     $("#dataFrm")[0].reset();
@@ -421,7 +440,7 @@
 
         //删除
         function deleteCustomer(data) {
-            layer.confirm('你确定要删除【' + data.customername + '】这个客户吗？', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm('Confirm permanent deletion of customer [data.customername]?(你确定要删除【' + data.customername + '】这个客户吗？)', {icon: 3, title: 'Reminder(提醒)'}, function (index) {
                 $.post("/customer/deleteCustomer", {id: data.id},function (res) {
                     if (res.code == 200) {
                         tableIns.reload({

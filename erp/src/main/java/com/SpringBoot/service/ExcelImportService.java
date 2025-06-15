@@ -1,5 +1,6 @@
 package com.SpringBoot.service;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.SpringBoot.bean.Customer;
@@ -71,7 +73,7 @@ public class ExcelImportService {
                     validateGoods(goods);
                     Integer providerId=providerService.selectProviderId("MEYINK");
                     // 保存到数据库 
-                    goodsService.insert(providerId, "Toner Cartridge/硒鼓", goods.getProductcode(),goods.getDescription(),goods.getSize(),0); 
+                    goodsService.insert(providerId, "Toner Cartridge/硒鼓", goods.getProductcode(),goods.getDescription(),goods.getSize(),goods.getNumber()); 
                     successList.add(goods); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -88,6 +90,12 @@ public class ExcelImportService {
         goods.setProductcode(getCellValue(row,  0)); // 商品型号 
         goods.setSize(getCellValue(row,  1));        // 商品规格 
         goods.setDescription(getCellValue(row,  2));        // 适用机型 
+        if(!StringUtil.isBlank(getCellValue(row,  3))) {
+        	goods.setNumber(Integer.valueOf(getCellValue(row,  3)));        // 库存数量
+    	}else{
+    		goods.setNumber(0);
+    	}
+        
         return goods;
     }
     
@@ -108,7 +116,7 @@ public class ExcelImportService {
                     validateCustomer(customer);
                     
                     // 保存到数据库 
-                    customerService.insert(customer.getCustomername(), customer.getAddress(), customer.getConnectionpersion(), customer.getPhone(), customer.getEmail());
+                    customerService.insert(generateCustomerId(),customer.getCustomername(), customer.getAddress(), customer.getConnectionpersion(), customer.getPhone(), customer.getEmail(),1);
                     successList.add(customer); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -118,6 +126,20 @@ public class ExcelImportService {
         
         return new ImportResult(successList.size()  + errorList.size(),  
                               successList.size(),  errorList.size(),  errorList);
+    }
+    
+    @Transactional 
+    public String generateCustomerId() {
+        // 1. 查询当前序列值（加锁）
+        Long nextVal = customerService.getCurrentSeq(); 
+ 
+        // 2. 格式化ID（ZHT_0000001）
+        String newId = String.format("ZHT-%06d",  nextVal);
+ 
+        // 3. 更新序列值 
+        customerService.incrementSeq(); 
+ 
+        return newId;
     }
  
     private Customer parseCustomerRow(Row row) {
@@ -141,15 +163,21 @@ public class ExcelImportService {
             Sheet sheet = workbook.getSheetAt(0); 
             for (int i = 1; i <= sheet.getLastRowNum();  i++) { // 从第2行开始读取 
                 Row row = sheet.getRow(i); 
-                if (row == null || StringUtil.isBlank(getCellValue(row,  0))) continue;
+                if (row == null || StringUtil.isBlank(getCellValue(row,  0)) || StringUtil.isBlank(getCellValue(row,  1))) continue;
                 
                 try {
                 	Inport inport = parseInportRow(row);
                     validateInport(inport);
+                    Integer providerId=providerService.selectProviderId("MEYINK");
                     
+                    Goods goods=goodsService.selectByProductcode(inport.getProductcode(), inport.getSize());
+                    if(goods!=null) {
+                    	inportService.insert(new Date(), operateperson, inport.getNumber(), inport.getRemark(), inport.getInportprice(), providerId, goods.getId(), inport.getCarton());
+                        successList.add(inport); 
+                    }else{
+                    	throw new Exception("product not found");
+                    }
                     // 保存到数据库 
-                    inportService.insert(new Date(), operateperson, inport.getNumber(), inport.getRemark(), inport.getInportprice(), inport.getProviderid(), inport.getGoodsid());
-                    successList.add(inport); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
                 }
@@ -162,10 +190,12 @@ public class ExcelImportService {
  
     private Inport parseInportRow(Row row) {
     	Inport inport = new Inport();
-       // goods.setProductCode(getCellValue(row,  0)); // 商品型号 
-        //goods.setGoodsName(getCellValue(row,  1));   // 商品名称 
-        //goods.setSize(getCellValue(row,  2));        // 商品规格 
-        //goods.setProviderId(getCellValue(row,  3)); // 供应商ID 
+        inport.setProductcode(getCellValue(row,  0)); // 商品型号 
+        inport.setSize(getCellValue(row,  1));        // 商品规格 
+        inport.setNumber(Integer.valueOf(getCellValue(row,  2)));        // 数量 
+        inport.setInportprice(new BigDecimal(Double.valueOf(getCellValue(row,  3))));        // 含运出厂价
+        inport.setCarton(Double.valueOf(getCellValue(row,  4)));        // 件数
+        inport.setRemark(getCellValue(row,  5));      // 备注 
         return inport;
     }
     
@@ -224,7 +254,7 @@ public class ExcelImportService {
                 	validateSales(sales);
                     
                     // 保存到数据库 
-                	salesService.insert(sales.getId(),sales.getId(), sales.getPaytype(), new Date(), operateperson, sales.getNumber(), sales.getRemark(), 
+                	salesService.insert(sales.getOrderid(),sales.getCustomerid(), sales.getPaytype(), new Date(), operateperson, sales.getNumber(), sales.getRemark(), 
                 			sales.getSaleprice(), sales.getGoodsid());
                     successList.add(sales); 
                 } catch (Exception e) {
@@ -275,12 +305,16 @@ public class ExcelImportService {
             
             headerRow.createCell(2).setCellValue("Compatible for\n产品机型");
             headerRow.getCell(2).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(3).setCellValue("ORIG Qty\n数量-初始库存");
+            headerRow.getCell(3).setCellStyle(wrapStyle); 
 
             
             // Set column widths (in units of 1/256th of a character width)
-            sheet.setColumnWidth(0,  30 * 256);  // Provider Name 
-            sheet.setColumnWidth(1,  30 * 256);  // Provider Address 
-            sheet.setColumnWidth(2,  30 * 256);  // Contact Person
+            sheet.setColumnWidth(0,  30 * 256);  
+            sheet.setColumnWidth(1,  30 * 256);  
+            sheet.setColumnWidth(2,  30 * 256);  
+            sheet.setColumnWidth(3,  30 * 256); 
 
             // 写入响应流 
             try (ServletOutputStream out = response.getOutputStream())  {
@@ -376,23 +410,47 @@ public class ExcelImportService {
             
             // 创建SXSSFWorkbook（默认保留100行在内存中）
             workbook = new SXSSFWorkbook();
-            Sheet sheet = workbook.createSheet(" 进货数据");
+            Sheet sheet = workbook.createSheet("Import Record入库数据");
+            
+            // Create cell style with text wrapping
+            CellStyle wrapStyle = workbook.createCellStyle(); 
+            wrapStyle.setWrapText(true); 
             
             // 创建表头 
             Row headerRow = sheet.createRow(0); 
-            headerRow.createCell(0).setCellValue(" 供应商");
-            headerRow.createCell(1).setCellValue(" 商品名称");
-            headerRow.createCell(2).setCellValue(" 商品型号");
-            headerRow.createCell(3).setCellValue(" 商品规格");
-            headerRow.createCell(3).setCellValue(" 进货时间");
-            headerRow.createCell(3).setCellValue(" 操作员");
-            headerRow.createCell(3).setCellValue(" 进货数量");
-            headerRow.createCell(3).setCellValue(" 进货价格(RMB)");
-            headerRow.createCell(3).setCellValue(" 备注");
+            headerRow.setHeightInPoints(30);  // Increased height for wrapped text
             
+            headerRow.createCell(0).setCellValue("Model\n产品型号");
+            headerRow.getCell(0).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(1).setCellValue("Remark\n产品规格");
+            headerRow.getCell(1).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(2).setCellValue("Inport Qty\n入库数量");
+            headerRow.getCell(2).setCellStyle(wrapStyle);
+            
+            headerRow.createCell(3).setCellValue("Inport Price(RMB)\n含运出厂价(人民币)");
+            headerRow.getCell(3).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(4).setCellValue("Carton\n件数");
+            headerRow.getCell(4).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(5).setCellValue("Note\n备注");
+            headerRow.getCell(5).setCellStyle(wrapStyle); 
+            
+            // Set column widths (in units of 1/256th of a character width)
+            sheet.setColumnWidth(0,  30 * 256); 
+            sheet.setColumnWidth(1,  30 * 256);
+            sheet.setColumnWidth(2,  30 * 256);
+            sheet.setColumnWidth(3,  30 * 256);  
+            sheet.setColumnWidth(4,  30 * 256); 
+            sheet.setColumnWidth(5,  30 * 256); 
+
             // 写入响应流 
-            workbook.write(response.getOutputStream()); 
-            
+            try (ServletOutputStream out = response.getOutputStream())  {
+                workbook.write(out); 
+                workbook.dispose();  // Clean up temporary files
+            }
         } catch (Exception e) {
             throw new RuntimeException("生成模板失败", e);
         } finally {

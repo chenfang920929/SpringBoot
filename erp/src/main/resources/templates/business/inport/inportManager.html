@@ -3,7 +3,7 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>进货管理</title>
+    <title>入库管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -37,6 +37,7 @@
             height: 30px;
             margin-top: 4px;
         }
+		
         input#search_goodsidTree_select_input_id {
             border-radius: 10px;
             height: 30px;
@@ -52,51 +53,66 @@
             height: 30px;
             margin-top: 4px;
         }
-        input.layui-input.layui-unselect {
-            border-radius: 10px;
-            height: 30px;
-            margin-top: 4px;
-        }
+
+		label.layui-form-label {
+		    width: 220px !important;  /* 默认宽度为120px，调整为180px或更大 */
+		    white-space: nowrap;      /* 禁止换行 */
+		    overflow: visible;        /* 允许内容溢出（避免被隐藏） */
+		}
+		input[name="goodsid_display"] {
+		    white-space: nowrap;       /* 禁止换行 */
+		    overflow: hidden;          /* 隐藏溢出内容 */
+		    text-overflow: ellipsis;   /* 显示省略号 */
+		    max-width: 1000px;         /* 根据实际情况调整 */
+		}
     </style>
 </head>
 <body>
 <!--查询条件-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>search criteria/搜索条件</legend>
+    <legend>search criteria(搜索条件)</legend>
 </fieldset>
 <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">Provider name<br/>供应商名称</label>
+            <label class="layui-form-label">Provider name(供应商名称)</label>
             <div class="layui-input-inline">
-                <select name="providerid" id="select_providerid">
+                <select name="providerid" id="select_providerid" autocomplete="off">
                     <option value="">Please select the provider name</option>
                 </select>
             </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">Product Name<br/>产品名称</label>
-            <div class="layui-input-inline">
-                <select name="goodsid" id="select_goodsid">
+	</div>
+	
+	<div class="layui-form-item">
+            <label class="layui-form-label">Product Name(产品名称)</label>
+            <div class="layui-input-inline" style="width: 800px;">
+                <select name="goodsid" id="select_goodsid" autocomplete="off" lay-search>
                     <option value="">Please select the product name</option>
                 </select>
             </div>
-        </div>
-
     </div>
+	
+	<div class="layui-form-item">
+		    <label class="layui-form-label">Sales Date(入库日期)</label>
+		    <div class="layui-input-inline" style="width: 300px;">
+		        <input type="text" class="layui-input" id="salesDateRange" autocomplete="off" placeholder="Please select the Date Range">
+		        <input type="hidden" name="startTime" id="startTime">
+		        <input type="hidden" name="endTime" id="endTime">
+		    </div>
+	</div>
+	
     <div class="layui-form-item">
         <div class="layui-input-block" style="text-align: center;padding-right: 15%;">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
-                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query/查询
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>Query(查询)
             </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
-                    class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                    class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
             </button>
         </div>
     </div>
 </form>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
-    <legend>Import Data/导入数据</legend>
+    <legend>Import Data(导入数据)</legend>
 </fieldset>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -138,104 +154,193 @@
     <table class="layui-hide" id="inportTable" lay-filter="inportTable"></table>
     <div id="inportToolBar" style="display: none">
         <button type="button" lay-event="add" shiro:hasPermission="inport:create" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
-            <i class="layui-icon layui-icon-add-1"></i>Add Inport/添加进货
-        </button>
+            <i class="layui-icon layui-icon-add-1"></i>Add Inport(添加入库)
+)        </button>
     </div>
     <div id="inportRowBar" style="display: none;">
         <button type="button" lay-event="update" shiro:hasPermission="inport:update" class="layui-btn layui-btn-sm layui-btn-radius"><i
-                class="layui-icon layui-icon-edit"></i>Edit/编辑
+                class="layui-icon layui-icon-edit"></i>Edit(编辑)
         </button>
         <button type="button" lay-event="delete" shiro:hasPermission="inport:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>Delete/删除
+                class="layui-icon layui-icon-delete"></i>Delete(删除)
         </button>
     </div>
 </div>
 
-<!--添加和修改弹出层-->
-<div id="addOrUpdateDiv" style="display: none;padding: 10px;padding-right: 5%">
-    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+<!-- 新增弹出层 -->
+<div id="addDiv" style="display: none;padding: 10px;padding-right: 5%">
+    <form action="" method="post" class="layui-form" id="addFrm" lay-filter="addFrm">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Provider name<br/>供应商名称</label>
+                <label class="layui-form-label">Provider name(供应商名称)</label>
                 <div class="layui-input-inline">
-                    <select name="providerid" id="providerid" lay-filter="providerid">
+                    <select name="providerid" id="providerid" autocomplete="off" lay-search lay-filter="providerid">
                         <option value="">Please select the provider name</option>
                     </select>
-                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
-        </div>
-		
+	    </div>
 		<div class="layui-form-item">
 		    <div class="layui-inline">
-				<label class="layui-form-label">Product Name<br/>产品名称</label>
-				            <div class="layui-input-inline">
-				                <select name="goodsid" id="goodsid" lay-filter="goodsid">
+				<label class="layui-form-label">Product Name(产品名称)</label>
+				            <div class="layui-input-inline" style="width: 800px;">
+				                <select name="goodsid" id="goodsid" autocomplete="off" lay-search lay-filter="goodsid">
 				                    <option value="">Please select the product name</option>
 				                </select>
 				            </div>
-		        <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
 		    </div>
 		</div>
+		
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label"><br/>Inport Qty<br/>进货数量</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">Inport Qty(入库数量)</label>
+                <div class="layui-input-inline">
                     <input type="hidden" name="id">
                     <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Qty">
                 </div>
             </div>
-        </div>
+		</div>
+		
 		<div class="layui-form-item">
 		    <div class="layui-inline">
-		        <label class="layui-form-label"><br/>Inport Price(RMB)<br/>进货价格(人民币)</label>
-		        <div class="layui-input-block">
-		            <input type="text" name="inportprice" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Price">
+		        <label class="layui-form-label">Inport Price(RMB)(含运出厂价(人民币))</label>
+		        <div class="layui-input-inline">
+		            <input type="text" name="inportprice" lay-verify="required|price" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Price">
 		        </div>
 		    </div>
+		</div>	
+		
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">SUM(RMB)(总价(人民币))</label>
+				 <div class="layui-input-inline">
+					  <input type="text" name="sum" lay-verify="required|price" autocomplete="off" class="layui-input input-radius" disabled>
+				 </div>
+			 </div>
 		</div>
+		
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">Carton(件数)</label>
+				 <div class="layui-input-inline">
+					  <input type="text" name="carton" lay-verify="required|price" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Carton">
+				 </div>
+			 </div>
+		</div>
+		
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label"><br/>Inport Note<br/>进货备注</label>
+                <label class="layui-form-label">Inport Note(入库备注)</label>
                 <div class="layui-input-block">
-                    <textarea name="remark" placeholder="Please select the Inport Note" class="layui-textarea" cols="200" rows="8"></textarea>
+                    <textarea name="remark" placeholder="Please select the Inport Note" autocomplete="off" class="layui-textarea" cols="200" rows="8"></textarea>
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
+                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doAddSubmit" id="doAddSubmit"><i
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit(提交)
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
                 </button>
             </div>
         </div>
     </form>
 </div>
 
-<!--进货的弹出层-->
+ 
+<!-- 修改弹出层 -->
+<div id="updateDiv" style="display: none;padding: 10px;padding-right: 5%">
+    <form action="" method="post" class="layui-form" id="updateFrm" lay-filter="updateFrm">
+        <div class="layui-form-item">
+                <label class="layui-form-label">Provider name(供应商名称)</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="providerName" class="layui-input readonly-input"  disabled>
+                    <input type="hidden" name="providerid">
+                </div>
+		</div>
+		
+		<div class="layui-form-item">
+				<label class="layui-form-label">Product Name(产品名称)</label>
+				<div class="layui-input-block">
+				    <input type="text" id="goodsName" name="goodsid_display" class="layui-input readonly-input"  disabled>
+				    <input type="hidden" name="goodsid">
+				</div>
+		</div>
+		
+        <div class="layui-form-item">
+                <label class="layui-form-label">Inport Qty(入库数量)</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Qty">
+                </div>
+        </div>
+		
+		<div class="layui-form-item">
+		        <label class="layui-form-label">Inport Price(RMB)(含运出厂价(人民币))</label>
+		        <div class="layui-input-inline">
+		            <input type="text" name="inportprice" lay-verify="required|price" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Price">
+		        </div>
+		</div>
+		
+		<div class="layui-form-item">
+				<label class="layui-form-label">SUM(RMB)(总价(人民币))</label>
+				 <div class="layui-input-inline">
+					  <input type="text" name="sum" lay-verify="required|price" autocomplete="off" class="layui-input input-radius"  disabled>
+				 </div>
+		</div>
+		
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">Carton(件数)</label>
+				 <div class="layui-input-inline">
+					  <input type="text" name="carton" lay-verify="required|price" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Carton">
+				 </div>
+			 </div>
+		</div>
+
+        <div class="layui-form-item">
+                <label class="layui-form-label">Inport Note(入库备注)</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" placeholder="Please select the Inport Note" autocomplete="off" class="layui-textarea" cols="200" rows="8"></textarea>
+                </div>
+        </div>
+		
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doUpdateSubmit" id="doUpdateSubmit"><i 
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit(提交)
+                </button>
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-warm" id="resetUpdateForm"><i 
+                        class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--入库的弹出层-->
 <div id="runDiv" style="display: none;padding-right: 3%">
     <form action="" method="post" class="layui-form" id="run" lay-filter="run">
 
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Inport Qty<br/>进货数量</label>
-                <div class="layui-input-block">
-                    <input type="hidden" name="id">  <!-- 进货单ID  -->
-                    <input type="hidden" name="runNumber" id="runNumber">  <!-- 进货单中进货数量  -->
-                    <input type="text" name="number" lay-verify="required|checkNumber" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Qty">
+                <label class="layui-form-label">Inport Qty(入库数量)</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">  <!-- 入库单ID  -->
+                    <input type="hidden" name="runNumber" id="runNumber">  <!-- 入库单中入库数量  -->
+                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="Please select the Inport Qty">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                 <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="runSubmit" id="runSubmit"><i
-                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit/提交
+                        class="layui-icon layui-icon-search layui-icon-normal"></i>Submit(提交)
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                        class="layui-icon layui-icon-refresh"></i><span>Reset/重置</span>
+                        class="layui-icon layui-icon-refresh"></i><span>Reset(重置)</span>
                 </button>
             </div>
         </div>
@@ -245,426 +350,598 @@
 
 <script type="text/javascript" src="../resources/layui/layui.js"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="none">
 
     //提升数据表格的作用域，因为底下还有一个reloadTable方法
     var tableIns;
 
     layui.use(['jquery', 'form', 'layer', 'table', 'laydate', 'upload', 'element'], function () {
-        var $ = layui.jquery;
-        var form = layui.form;
-        var layer = layui.layer;
-        var table = layui.table;
-        var laydate = layui.laydate;
-		var upload = layui.upload; 
-		var element = layui.element;
+		       var $ = layui.jquery; 
+		       var form = layui.form; 
+		       var layer = layui.layer; 
+		       var table = layui.table; 
+		       var laydate = layui.laydate; 
+		       var upload = layui.upload;  
+		       var element = layui.element; 
+			   
+			   // 获取当天日期范围 
+			   			    function getCurrentDateRange() {
+			   			        var now = new Date();
+			   			        var year = now.getFullYear(); 
+			   			        var month = now.getMonth()  + 1;
+			   			        var day = now.getDate(); 
+			   			        
+			   			        month = month < 10 ? '0' + month : month;
+			   			        day = day < 10 ? '0' + day : day;
+			   			        
+			   			        var today = year + '-' + month + '-' + day;
+			   			        return today + ' - ' + today;
+			   			    }
+			   			 
+			   			    // 格式化日期对象为 yyyy-MM-dd 
+			   			    function formatDate(dateObj) {
+			   			        if (!dateObj) return '';
+			   			        var year = dateObj.year; 
+			   			        // 注意：laydate 的 month 已经是 0-11，直接 +1 即可 
+			   			        var month = (dateObj.month).toString().padStart(2, '0');
+			   			        var day = dateObj.date.toString().padStart(2,  '0');
+			   			        return `${year}-${month}-${day}`;
+			   			    }
+			   			 
+			   				// 初始化日期范围选择器 
+			   				laydate.render({  
+			   				    elem: '#salesDateRange',
+			   				    type: 'date',
+			   				    range: true,
+			   				    trigger: 'click',
+			   				    format: 'yyyy-MM-dd',
+								ready: function() {
+								   
+								},
+			   				    change: function(value, date, endDate) {
+			   				        if (date && endDate) {
+			   				            $('#startTime').val(formatDate(date));
+			   				            $('#endTime').val(formatDate(endDate));
+			   				        } else {
+			   				            $('#startTime').val('');
+			   				            $('#endTime').val('');
+			   				        }
+			   				    },
+								done: function(value, date, endDate) {
+									// 用户取消选择时清空值 
+									        if (!value) {
+									            $('#salesDateRange').val('');
+									            $('#startTime').val('');
+									            $('#endTime').val('');
+									            form.val("searchFrm",  {
+									                startTime: '',
+									                endTime: ''
+									            });
+									        } else if (value && date && endDate) {
+									            var dates = value.split(/\s*  - \s*/);  
+									            if (dates.length  >= 2) {
+									                $('#startTime').val(dates[0].trim());
+									                $('#endTime').val(dates[1].trim());
+									                form.val("searchFrm",  {
+									                    startTime: dates[0].trim(),
+									                    endTime: dates[1].trim()
+									                });
+									            }
+									        }
+								}
+			   				});
 
-		var selectedFile = null;
-		 
-		// 文件选择按钮点击事件 
-		$('#select-file').click(function(){
-		    $('#file-input').click();
-		});
-		 
-		// 文件选择变化事件 
-		$('#file-input').change(function(e){
-		    if(this.files  && this.files.length  > 0){
-		        selectedFile = this.files[0]; 
-		        
-		        // 验证文件类型 
-		        var fileExt = selectedFile.name.split('.').pop().toLowerCase(); 
-		        if(!['xlsx','xls'].includes(fileExt)){
-		            layer.msg(' 请选择Excel文件(xlsx或xls格式)', {icon: 2});
-		            return;
-		        }
-		        
-		        // 验证文件大小(100MB限制)
-		        if(selectedFile.size  > 100 * 1024 * 1024){
-		            layer.msg(' 文件大小不能超过100MB', {icon: 2});
-		            return;
-		        }
-		        
-		        $('#file-name').text(selectedFile.name).css('color','#333'); 
-		    }
-		});
-		 
-		// 导入按钮点击事件 
-		$('#import-btn').click(function(){
-		    if(!selectedFile){
-		        layer.msg(' 请先选择Excel文件', {icon: 2});
-		        return;
-		    }
-		    
-		    // 显示加载层 
-		    var loadIndex = layer.load(2); 
-		    
-		    // 显示进度条 
-		    $('#progress-container').show();
-		    element.progress('import-progress',  '0%');
-		    
-		    // 使用FormData上传文件 
-		    var formData = new FormData();
-		    formData.append('file',  selectedFile);
-		    
-		    // 使用原生AJAX上传 
-		    var xhr = new XMLHttpRequest();
-		    xhr.open('POST',  '/excel/importinport', true);
-		    
-		    xhr.upload.onprogress  = function(e) {
-		        if(e.lengthComputable){ 
-		            var percent = Math.round((e.loaded  / e.total)  * 100);
-		            element.progress('import-progress',  percent + '%');
-		        }
-		    };
-		    
-		    xhr.onload  = function() {
-		        layer.close(loadIndex); 
-		        if(xhr.status  === 200){
-		            try {
-		                var res = JSON.parse(xhr.responseText); 
-		                if(res.code  === 200){
-		                    showImportResult(res);
-		                    tableIns.reload(); 
-		                } else {
-		                    showErrorResult(res.msg  || '导入失败');
-		                }
-		            } catch(e) {
-		                showErrorResult('解析服务器响应失败');
-		            }
-		        } else {
-		            showErrorResult('服务器错误: ' + xhr.status); 
-		        }
-		    };
-		    
-		    xhr.onerror  = function() {
-		        layer.close(loadIndex); 
-		        showErrorResult('网络错误，请检查连接');
-		    };
-		    
-		    xhr.send(formData); 
-		});
-		 
-		// 显示导入结果 
-		function showImportResult(res) {
-		    var html = '<div style="color:green">导入成功！</div>' +
-		               '<div>总记录数: ' + res.data.total  + '</div>' +
-		               '<div>成功: ' + res.data.successCount  + '</div>' +
-		               '<div>失败: ' + res.data.failureCount  + '</div>';
-		    
-		    if(res.data.failureCount  > 0) {
-		        html += '<div style="margin-top:10px;">' +
-		                '<a href="javascript:void(0)" class="layui-btn layui-btn-xs" id="show-error">查看失败详情</a>' +
-		                '<div id="error-detail" style="display:none;margin-top:10px;padding:10px;background:#f2f2f2;">';
-		        
-		        res.data.errorMessages.forEach(function(error,  index) {
-		            html += '<p>' + (index + 1) + '. 行号: ' + error.row  + ', 错误: ' + error.message  + '</p>';
-		        });
-		        
-		        html += '</div></div>';
-		        
-		        $('#import-result').html(html);
-		        
-		        $('#show-error').click(function(){
-		            $('#error-detail').toggle();
-		        });
-		    } else {
-		        $('#import-result').html(html);
-		    }
-		}
-		 
-		// 显示错误结果 
-		function showErrorResult(message) {
-		    element.progress('import-progress',  '0%');
-		    $('#import-result').html('<div style="color:red">' + message + '</div>');
-		}
-		 
-		// 模板下载功能 
-		$('#download-template').click(function(){
-		    window.location.href  = '/excel/inporttemplate';
-		});
 
-        //初始化时间选择器
-        laydate.render({
-            elem: '#startTime',
-            type: 'datetime'
-        });
-        laydate.render({
-            elem: '#endTime',
-            type: 'datetime'
-        })
 
-        //初始化表格 加载数据
+		       // 1. 初始化表单验证规则 
+		       form.verify({ 
+		           number: function(value, item) {
+		               if(!/^\d+$/.test(value)) {
+		                   return '只能输入整数';
+		               }
+		           },
+		           price: function(value, item) {
+		               if(!/^\d+(\.\d{1,2})?$/.test(value)) {
+		                   return '请输入正确价格格式(如: 100 或 100.50)';
+		               }
+		           }
+		       });
+
+		       // 2. 初始化下拉框数据 
+		       function initSelects() {
+		           var loadIndex = layer.load(1,  {shade: 0.2});
+		           
+		           // 使用Promise.all 同时加载供应商和产品数据 
+		           Promise.all([ 
+		               $.get("/provider/loadAllProviderForSelect"),
+		               $.get("/goods/loadAllGoodsForSelect")
+		           ]).then(function(results) {
+		               // 初始化供应商下拉 
+		               var providerData = results[0].data;
+		               var providerHtml = '<option value="">Please select the provider name</option>';
+		               $.each(providerData, function(index, item) {
+		                   providerHtml += '<option value="'+item.id+'">'+item.providername+'</option>'; 
+		               });
+		               $('#select_providerid, #providerid').html(providerHtml);
+		               
+		               // 初始化产品下拉 
+		               var goodsData = results[1].data;
+		               var goodsHtml = '<option value="">Please select the product name</option>';
+		               $.each(goodsData, function(index, item) {
+		                   goodsHtml += '<option value="'+item.id+'">'+ 
+		                              item.goodsname+'-['+item.productcode+']-['+item.size+']'+ 
+		                              '</option>';
+		               });
+		               $('#select_goodsid, #goodsid').html(goodsHtml);
+		               
+		               // 重新渲染下拉框 
+		               form.render('select'); 
+		           }).catch(function(error) {
+		               layer.msg(' 加载数据失败: ' + (error.statusText  || '未知错误'));
+		           }).finally(function() {
+		               layer.close(loadIndex); 
+		           });
+		       }
+
+		       // 3. 加载特定供应商的产品 
+			   function loadGoodsByProvider(providerid, goodsid, callback) {
+			       var url = providerid ? "/goods/loadGoodsByProviderId" : "/goods/loadAllGoodsForSelect";
+			       var params = providerid ? {providerid: providerid} : {};
+			       
+			       $.get(url, params, function(res) {
+			           if(res.code  == 0) {
+			               var html = '<option value="">Please select the product name</option>';
+			               $.each(res.data,  function(index, item) {
+			                   var displayText = item.goodsname; 
+			                   if(item.productcode)  displayText += '-[' + item.productcode  + ']';
+			                   if(item.size)  displayText += '-[' + item.size  + ']';
+			                   
+			                   html += '<option value="'+item.id+'"'  + 
+			                          (goodsid && item.id  == goodsid ? ' selected' : '') + '>' +
+			                          displayText + '</option>';
+			               });
+			               
+			               $('#goodsid').html(html);
+			               form.render('select'); 
+			               
+			               if(callback) callback();
+			           } else {
+			               layer.msg(res.msg  || '加载产品失败: ' + (res.error  || ''));
+			           }
+			       }).fail(function(jqXHR, textStatus, errorThrown) {
+						var errorMsg = '请求产品数据失败: ';
+					    if(jqXHR.responseJSON  && jqXHR.responseJSON.message)  {
+					        errorMsg += jqXHR.responseJSON.message; 
+					    } else {
+					        errorMsg += textStatus + ' ' + errorThrown;
+					    }
+					    layer.msg(errorMsg); 
+					    console.error(' 加载产品失败详情:', jqXHR);
+			       });
+			   }
+
+		       // 4. 页面加载完成后初始化 
+		       initSelects();
+		       
+		       // 5. 监听供应商下拉变化 
+		       form.on('select(providerid)',  function(data) {
+		           loadGoodsByProvider(data.value); 
+		       });
+
+			   
+			   // ================== 新增智能模糊搜索 ==================
+			   // 1. 增强型防抖函数（支持立即执行）
+			   function enhancedDebounce(func, wait, immediate) {
+			       var timeout;
+			       return function() {
+			           var context = this, args = arguments;
+			           var later = function() {
+			               timeout = null;
+			               if (!immediate) func.apply(context,  args);
+			           };
+			           var callNow = immediate && !timeout;
+			           clearTimeout(timeout);
+			           timeout = setTimeout(later, wait);
+			           if (callNow) func.apply(context,  args);
+			       };
+			   }
+			    
+			   // 2. 智能搜索处理器 
+			   function handleSmartSearch(elem) {
+			       var $select = $(elem);
+			       var $searchInput = $select.next('.layui-select-title').find('input'); 
+			       var $options = $select.find('option'); 
+			       
+			       $searchInput.off('input').on('input',  enhancedDebounce(function() {
+			           var keyword = $(this).val().toLowerCase().trim();
+			           var hasMatch = false;
+			           
+			           $options.each(function()  {
+			               var $option = $(this);
+			               var matchResult = $option.text().toLowerCase().includes(keyword); 
+			               $option.toggle(matchResult); 
+			               if (matchResult) hasMatch = true;
+			           });
+			    
+			           // 无结果提示 
+			           if (!hasMatch && keyword) {
+			               $select.append('<option  value="" disabled style="color:#ff5722">NO record</option>');
+			           }
+			           
+			           form.render('select'); 
+			       }, 300, true));
+			   }
+			    
+			   // 3. 初始化所有搜索下拉框 
+			   function initSmartSearch() {
+			       $('select[lay-search]').each(function() {
+			           handleSmartSearch(this);
+			           
+			           // 修复Layui搜索框点击穿透问题 
+			           $(this).next('.layui-select-title').find('input').on('click', function(e) {
+			               e.stopPropagation(); 
+			           });
+			       });
+			   }
+			    
+			   // 执行初始化 
+			   initSmartSearch();
+			   // ================== 模糊搜索优化结束 ==================
+			   
+			   
+		       // 6. 初始化表格 
         tableIns = table.render({
             elem: "#inportTable",
-            title: "进货数据表格",
+            title: "入库数据表格",
             url: "/inport/loadAllInport",
             toolbar: "#inportToolBar",
             page: true,
 			limit: '9999999',  // 默认单页模式 
 			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
-            cols: [ [
-                {field: 'productcode', title: 'Model<br/>产品型号', align: 'center',width:'300'},
-				{field: 'size', title: 'Remark<br/>产品规格', align: 'center',width:'300'},
-                {field: 'inporttime', title: 'Inport Time<br/>进货时间', align: 'center',width:'170'},
-                {field: 'number', title: 'Inport Qty<br/>进货数量', align: 'center',width:'100'},
-                {field: 'inportprice', title: 'Inport Price(RMB)<br/>进货价格(人民币)', align: 'center',width:'130'},
-                {field: 'remark', title: 'Note<br/>备注', align: 'center',width:'120'},
-                {fixed: 'right', title: 'execute<br/>操作', toolbar: '#inportRowBar', align: 'center',width:'250'}
-            ] ],
-            done: function (data, curr, count) {
-                //不是第一页时，如果当前返回的数据为0那么就返回上一页
-                if (data.data.length == 0 && curr != 1) {
-                    tableIns.reload({
-                        page: {
-                            curr: curr - 1
-                        }
-                    })
-                }
-            }
-        });
+			cols: [[ 
+			                {field: 'productcode', title: 'Model<br/>产品型号', align: 'center', width: '500'},
+			                {field: 'size', title: 'Remark<br/>产品规格', align: 'center', width: '300'},
+			                {field: 'inporttime', title: 'Inport Time<br/>入库时间', align: 'center', width: '170'},
+			                {field: 'number', title: 'Inport Qty<br/>入库数量', align: 'center', width: '100'},
+			                {field: 'inportprice', title: 'Inport Price(RMB)<br/>含运出厂价(人民币)', align: 'center', width: '160'},
+							{field: 'sum', title: 'SUM(RMB)<br/>总价(人民币)', align: 'center', width: '130'							,
+												  templet: function(d){
+												        return (parseFloat(d.number)  * parseFloat(d.inportprice)).toFixed(2); 
+												    }
+												},
+							{field: 'carton', title: 'Carton<br/>件数', align: 'center', width: '130'},
+			                {field: 'remark', title: 'Note<br/>备注', align: 'center', width: '120'},
+			                {fixed: 'right', title: 'execute<br/>操作', toolbar: '#inportRowBar', align: 'center', width: '250'}
+			            ]],
+			            done: function (data, curr, count) {
+			                if (data.data.length  == 0 && curr != 1) {
+			                    tableIns.reload({ 
+			                        page: { curr: curr - 1 }
+			                    });
+			                }
+			            }
+			        });
+			 
+			        // 7. 监控模糊查询按钮事件 
+			        form.on("submit(doSearch)",  function (data) {
+			            tableIns.reload({ 
+			                where: data.field, 
+			                page: { curr: 1 }
+			            });
+			            return false;
+			        });
+			 
+			        // 8. 监控工具条事件 
+			        table.on("toolbar(inportTable)",  function (obj) {
+			            switch (obj.event)  {
+			                case 'add':
+			                    openAddLayer();
+			                    break;
+			            }
+			        });
+			 
+			        // 9. 监控行工具条事件 
+			        table.on("tool(inportTable)",  function (obj) {
+			            var data = obj.data; 
+			            switch (obj.event)  {
+			                case 'delete':
+			                    deleteInport(data);
+			                    break;
+			                case 'update':
+			                    updateInport(data);
+			                    break;
+			                case 'run':
+			                    runInport(data);
+			                    break;
+			            }
+			        });
+					
+					// 自动计算函数 
+					function calculateTotal() {
+					    // 获取数量和价格 
+					    var number = parseFloat($('input[name="number"]').val()) || 0;
+					    var price = parseFloat($('input[name="inportprice"]').val()) || 0;
+					    
+					    // 计算总价 
+					    var total = number * price;
+					    
+					    // 更新总价字段，保留2位小数 
+					    $('input[name="sum"]').val(total.toFixed(2));  
+					}
+					
+			        // 10. 打开添加弹出层 
+			        function openAddLayer() {
+			            mainIndex = layer.open({ 
+			                type: 1,
+			                content: $("#addDiv"),
+			                area: ['1500px', '700px'],
+			                title: '添加入库',
+			                success: function () {
+			                    $("#addFrm")[0].reset();
+								
+								// 绑定自动计算事件 
+								$('input[name="number"], input[name="inportprice"]').on('input', calculateTotal);
+								
+			                    url = "/inport/addInport";
+			                }
+			            });
+			        }
+			 
+			        // 11. 打开修改弹出层 
+			        function updateInport(data) {
+			            mainIndex = layer.open({ 
+			                type: 1,
+			                content: $("#updateDiv"),
+			                area: ['1500px', '700px'],
+			                title: '修改商品入库',
+			                success: function () {
+								// 填充表单数据 
+								form.val("updateFrm",  data);
+								                    
+								// 设置供应商和产品名称（只读）
+								$("#providerName").val(data.providername); 
+								$("#goodsName").val(data.goodsname  + "-[" + data.productcode  + "]-[" + data.size  + "]");
+			                    
+								// 初始计算（确保使用原始数据）
+								var initNum = parseFloat(data.number)  || 0;
+								var initPrice = parseFloat(data.inportprice)  || 0;
+								$('#updateDiv input[name="sum"]').val((initNum * initPrice).toFixed(2));
 
-        //监控模糊查询按钮事件
-        form.on("submit(doSearch)", function (data) {
-            tableIns.reload({
-                where: data.field,
-                page: {
-                    curr: 1
-                }
-            });
-            return false;
-        });
+								// 绑定自动计算事件（限定在updateDiv内）
+								$('#updateDiv').off('input').on('input', 'input[name="number"], input[name="inportprice"]', function() {
+								    var num = parseFloat($('#updateDiv input[name="number"]').val()) || 0;
+								    var pri = parseFloat($('#updateDiv input[name="inportprice"]').val()) || 0;
+								    $('#updateDiv input[name="sum"]').val((num * pri).toFixed(2));
+								});
+								
+			                    url = "/inport/updateInport";
+			                }
+			            });
+			        }
+					
+					// 自定义重置更新表单（不重置供应商和产品名称）
+					$("#resetUpdateForm").click(function() {
+					    // 1. 获取当前表单值 
+					    var formData = form.val("updateFrm"); 
+					    
+					    // 2. 保存关键字段 
+					    var providerid = formData.providerid; 
+					    var providerName = $("#providerName").val();
+					    var goodsid = formData.goodsid; 
+					    var goodsName = $("#goodsName").val();
+					    var id = formData.id; 
+					    
+					    // 3. 重置表单 
+					    $("#updateFrm")[0].reset();
+					    
+					    // 4. 恢复关键字段 
+					    form.val("updateFrm",  {
+					        providerid: providerid,
+					        goodsid: goodsid,
+					        id: id,
+					        number: '',
+					        inportprice: '',
+					        carton: '',
+					        remark: ''
+					    });
+					    
+					    // 5. 恢复显示名称 
+					    $("#providerName").val(providerName);
+					    $("#goodsName").val(goodsName);
+								
+								
+						// 4. 重新计算总价（基于当前表单值）
+						 var number = parseFloat($('input[name="number"]').val()) || 0;
+						 var price = parseFloat($('input[name="inportprice"]').val()) || 0;
+						$('input[name="sum"]').val((number * price).toFixed(2));
+								    
+						// 5. 重新渲染表单（确保Layui样式正确）
+						form.render(); 
+								    
+						// 6. 调试用日志（正式环境可移除）
+						console.log(" 表单已重置，保留关键字段并重新计算总价");
+					   });
+					    
+			 
+			        // 12. 删除入库记录 
+			        function deleteInport(data) {
+			            layer.confirm(' 确定要删除这条入库信息吗？', {icon: 3, title: '提示'}, function (index) {
+			                $.post("/inport/deleteInport", {id: data.id},  function(res) {
+			                    if (res.code  == 200) {
+			                        tableIns.reload(); 
+			                    }
+			                    layer.msg(res.msg); 
+			                    layer.close(index); 
+			                });
+			            });
+			        }
+			 
+			        // 13. 执行入库 
+			        function runInport(data) {
+			            mainIndex = layer.open({ 
+			                type: 1,
+			                content: $("#runDiv"),
+			                area: ['600px', '400px'],
+			                title: '商品入库',
+			                success: function () {
+			                    $("#run")[0].reset();
+			                    form.val("run",  {
+			                        id: data.id, 
+			                        runNumber: data.number  
+			                    });
+			                }
+			            });
+			        }
+			 
+					// 14. 提交新增表单 
+					form.on("submit(doAddSubmit)",  function(data) {
+					    $.post(url, data.field,  function(res) {
+					        layer.msg(res.msg);  
+					        if (res.code  == 200) {
+					            tableIns.reload();  
+					            layer.close(mainIndex);  
+					        }
+					    });
+					    return false;
+					});
 
-        //监控工具条事件
-        table.on("toolbar(inportTable)", function (obj) {
-            switch (obj.event) {
-                case 'add':
-                    openAddLayer();
-                    break;
-                case 'deleteBatch':
-                    batchDeleteInport();
-                    break;
-            };
-        });
-
-        //监控行工具条事件
-        table.on("tool(inportTable)", function (obj) {
-            //获取当前行数据
-            var data = obj.data;
-            switch (obj.event) {
-                case 'delete':
-                    deleteInport(data);
-                    break;
-                case 'update':
-                    updateInport(data);
-                    break;
-                case 'back':
-                    backInport(data);
-                    break;
-                case 'run':
-                    runInport(data);
-                    break;
-            };
-        });
-
-        //初始化供应商名称的下拉列表
-        $.get("/provider/loadAllProviderForSelect",function (res) {
-            var data = res.data;
-            var dom = $("#select_providerid");
-            var html = '<option value="">Please select the provider name</option>';
-            $.each(data,function (index, item) {
-                html += '<option value="'+item.id+'">'+item.providername+'</option>';
-            })
-            dom.html(html);
-            //重新渲染下拉列表
-            form.render("select");
-        });
-        //初始化商品名称的下拉列表
-        $.get("/goods/loadAllGoodsForSelect",function (res) {
-            var data = res.data;
-            var dom = $("#select_goodsid");
-            var html = '<option value="">Please select the product name</option>';
-            $.each(data,function (index, item) {
-                html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.productcode+']-'+'['+item.providername+']'+'</option>';
-            });
-            dom.html(html);
-            //重新渲染下拉列表
-            form.render("select");
-        });
-
-        var mainIndex;
-        var url;
-
-        //打开添加弹出层
-        function openAddLayer() {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
-                area:['700px','500px'],
-                title:'添加进货',
-                success:function () {
-                    $("#dataFrm")[0].reset();
-                    //初始化供应商的下拉列表
-                    initProviderSelect();
-                    //使该div隐藏
-                    $(".mydiv").hide();
-                    url="/inport/addInport";
-
-                }
-            });
-        }
-
-        //打开修改的弹出层
-        function updateInport(data) {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
-                area:['700px','500px'],
-                title:'修改商品进货',
-                success:function () {
-                    //清空原有的数据
-                    $("#dataFrm")[0].reset();
-                    //装载新的数据
-                    form.val("dataFrm",data);
-                    //供应商进行反选
-                    initProviderSelect(data.providerid);
-                    //商品进行反选
-                    initGoodsSelect(data.providerid,data.goodsid);
-                    //禁用供应商和商品的下拉列表
-                    $(".mydiv").show();
-                    url="/inport/updateInport";
-                }
-            });
-        }
-
-        //初始化添加和修改页面的下拉列表
-        function initProviderSelect(providerid) {
-            //重置商品的下拉列表
-            var dom = $("#goodsid");
-            dom.html("");
-            $.get("/provider/loadAllProviderForSelect",function (res) {
-                var data = res.data;
-                var dom = $("#providerid");
-                var html = '<option value="">Please select the provider name</option>';
-                $.each(data,function (index, item) {
-                    html += '<option value="'+item.id+'">'+item.providername+'</option>';
-                });
-                dom.html(html);
-                //如果providerid有值就进行反选
-                if (providerid!=undefined){
-                    dom.val(providerid);
-                }
-                //重新渲染下拉列表
-                form.render("select");
-            });
-        };
-
-        //监听供应商的下拉列表的事件
-        form.on('select(providerid)',function (data) {
-           var providerid = data.value;
-           initGoodsSelect(providerid);
-        });
-
-        //加载商品的下拉列表
-        function initGoodsSelect(providerid, goodsid) {
-            $.get("/goods/loadGoodsByProviderId",{providerid:providerid},function (res) {
-                var data = res.data;
-                var dom = $("#goodsid");
-                var html = '<option value="">Please select the product name</option>';
-                $.each(data,function (index, item) {
-                    html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.productcode+']-'+'['+item.providername+']'+'</option>';
-                });
-                dom.html(html);
-                //如果goodsid有值就进行反选
-                if (goodsid!=undefined){
-                    dom.val(goodsid);
-                }
-                //重新渲染下拉列表
-                form.render("select");
-            });
-        }
-        
-
-        form.on("submit(doSubmit)",function (data) {
-            $.post(url,data.field,function (res) {
-                if (res.code==200){
-                    tableIns.reload();
-                }
-                layer.msg(res.msg);
-                layer.close(mainIndex);
-            });
-            return false;
-        });
-
-
-        //删除
-        function deleteInport(data) {
-            layer.confirm('你确定要删除这条进货信息吗？', {icon: 3, title: '提示'}, function (index) {
-                $.post("/inport/deleteInport", {id: data.id},function (res) {
-                    if (res.code == 200) {
-                        tableIns.reload({
-                            where:"",
-                        });
-                    }
-                    layer.msg(res.msg);
-                });
-                layer.close(index);
-            });
-        }
-
-        //打开退货的弹出层
-        function backInport(data) {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#backGoodsDiv"),
-                area:['600px','400px'],
-                title:'商品退货',
-                success:function () {
-                    //清空原有的数据
-                    $("#dataFrmBack")[0].reset();
-                    //装载新的数据   获得进货的ID以及当前进货单的进货数量
-                    form.val("dataFrmBack",{id:data.id,currentNumber:data.number});
-                }
-            });
-        }
-      //打开进货的弹出层
-        function runInport(data) {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#runDiv"),
-                area:['600px','400px'],
-                title:'商品进货',
-                success:function () {
-                    //清空原有的数据
-                    $("#run")[0].reset();
-                    //装载新的数据   获得进货的ID以及当前进货单的进货数量
-                    form.val("run",{id:data.id,runNumber:data.number});
-                }
-            });
-        }
-
-        
-        
-        //执行进货
-        form.on("submit(runSubmit)",function (data) {
-            $.post("/inport/run",data.field,function (res) {
-                if (res.code==200){
-                    //重新加载表格数据
-                    tableIns.reload();
-                    //关闭退货弹出层
-                    layer.close(mainIndex);
-                }
-                layer.msg(res.msg);
-            });
-            return false;
-        })
-
-
-
-    });
-
-
-</script>
-
-</body>
-</html>
+					// 15. 提交修改表单 
+					form.on("submit(doUpdateSubmit)",  function(data) {
+					    $.post(url, data.field,  function(res) {
+					        layer.msg(res.msg);  
+					        if (res.code  == 200) {
+					            tableIns.reload();  
+					            layer.close(mainIndex);  
+					        }
+					    });
+					    return false;
+					});
+			 
+			        // 16. 执行入库提交 
+			        form.on("submit(runSubmit)",  function(data) {
+			            $.post("/inport/run", data.field,  function(res) {
+			                layer.msg(res.msg); 
+			                if (res.code  == 200) {
+			                    tableIns.reload(); 
+			                    layer.close(mainIndex); 
+			                }
+			            });
+			            return false;
+			        });
+			 
+			        // 17. 文件上传相关逻辑保持不变 
+			        var selectedFile = null;
+			         
+			        $('#select-file').click(function(){
+			            $('#file-input').click();
+			        });
+			         
+			        $('#file-input').change(function(e){
+			            if(this.files  && this.files.length  > 0){
+			                selectedFile = this.files[0];  
+			                
+			                var fileExt = selectedFile.name.split('.').pop().toLowerCase();  
+			                if(!['xlsx','xls'].includes(fileExt)){
+			                    layer.msg(' 请选择Excel文件(xlsx或xls格式)', {icon: 2});
+			                    return;
+			                }
+			                
+			                if(selectedFile.size  > 100 * 1024 * 1024){
+			                    layer.msg(' 文件大小不能超过100MB', {icon: 2});
+			                    return;
+			                }
+			                
+			                $('#file-name').text(selectedFile.name).css('color','#333');  
+			            }
+			        });
+			         
+			        $('#import-btn').click(function(){
+			            if(!selectedFile){
+			                layer.msg(' 请先选择Excel文件', {icon: 2});
+			                return;
+			            }
+			            
+			            var loadIndex = layer.load(2);  
+			            $('#progress-container').show();
+			            element.progress('import-progress',  '0%');
+			            
+			            var formData = new FormData();
+			            formData.append('file',  selectedFile);
+			            
+			            var xhr = new XMLHttpRequest();
+			            xhr.open('POST',  '/excel/importinport', true);
+			            
+			            xhr.upload.onprogress  = function(e) {
+			                if(e.lengthComputable){  
+			                    var percent = Math.round((e.loaded  / e.total)  * 100);
+			                    element.progress('import-progress',  percent + '%');
+			                }
+			            };
+			            
+			            xhr.onload  = function() {
+			                layer.close(loadIndex);  
+			                if(xhr.status  === 200){
+			                    try {
+			                        var res = JSON.parse(xhr.responseText);  
+			                        if(res.code  === 200){
+			                            showImportResult(res);
+			                            tableIns.reload();  
+			                        } else {
+			                            showErrorResult(res.msg  || '导入失败');
+			                        }
+			                    } catch(e) {
+			                        showErrorResult('解析服务器响应失败');
+			                    }
+			                } else {
+			                    showErrorResult('服务器错误: ' + xhr.status);  
+			                }
+			            };
+			            
+			            xhr.onerror  = function() {
+			                layer.close(loadIndex);  
+			                showErrorResult('网络错误，请检查连接');
+			            };
+			            
+			            xhr.send(formData);  
+			        });
+			         
+			        function showImportResult(res) {
+			            var html = '<div style="color:green">导入成功！</div>' +
+			                       '<div>总记录数: ' + res.data.total  + '</div>' +
+			                       '<div>成功: ' + res.data.successCount  + '</div>' +
+			                       '<div>失败: ' + res.data.failureCount  + '</div>';
+			            
+			            if(res.data.failureCount  > 0) {
+			                html += '<div style="margin-top:10px;">' +
+			                        '<a href="javascript:void(0)" class="layui-btn layui-btn-xs" id="show-error">查看失败详情</a>' +
+			                        '<div id="error-detail" style="display:none;margin-top:10px;padding:10px;background:#f2f2f2;">';
+			                
+			                res.data.errorMessages.forEach(function(error,  index) {
+			                    html += '<p>' + (index + 1) + '. 行号: ' + error.row  + ', 错误: ' + error.message  + '</p>';
+			                });
+			                
+			                html += '</div></div>';
+			                
+			                $('#import-result').html(html);
+			                
+			                $('#show-error').click(function(){
+			                    $('#error-detail').toggle();
+			                });
+			            } else {
+			                $('#import-result').html(html);
+			            }
+			        }
+			         
+			        function showErrorResult(message) {
+			            element.progress('import-progress',  '0%');
+			            $('#import-result').html('<div style="color:red">' + message + '</div>');
+			        }
+			         
+			        $('#download-template').click(function(){
+			            window.location.href  = '/excel/inporttemplate';
+			        });
+			    });
+			</script>
+			</body>
+			</html>

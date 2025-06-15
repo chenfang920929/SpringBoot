@@ -10,7 +10,22 @@
 	</select>
 
 	<select id="select" resultType="com.SpringBoot.bean.Goods">
-		select * from bus_goods g join bus_provider p on g.providerid = p.id 
+SELECT 
+    g.id,  g.providerid,  g.description,  g.goodsname,  
+    g.productcode,  g.size,  g.number, 
+    COALESCE(i.in_total,  0) AS in_count,
+    COALESCE(s.out_total,  0) AS out_count,
+    (g.number  + COALESCE(i.in_total,  0) - COALESCE(s.out_total,  0)) AS actual_count 
+FROM 
+    bus_goods g 
+LEFT JOIN 
+    bus_provider p ON g.providerid  = p.id  
+LEFT JOIN 
+    (SELECT goodsid, SUM(number) AS in_total 
+     FROM bus_inport GROUP BY goodsid) i ON i.goodsid  = g.id  
+LEFT JOIN 
+    (SELECT goodsid, SUM(number) AS out_total 
+     FROM bus_sales GROUP BY goodsid) s ON s.goodsid  = g.id 
 		<where>
 			
 			<if test="providerid!=null">
@@ -75,4 +90,8 @@
 		select g.*,p.* from bus_goods g join bus_provider p on g.providerid = p.id where g.providerid=#{providerid}
 	</select>
 
+	<select id="selectByProductcode" resultType="com.SpringBoot.bean.Goods">
+		select g.*,p.* from bus_goods g join bus_provider p on g.providerid = p.id where REPLACE(REPLACE(REPLACE(g.productcode,  CHAR(13), ''), CHAR(10), ''), ' ', '') = REPLACE(REPLACE(REPLACE(#{productcode}, CHAR(13), ''), CHAR(10), ''), ' ', '') 
+		and REPLACE(REPLACE(REPLACE(g.size,  CHAR(13), ''), CHAR(10), ''), ' ', '') = REPLACE(REPLACE(REPLACE(#{size}, CHAR(13), ''), CHAR(10), ''), ' ', '')
+	</select>
 </mapper>
