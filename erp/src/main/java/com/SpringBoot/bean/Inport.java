@@ -49,4 +49,6 @@ public class Inport {
     private String size;
 
     private Double carton;
+    
+    private BigDecimal sum;    // 总价 = 单价 × 数量 
 }

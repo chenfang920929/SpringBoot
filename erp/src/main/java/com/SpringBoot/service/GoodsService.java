@@ -57,6 +57,13 @@ public class GoodsService implements GoodsImp {
 		List<Goods> selectGoodsName = goodsImp.selectGoodsName();
 		return selectGoodsName;
 	}
+	
+	@Override
+	public Integer selectGoodsActualCount(Integer id) {
+		// TODO 自动生成的方法存根
+		Integer actualCount = goodsImp.selectGoodsActualCount(id);
+		return actualCount;
+	}
 
 	@Override
 	public List<Goods> selectByProviderid(Integer providerid) {

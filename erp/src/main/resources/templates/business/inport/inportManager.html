@@ -599,17 +599,15 @@
 			limit: '9999999',  // 默认单页模式 
 			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
-			cols: [[ 
+			totalRow: true, // 开启合计行
+			cols: [[ 		
+							{field: 'goodsname', title: 'Product Name<br/>产品名称', align: 'center', width: '200'},
 			                {field: 'productcode', title: 'Model<br/>产品型号', align: 'center', width: '500'},
 			                {field: 'size', title: 'Remark<br/>产品规格', align: 'center', width: '300'},
 			                {field: 'inporttime', title: 'Inport Time<br/>入库时间', align: 'center', width: '170'},
-			                {field: 'number', title: 'Inport Qty<br/>入库数量', align: 'center', width: '100'},
+			                {field: 'number', title: 'Inport Qty<br/>入库数量', align: 'center', width: '100', totalRow: true}, // 数量合计
 			                {field: 'inportprice', title: 'Inport Price(RMB)<br/>含运出厂价(人民币)', align: 'center', width: '160'},
-							{field: 'sum', title: 'SUM(RMB)<br/>总价(人民币)', align: 'center', width: '130'							,
-												  templet: function(d){
-												        return (parseFloat(d.number)  * parseFloat(d.inportprice)).toFixed(2); 
-												    }
-												},
+							{field: 'sum', title: 'SUM(RMB)<br/>总价(人民币)', align: 'center', width: '130', totalRow: true},
 							{field: 'carton', title: 'Carton<br/>件数', align: 'center', width: '130'},
 			                {field: 'remark', title: 'Note<br/>备注', align: 'center', width: '120'},
 			                {fixed: 'right', title: 'execute<br/>操作', toolbar: '#inportRowBar', align: 'center', width: '250'}
@@ -853,7 +851,10 @@
 			                }
 			                
 			                $('#file-name').text(selectedFile.name).css('color','#333');  
-			            }
+						} else {
+						    // 如果没有选择文件，则重置状态 
+						    resetFileSelection();
+						}
 			        });
 			         
 			        $('#import-btn').click(function(){
@@ -861,6 +862,11 @@
 			                layer.msg(' 请先选择Excel文件', {icon: 2});
 			                return;
 			            }
+						
+						// 重置进度条和结果区域 
+						$('#progress-container').show();
+						element.progress('import-progress',  '0%');
+						$('#import-result').html('');
 			            
 			            var loadIndex = layer.load(2);  
 			            $('#progress-container').show();
@@ -905,7 +911,14 @@
 			            
 			            xhr.send(formData);  
 			        });
-			         
+			        
+					// 在导入成功或失败后，重置文件选择状态 
+					function resetFileSelection() {
+					    selectedFile = null;
+					    $('#file-input').val(''); // 清空文件输入 
+					    $('#file-name').text('').css('color','#666');
+					}
+					 
 			        function showImportResult(res) {
 			            var html = '<div style="color:green">导入成功！</div>' +
 			                       '<div>总记录数: ' + res.data.total  + '</div>' +
@@ -931,11 +944,17 @@
 			            } else {
 			                $('#import-result').html(html);
 			            }
+
+						// 重置文件选择状态 
+						resetFileSelection();
 			        }
 			         
 			        function showErrorResult(message) {
 			            element.progress('import-progress',  '0%');
 			            $('#import-result').html('<div style="color:red">' + message + '</div>');
+						
+						// 重置文件选择状态 
+						resetFileSelection();
 			        }
 			         
 			        $('#download-template').click(function(){

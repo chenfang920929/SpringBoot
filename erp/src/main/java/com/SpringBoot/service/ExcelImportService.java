@@ -67,13 +67,13 @@ public class ExcelImportService {
             for (int i = 1; i <= sheet.getLastRowNum();  i++) { // 从第2行开始读取 
                 try {
                     Row row = sheet.getRow(i); 
-                    if (row == null || StringUtil.isBlank(getCellValue(row,  0)) ||  StringUtil.isBlank(getCellValue(row,  1))) continue;
+                    if (row == null || StringUtil.isBlank(getCellValue(row, 0)) ||  StringUtil.isBlank(getCellValue(row,  1)) || StringUtil.isBlank(getCellValue(row, 2)) ) continue;
                     
                     Goods goods = parseGoodsRow(row);
                     validateGoods(goods);
-                    Integer providerId=providerService.selectProviderId("MEYINK");
+                    Integer providerId=providerService.selectProviderId(goods.getProvidername());
                     // 保存到数据库 
-                    goodsService.insert(providerId, "Toner Cartridge/硒鼓", goods.getProductcode(),goods.getDescription(),goods.getSize(),goods.getNumber()); 
+                    goodsService.insert(providerId, goods.getGoodsname(), goods.getProductcode(),goods.getDescription(),goods.getSize(),goods.getNumber()); 
                     successList.add(goods); 
                 } catch (Exception e) {
                     errorList.add(new  ImportError(i + 1, e.getMessage())); 
@@ -87,11 +87,13 @@ public class ExcelImportService {
  
     private Goods parseGoodsRow(Row row) {
         Goods goods = new Goods();
-        goods.setProductcode(getCellValue(row,  0)); // 商品型号 
-        goods.setSize(getCellValue(row,  1));        // 商品规格 
-        goods.setDescription(getCellValue(row,  2));        // 适用机型 
-        if(!StringUtil.isBlank(getCellValue(row,  3))) {
-        	goods.setNumber(Integer.valueOf(getCellValue(row,  3)));        // 库存数量
+        goods.setGoodsname(getCellValue(row, 0)); // 产品名称 
+        goods.setProductcode(getCellValue(row, 1)); // 产品型号 
+        goods.setSize(getCellValue(row,  2));        // 产品规格 
+        goods.setDescription(getCellValue(row,  3));        // 产品机型 
+        goods.setProvidername(getCellValue(row,  4));        // 供应商 
+        if(!StringUtil.isBlank(getCellValue(row,  5))) {     
+        	goods.setNumber(Integer.valueOf(getCellValue(row,  5)));        // 库存数量
     	}else{
     		goods.setNumber(0);
     	}
@@ -168,7 +170,7 @@ public class ExcelImportService {
                 try {
                 	Inport inport = parseInportRow(row);
                     validateInport(inport);
-                    Integer providerId=providerService.selectProviderId("MEYINK");
+                    Integer providerId=providerService.selectProviderId("MYK-美印克");
                     
                     Goods goods=goodsService.selectByProductcode(inport.getProductcode(), inport.getSize());
                     if(goods!=null) {
@@ -297,24 +299,34 @@ public class ExcelImportService {
             Row headerRow = sheet.createRow(0); 
             headerRow.setHeightInPoints(30);  // Increased height for wrapped text
             
-            headerRow.createCell(0).setCellValue("Model\n产品型号");
+            headerRow.createCell(0).setCellValue("Product Name\n产品名称");
             headerRow.getCell(0).setCellStyle(wrapStyle); 
-            
-            headerRow.createCell(1).setCellValue("Remark\n产品规格");
+
+            headerRow.createCell(1).setCellValue("Model\n产品型号");
             headerRow.getCell(1).setCellStyle(wrapStyle); 
             
-            headerRow.createCell(2).setCellValue("Compatible for\n产品机型");
+     
+            headerRow.createCell(2).setCellValue("Remark\n产品规格");
             headerRow.getCell(2).setCellStyle(wrapStyle); 
             
-            headerRow.createCell(3).setCellValue("ORIG Qty\n数量-初始库存");
+            headerRow.createCell(3).setCellValue("Compatible for\n产品机型");
             headerRow.getCell(3).setCellStyle(wrapStyle); 
+            
+            
+            headerRow.createCell(4).setCellValue("Compatible for\n供应商");
+            headerRow.getCell(4).setCellStyle(wrapStyle); 
+            
+            headerRow.createCell(5).setCellValue("ORIG Qty\n库存数量");
+            headerRow.getCell(5).setCellStyle(wrapStyle); 
 
             
             // Set column widths (in units of 1/256th of a character width)
             sheet.setColumnWidth(0,  30 * 256);  
             sheet.setColumnWidth(1,  30 * 256);  
             sheet.setColumnWidth(2,  30 * 256);  
-            sheet.setColumnWidth(3,  30 * 256); 
+            sheet.setColumnWidth(3,  30 * 256);
+            sheet.setColumnWidth(4,  30 * 256); 
+            sheet.setColumnWidth(5,  30 * 256); 
 
             // 写入响应流 
             try (ServletOutputStream out = response.getOutputStream())  {

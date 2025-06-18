@@ -20,6 +20,7 @@ import com.SpringBoot.bean.SalesRequest;
 import com.SpringBoot.common.DataGridView;
 import com.SpringBoot.common.LayuiJson;
 import com.SpringBoot.common.ResultObj;
+import com.SpringBoot.service.GoodsService;
 import com.SpringBoot.service.SalesService;
 
 @RestController
@@ -34,6 +35,9 @@ public class SalesController {
 	
 	@Autowired
 	HttpSession httpSession;
+	
+	@Autowired
+	GoodsService goodsService;
 	
 	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
 	@RequestMapping("loadAllSales")
@@ -65,14 +69,23 @@ public class SalesController {
         	List<SalesItem> products=request.getProducts();
         	if(products!=null && !products.isEmpty()) {
         		for(SalesItem salesItem:products) {
+        			Integer actualCount=goodsService.selectGoodsActualCount(salesItem.getGoodsid());
+        			if(salesItem.getNumber()>actualCount) {
+        				throw new Exception("Sales Fail:The sales volume is greater than the inventory quantity./销售失败:销售数量大于库存数量");
+        			}
+        		}
+        	}
+        	
+        	if(products!=null && !products.isEmpty()) {
+        		for(SalesItem salesItem:products) {
             		salesService.insert(request.getOrderid(),request.getCustomerid(), salesItem.getPaytype(), salestime, operateperson, salesItem.getNumber(), salesItem.getRemark(), salesItem.getSaleprice(), salesItem.getGoodsid());
         		}
         	}
         	
-            return ResultObj.ADD_SUCCESS;
+            return ResultObj.SALES_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultObj.ADD_ERROR;
+            return ResultObj.SALES_ERROR;
         }
     }
     

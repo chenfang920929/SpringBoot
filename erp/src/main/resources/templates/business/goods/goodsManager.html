@@ -71,11 +71,11 @@
 						    <div class="layui-input-inline">
 						  	  	<select name="goodsname" id="goodsname" autocomplete="off" placeholder="Please select the product name">
 						      		<option value="">Please select the product name</option>
-						  	  		<option value="Toner Cartridge/硒鼓">Toner Cartridge/硒鼓</option>
-						  	 		<option value="Ink Cartridge/墨盒">Ink Cartridge/墨盒</option>
-						  	  		<option value="Ink/墨水">Ink/墨水</option>
-						  	 		<option value="Parts/配件">Parts/配件</option>
-						  	  		<option value="Box/纸盒">Box/纸盒</option>
+						  	  		<option value="Toner Cartridge-硒鼓">Toner Cartridge-硒鼓</option>
+						  	 		<option value="Ink Cartridge-墨盒">Ink Cartridge-墨盒</option>
+						  	  		<option value="Ink-墨水">Ink-墨水</option>
+						  	 		<option value="Parts-配件">Parts-配件</option>
+						  	  		<option value="Box-纸盒">Box-纸盒</option>
 						  	 	</select>
 						      </div>
 		</div>
@@ -176,11 +176,11 @@
 							<div class="layui-input-inline">
 							<select name="goodsname" id="goodsname" autocomplete="off" placeholder="Please select the product name">
 													<option value="">Please select the product name</option>
-													<option value="Toner Cartridge/硒鼓">Toner Cartridge/硒鼓</option>
-													<option value="Ink Cartridge/墨盒">Ink Cartridge/墨盒</option>
-													<option value="Ink/墨水">Ink/墨水</option>
-													<option value="Parts/配件">Parts/配件</option>
-													<option value="Box/纸盒">Box/纸盒</option>
+													<option value="Toner Cartridge-硒鼓">Toner Cartridge-硒鼓</option>
+													<option value="Ink Cartridge-墨盒">Ink Cartridge-墨盒</option>
+													<option value="Ink-墨水">Ink-墨水</option>
+													<option value="Parts-配件">Parts-配件</option>
+													<option value="Box-纸盒">Box-纸盒</option>
 							</select>
 							</div>
 					     </div>
@@ -273,103 +273,116 @@
 		        }
 		        
 		        $('#file-name').text(selectedFile.name).css('color','#333'); 
-		    }
-		});
-		 
-		// 导入按钮点击事件 
-		$('#import-btn').click(function(){
-		    if(!selectedFile){
-		        layer.msg(' 请先选择Excel文件', {icon: 2});
-		        return;
-		    }
-		    
-		    // 显示加载层 
-		    var loadIndex = layer.load(2); 
-		    
-		    // 显示进度条 
-		    $('#progress-container').show();
-		    element.progress('import-progress',  '0%');
-		    
-		    // 使用FormData上传文件 
-		    var formData = new FormData();
-		    formData.append('file',  selectedFile);
-		    
-		    // 使用原生AJAX上传 
-		    var xhr = new XMLHttpRequest();
-		    xhr.open('POST',  '/excel/importgoods', true);
-		    
-		    xhr.upload.onprogress  = function(e) {
-		        if(e.lengthComputable){ 
-		            var percent = Math.round((e.loaded  / e.total)  * 100);
-		            element.progress('import-progress',  percent + '%');
-		        }
-		    };
-		    
-		    xhr.onload  = function() {
-		        layer.close(loadIndex); 
-		        if(xhr.status  === 200){
-		            try {
-		                var res = JSON.parse(xhr.responseText); 
-		                if(res.code  === 200){
-		                    showImportResult(res);
-		                    tableIns.reload(); 
-		                } else {
-		                    showErrorResult(res.msg  || '导入失败');
-		                }
-		            } catch(e) {
-		                showErrorResult('解析服务器响应失败');
-		            }
-		        } else {
-		            showErrorResult('服务器错误: ' + xhr.status); 
-		        }
-		    };
-		    
-		    xhr.onerror  = function() {
-		        layer.close(loadIndex); 
-		        showErrorResult('网络错误，请检查连接');
-		    };
-		    
-		    xhr.send(formData); 
-		});
-		 
-		// 显示导入结果 
-		function showImportResult(res) {
-		    var html = '<div style="color:green">导入成功！</div>' +
-		               '<div>总记录数: ' + res.data.total  + '</div>' +
-		               '<div>成功: ' + res.data.successCount  + '</div>' +
-		               '<div>失败: ' + res.data.failureCount  + '</div>';
-		    
-		    if(res.data.failureCount  > 0) {
-		        html += '<div style="margin-top:10px;">' +
-		                '<a href="javascript:void(0)" class="layui-btn layui-btn-xs" id="show-error">查看失败详情</a>' +
-		                '<div id="error-detail" style="display:none;margin-top:10px;padding:10px;background:#f2f2f2;">';
-		        
-		        res.data.errorMessages.forEach(function(error,  index) {
-		            html += '<p>' + (index + 1) + '. 行号: ' + error.row  + ', 错误: ' + error.message  + '</p>';
-		        });
-		        
-		        html += '</div></div>';
-		        
-		        $('#import-result').html(html);
-		        
-		        $('#show-error').click(function(){
-		            $('#error-detail').toggle();
-		        });
-		    } else {
-		        $('#import-result').html(html);
-		    }
-		}
-		 
-		// 显示错误结果 
-		function showErrorResult(message) {
-		    element.progress('import-progress',  '0%');
-		    $('#import-result').html('<div style="color:red">' + message + '</div>');
-		}
-		 
-		// 模板下载功能 
-		$('#download-template').click(function(){
-		    window.location.href  = '/excel/goodstemplate';
-		});
+					} else {
+					    // 如果没有选择文件，则重置状态 
+					    resetFileSelection();
+					}
+			    });
+			     
+			    $('#import-btn').click(function(){
+			        if(!selectedFile){
+			            layer.msg(' 请先选择Excel文件', {icon: 2});
+			            return;
+			        }
+					
+					// 重置进度条和结果区域 
+					$('#progress-container').show();
+					element.progress('import-progress',  '0%');
+					$('#import-result').html('');
+			        
+			        var loadIndex = layer.load(2);  
+			        $('#progress-container').show();
+			        element.progress('import-progress',  '0%');
+			        
+			        var formData = new FormData();
+			        formData.append('file',  selectedFile);
+			        
+			        var xhr = new XMLHttpRequest();
+			        xhr.open('POST',  '/excel/importgoods', true);
+			        
+			        xhr.upload.onprogress  = function(e) {
+			            if(e.lengthComputable){  
+			                var percent = Math.round((e.loaded  / e.total)  * 100);
+			                element.progress('import-progress',  percent + '%');
+			            }
+			        };
+			        
+			        xhr.onload  = function() {
+			            layer.close(loadIndex);  
+			            if(xhr.status  === 200){
+			                try {
+			                    var res = JSON.parse(xhr.responseText);  
+			                    if(res.code  === 200){
+			                        showImportResult(res);
+			                        tableIns.reload();  
+			                    } else {
+			                        showErrorResult(res.msg  || '导入失败');
+			                    }
+			                } catch(e) {
+			                    showErrorResult('解析服务器响应失败');
+			                }
+			            } else {
+			                showErrorResult('服务器错误: ' + xhr.status);  
+			            }
+			        };
+			        
+			        xhr.onerror  = function() {
+			            layer.close(loadIndex);  
+			            showErrorResult('网络错误，请检查连接');
+			        };
+			        
+			        xhr.send(formData);  
+			    });
+			    
+				// 在导入成功或失败后，重置文件选择状态 
+				function resetFileSelection() {
+				    selectedFile = null;
+				    $('#file-input').val(''); // 清空文件输入 
+				    $('#file-name').text('').css('color','#666');
+				}
+				 
+			    function showImportResult(res) {
+			        var html = '<div style="color:green">导入成功！</div>' +
+			                   '<div>总记录数: ' + res.data.total  + '</div>' +
+			                   '<div>成功: ' + res.data.successCount  + '</div>' +
+			                   '<div>失败: ' + res.data.failureCount  + '</div>';
+			        
+			        if(res.data.failureCount  > 0) {
+			            html += '<div style="margin-top:10px;">' +
+			                    '<a href="javascript:void(0)" class="layui-btn layui-btn-xs" id="show-error">查看失败详情</a>' +
+			                    '<div id="error-detail" style="display:none;margin-top:10px;padding:10px;background:#f2f2f2;">';
+			            
+			            res.data.errorMessages.forEach(function(error,  index) {
+			                html += '<p>' + (index + 1) + '. 行号: ' + error.row  + ', 错误: ' + error.message  + '</p>';
+			            });
+			            
+			            html += '</div></div>';
+			            
+			            $('#import-result').html(html);
+			            
+			            $('#show-error').click(function(){
+			                $('#error-detail').toggle();
+			            });
+			        } else {
+			            $('#import-result').html(html);
+			        }
+
+					// 重置文件选择状态 
+					resetFileSelection();
+			    }
+			     
+			    function showErrorResult(message) {
+			        element.progress('import-progress',  '0%');
+			        $('#import-result').html('<div style="color:red">' + message + '</div>');
+					
+					// 重置文件选择状态 
+					resetFileSelection();
+			    }
+			     
+				// 模板下载功能 
+				$('#download-template').click(function(){
+				    window.location.href  = '/excel/goodstemplate';
+				});
 		
         //初始化表格 加载数据
         tableIns = table.render({

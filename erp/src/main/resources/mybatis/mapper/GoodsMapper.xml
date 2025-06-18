@@ -8,6 +8,21 @@
 	<select id="selectById" resultType="com.SpringBoot.bean.Goods">
 		select * from bus_goods where id=#{id}
 	</select>
+	
+	<select id="selectGoodsActualCount" resultType="java.lang.Integer">
+SELECT 
+    (g.number  + COALESCE(i.in_total,  0) - COALESCE(s.out_total,  0)) AS actual_count 
+FROM 
+    bus_goods g 
+LEFT JOIN 
+    bus_provider p ON g.providerid  = p.id  
+LEFT JOIN 
+    (SELECT goodsid, SUM(number) AS in_total 
+     FROM bus_inport GROUP BY goodsid) i ON i.goodsid  = g.id  
+LEFT JOIN 
+    (SELECT goodsid, SUM(number) AS out_total 
+     FROM bus_sales GROUP BY goodsid) s ON s.goodsid  = g.id  where g.id=#{id} 
+	</select>
 
 	<select id="select" resultType="com.SpringBoot.bean.Goods">
 SELECT 

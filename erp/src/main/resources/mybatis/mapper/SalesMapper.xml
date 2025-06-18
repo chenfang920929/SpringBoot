@@ -6,7 +6,7 @@
 <mapper namespace="com.SpringBoot.dao.SalesImp" >
 	
 	<select id="select" resultType="com.SpringBoot.bean.Sales">
-		select * from bus_sales s join bus_customer c on s.customerid=c.id join bus_goods g on s.goodsid=g.id
+		select * ,s.number * s.saleprice AS sum from bus_sales s join bus_customer c on s.customerid=c.id join bus_goods g on s.goodsid=g.id
 			<where>
 				<if test="customerid!=null">
 				   and s.customerid =#{customerid}

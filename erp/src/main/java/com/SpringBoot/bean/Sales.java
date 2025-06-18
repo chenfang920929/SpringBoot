@@ -42,4 +42,6 @@ public class Sales {
 	    private String goodsname;
 
 	    private String size;
+	    
+	    private BigDecimal sum;    // 总价 = 单价 × 数量 
 }

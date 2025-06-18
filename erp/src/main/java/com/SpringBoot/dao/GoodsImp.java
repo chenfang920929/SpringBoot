@@ -29,5 +29,7 @@ public interface GoodsImp {
 	public Goods selectById(@Param("id")Integer id);
 
 	public Goods selectByProductcode(@Param("productcode")String productcode,@Param("size")String size);
+
+	public Integer selectGoodsActualCount(@Param("id")Integer id);
 	
 }

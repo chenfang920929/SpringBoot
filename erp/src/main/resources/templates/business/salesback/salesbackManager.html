@@ -224,21 +224,19 @@
 			limit: '9999999',  // 默认单页模式 
 			limits: [9999999,10, 20, 50, 100,], // 分页选项 
             height: "full-180",
+			totalRow: true, // 开启合计行
             cols: [ [
 				{field: 'orderno', title: 'Order No.<br/>订单号', align: 'center',width:'150'},
                 {field: 'customerid', title: 'Client\'s Id<br/>客户代码', align: 'center',width:'130'},
+				{field: 'goodsname', title: 'Product Name<br/>产品名称', align: 'center', width: '200'},
 				{field: 'productcode', title: 'Model<br/>产品型号', align: 'center',width:'500'},
 				{field: 'size', title: 'Remark<br/>产品规格', align: 'center',width:'260'},
                 {field: 'paytype', title: 'Paytype<br/>支付类型', align: 'center',width:'90'},
                 {field: 'salesbacktime', title: 'Return Time<br/>退货时间', align: 'center',width:'170'},
                 {field: 'operateperson', title: 'Sales Name<br/>销售员', align: 'center',width:'130'},
-                {field: 'number', title: 'Return Qty<br/>退货数量', align: 'center',width:'100'},
+                {field: 'number', title: 'Return Qty<br/>退货数量', align: 'center',width:'100', totalRow: true},
                 {field: 'salebackprice', title: 'Return Price<br/>退货价格', align: 'center',width:'120'},
-				{field: 'sum', title: 'Sum<br/>总数', align: 'center',width:'120'				,
-					 templet: function(d){
-							return (parseFloat(d.number)  * parseFloat(d.salebackprice)).toFixed(2); 
-					 }
-				},
+				{field: 'sum', title: 'Sum<br/>总数', align: 'center',width:'120'	, totalRow: true},
                 {field: 'remark', title: 'Note<br/>备注', align: 'center',width:'130'},
                 {fixed: 'right', title: 'execute<br/>操作', toolbar: '#salesbackRowBar', align: 'center',width:'150'}
             ] ],
