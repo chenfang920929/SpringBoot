@@ -6,8 +6,12 @@
 <mapper namespace="com.SpringBoot.dao.PermissionImp">
 	
 	<select id="selectmenu" resultType="com.SpringBoot.bean.Permission">
-		select * from sys_permission where type = 'menu' 
+select p.* from  sys_user u  join  sys_user_role r on u.id = r.uid  join  sys_role_permission rp on r.rid= rp.rid join  sys_permission p on p.id =rp.pid where  p.type = 'menu' AND u.name=#{name} 
 	</select>
+	
+	<select id="selectmenuAll" resultType="com.SpringBoot.bean.Permission">
+		select * from sys_permission where type = 'menu' 
+   	</select>
 	
 	<select id="selectPid" resultType="com.SpringBoot.bean.Permission">
 		select * from sys_permission where pid=#{pid} 

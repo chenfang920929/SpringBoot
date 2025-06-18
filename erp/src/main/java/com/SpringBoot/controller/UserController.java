@@ -15,6 +15,7 @@ import com.SpringBoot.common.LayuiJson;
 import com.SpringBoot.common.ResultObj;
 import com.SpringBoot.service.UserService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.SpringBoot.annotation.LogMethod;
 import com.SpringBoot.bean.User;
 
 @RestController
@@ -118,6 +119,7 @@ public class UserController {
     /**
      * 重置用户密码
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("resetPwd/{id}")
     public ResultObj resetPwd(@PathVariable(value = "id")Integer id) {
         try {

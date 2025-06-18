@@ -437,12 +437,12 @@
 		       form.verify({ 
 		           number: function(value, item) {
 		               if(!/^\d+$/.test(value)) {
-		                   return '只能输入整数';
+		                   return 'Only integers can be entered.只能输入整数';
 		               }
 		           },
 		           price: function(value, item) {
 		               if(!/^\d+(\.\d{1,2})?$/.test(value)) {
-		                   return '请输入正确价格格式(如: 100 或 100.50)';
+		                   return 'Please enter the correct price format (e.g.: 100 or 100.50).请输入正确价格格式(如: 100 或 100.50)';
 		               }
 		           }
 		       });
@@ -674,7 +674,7 @@
 			                type: 1,
 			                content: $("#addDiv"),
 			                area: ['1500px', '700px'],
-			                title: '添加入库',
+			                title: 'Add inport(添加入库)',
 			                success: function () {
 			                    $("#addFrm")[0].reset();
 								
@@ -692,7 +692,7 @@
 			                type: 1,
 			                content: $("#updateDiv"),
 			                area: ['1500px', '700px'],
-			                title: '修改商品入库',
+			                title: 'Edit inport(修改入库)',
 			                success: function () {
 								// 填充表单数据 
 								form.val("updateFrm",  data);
@@ -764,7 +764,7 @@
 			 
 			        // 12. 删除入库记录 
 			        function deleteInport(data) {
-			            layer.confirm(' 确定要删除这条入库信息吗？', {icon: 3, title: '提示'}, function (index) {
+			            layer.confirm(' Are you sure you want to delete this inbound information?(确定要删除这条入库信息吗？)', {icon: 3, title: 'Alert(提示)'}, function (index) {
 			                $.post("/inport/deleteInport", {id: data.id},  function(res) {
 			                    if (res.code  == 200) {
 			                        tableIns.reload(); 

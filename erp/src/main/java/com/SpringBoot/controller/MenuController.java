@@ -47,14 +47,10 @@ public class MenuController {
     public DataGridView loadIndexLeftMenuJson(PermissionVo permissionVo){
         //查询所有菜单
     	 List<Permission> list = null;
-         if (httpSession.getAttribute("type").equals(Constast.USER_TYPE_SUPER)){
-             //用户类型为超级管理员
-             list = permissionService.selectmenu();
-         }else {
-        	 
-             list = permissionService.selectmenu();
-
-         }
+    	
+    	String username = (String) httpSession.getAttribute("username"); 
+    	list = permissionService.selectmenu(username);
+    	 
 
         List<TreeNode> treeNodes = new ArrayList<TreeNode>();
         for (Permission p : list) {
@@ -84,7 +80,7 @@ public class MenuController {
     @RequestMapping("loadMenuManagerLeftTreeJson")
     public DataGridView loadMenuManagerLeftTreeJson(PermissionVo permissionVo){
         //查询出所有的菜单，存放进list中
-        List<Permission> list = permissionService.selectmenu();
+        List<Permission> list = permissionService.selectmenuAll();
         List<TreeNode> treeNodes = new ArrayList<>();
         //将菜单放入treeNodes中，组装成json
         for (Permission menu : list) {

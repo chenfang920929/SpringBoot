@@ -16,8 +16,14 @@ public class PermissionService implements PermissionImp{
 	PermissionImp permissionImp;
 
 	@Override
-	public List<Permission> selectmenu() {
-		List<Permission> selectmenu = permissionImp.selectmenu();
+	public List<Permission> selectmenu(String username) {
+		List<Permission> selectmenu = permissionImp.selectmenu(username);
+		return selectmenu;
+	}
+	
+	@Override
+	public List<Permission> selectmenuAll() {
+		List<Permission> selectmenu = permissionImp.selectmenuAll();
 		return selectmenu;
 	}
 
@@ -81,5 +87,4 @@ public class PermissionService implements PermissionImp{
 		List<Permission> selectPid = permissionImp.selectPid(pid);
 		return selectPid;
 	}
-	
 }

@@ -431,7 +431,7 @@
 
         //删除
         function deleteProvider(data) {
-            layer.confirm('你确定要删除【' + data.providername + '】这个供应商吗？删除该供应商将同时删除该供应商所供应的所有商品，以及和商品有关的进货、退货、销售进货、销售退货的所有信息！', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm('Confirm permanent deletion of customer [' +data.providername + ']?(你确定要删除【' + data.providername + '】这个供应商吗？)', {icon: 3, title: 'Alert(提示)'}, function (index) {
                 $.post("/provider/deleteProvider", {id: data.id},function (res) {
                     if (res.code == 200) {
                         tableIns.reload({

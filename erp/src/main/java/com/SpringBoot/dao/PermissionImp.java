@@ -16,7 +16,10 @@ public interface PermissionImp {
 	
 	public List<Permission> selectPid(Integer pid);
 	
-	public List<Permission> selectmenu();
+
+	public List<Permission> selectmenuAll();
+	
+	public List<Permission> selectmenu(@Param("name")String name);
 	
 	public List<Permission> selectPermission();
 	
@@ -34,5 +37,5 @@ public interface PermissionImp {
 	
 	public void insert2(@Param("pid")Integer pid,@Param("title")String title, @Param("percode")String percode, @Param("open")Integer open,
 			@Param("ordernum")Integer ordernum, @Param("available")Integer available);
-	
+
 }
