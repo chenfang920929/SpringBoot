@@ -64,4 +64,9 @@ public class UserService implements UserImp {
 		return selectByMgr;
 	}
 
+	@Override
+	public void changePwd(String pwd, Integer id) {
+		userImp.changePwd(pwd,id);
+	}
+
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +30,12 @@ public class UserController {
 	@Autowired
 	LayuiJson layuiJson;
 	
-	
+	@Autowired
+	HttpSession httpSession;
 	   /**
      * 用户全查询
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("loadAllUser")
     public LayuiJson<User> select(Integer deptid,String deptname, String name, String address,Integer page,Integer limit){
     	
@@ -58,7 +62,7 @@ public class UserController {
     /**
      * 添加用户
      */
-    
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("addUser")
     public ResultObj addUser(String loginname,Integer ordernum, Integer available, Integer mgr,  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")Date hiredate, String remark, Integer sex,
 			Integer deptid, String name, String address) {
@@ -90,6 +94,7 @@ public class UserController {
     /**
      * 修改用户
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("updateUser")
     public ResultObj updateUser(Integer id,String loginname,Integer ordernum, Integer available, Integer mgr, Date hiredate, String remark, Integer sex
 			, Integer deptid, String name, String address) {
@@ -105,6 +110,7 @@ public class UserController {
     /**
      * 删除用户
      */
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
     @RequestMapping("deleteUser/{id}")
     public ResultObj deleteUser(@PathVariable(value = "id")Integer id) {
         try {
@@ -131,6 +137,20 @@ public class UserController {
         }
     }
 
-
-
+	@LogMethod(trackTime = true, level = LogMethod.Level.DEBUG)
+    @RequestMapping("changePwd")
+    public ResultObj changePwd(String newPwdOne) {
+        try {
+        	User user = (User) httpSession.getAttribute("user");
+        	if(user!=null) {
+        		userService.changePwd(newPwdOne,user.getId());
+        	}else {
+        		throw new Exception("session is null");
+        	}
+            return ResultObj.RESET_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.RESET_ERROR;
+        }
+    }
 }

@@ -31,4 +31,6 @@ public interface UserImp {
 	public List<User> selectByDeptId(Integer deptId);
 	
 	public List<User> selectByMgr(Integer mgr);
+
+	public void changePwd(@Param("pwd")String pwd, Integer id);
 }
